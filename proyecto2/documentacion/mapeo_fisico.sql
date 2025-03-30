@@ -9,9 +9,15 @@ CREATE TABLE Usuario(
 	correo VARCHAR(250) NOT NULL UNIQUE,
 	rol ENUM('CLIENTE','EMPLEADO','MARKETING','SERVICIOS','ADMINISTRADOR'),
 	contraseña VARCHAR(60) NOT NULL,
+	foto BLOB,
 	descripcion TEXT NOT NULL,
-	gustos TEXT NOT NULL,
-	hobbies TEXT NOT NULL,
+	gustos TEXT,
+	hobbies TEXT,
+	estado BOOL NOT NULL DEFAULT TRUE,
+	dpi INT,
+	listaNegra BOOL NOT NULL DEFAULT FALSE,
+	direccion VARCHAR(250),
+	telefono VARCHAR(20),
 	CONSTRAINT pk_usuario PRIMARY KEY(idUsuario)
 );
 
@@ -24,12 +30,20 @@ CREATE TABLE Servicio(
 	CONSTRAINT pk_servicio PRIMARY KEY(idServicio)
 );
 
+CREATE TABLE ArchivosServicio(
+	idArchivos INT,
+	catalogo MEDIUMBLOB NOT NULL,
+	fotografia MEDIUMBLOB NOT NULL,
+	CONSTRAINT pk_catalogo PRIMARY KEY(idArchivos),
+	CONSTRAINT fk_servicio1 FOREIGN KEY(idArchivos) REFERENCES Servicio(idServicio)
+);
+
 CREATE TABLE EmpleadosServicio(
 	empleado INT NOT NULL,
 	servicio INT NOT NULL,
 	CONSTRAINT pk_empleados_servicio PRIMARY KEY(empleado, servicio),
 	CONSTRAINT fk_empleado1 FOREIGN KEY(empleado) REFERENCES Usuario(idUsuario),
-	CONSTRAINT fk_servicio1 FOREIGN KEY(servicio) REFERENCES Servicio(idServicio)
+	CONSTRAINT fk_servicio2 FOREIGN KEY(servicio) REFERENCES Servicio(idServicio)
 );
 
 CREATE TABLE Anuncio(
@@ -37,8 +51,17 @@ CREATE TABLE Anuncio(
 	tipo ENUM('TEXTO','IMAGEN','VIDEO') NOT NULL,
 	texto TEXT NOT NULL,
 	urlVideo VARCHAR(250),
+	imagen BLOB,
 	estado BOOL NOT NULL DEFAULT TRUE,
 	CONSTRAINT pk_anuncio PRIMARY KEY(idAnuncio)
+);
+
+CREATE TABLE HistorialAnuncio(
+	url VARCHAR(250),
+	fechaPublicacion DATE NOT NULL,
+	cantidad INT NOT NULL DEFAULT 1,
+	idAnuncio INT NOT NULL,
+	CONSTRAINT pk_historial PRIMARY KEY(url, fechaPublicacion)
 );
 
 CREATE TABLE Vigencia(
@@ -63,3 +86,18 @@ CREATE TABLE Cita(
 	CONSTRAINT fk_empleado2 FOREIGN KEY(empleado) REFERENCES Usuario(idUsuario),
 	CONSTRAINT pk_cita PRIMARY KEY(idCita)
 );
+
+CREATE TABLE PreciosAnuncio(
+	texto DECIMAL(10, 2) UNSIGNED NOT NULL,
+	imagen DECIMAL(10, 2) UNSIGNED NOT NULL,
+	video DECIMAL(10, 2) UNSIGNED NOT NULL
+);
+
+INSERT INTO PreciosAnuncio(texto, imagen, video) VALUES(2.50, 5.00, 7.50);
+
+CREATE TABLE HorarioSalon(
+	horaInicio TIME NOT NULL,
+	horaFin TIME NOT NULL
+);
+
+INSERT INTO HorarioSalon(horaInicio, horaFin) VALUES('08:00:00', '18:00:00');
