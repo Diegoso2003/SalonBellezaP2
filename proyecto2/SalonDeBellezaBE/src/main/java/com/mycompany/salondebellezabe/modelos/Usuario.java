@@ -5,7 +5,6 @@
 package com.mycompany.salondebellezabe.modelos;
 
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
-import java.io.InputStream;
 
 /**
  *
@@ -17,13 +16,15 @@ public class Usuario {
     private String correo;
     private Rol rol;
     private String contraseña;
+    private Integer dpi;
     private String confirmacionContraseña;
-    private InputStream foto;
     private String gustos;
     private String hobbies;
-    private Integer dpi;
     private String direccion;
+    private String descripcion;
     private String telefono;
+    private boolean activo;
+    private boolean listaNegra;
 
     public Integer getIdUsuario() {
         return idUsuario;
@@ -73,14 +74,6 @@ public class Usuario {
         this.confirmacionContraseña = confirmacionContraseña;
     }
 
-    public InputStream getFoto() {
-        return foto;
-    }
-
-    public void setFoto(InputStream foto) {
-        this.foto = foto;
-    }
-
     public String getGustos() {
         return gustos;
     }
@@ -121,4 +114,28 @@ public class Usuario {
         this.telefono = telefono;
     }
 
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
+    }
+
+    public boolean isListaNegra() {
+        return listaNegra;
+    }
+
+    public void setListaNegra(boolean listaNegra) {
+        this.listaNegra = listaNegra;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
 }

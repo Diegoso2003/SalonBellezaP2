@@ -9,16 +9,22 @@ CREATE TABLE Usuario(
 	correo VARCHAR(250) NOT NULL UNIQUE,
 	rol ENUM('CLIENTE','EMPLEADO','MARKETING','SERVICIOS','ADMINISTRADOR'),
 	contraseña VARCHAR(60) NOT NULL,
-	foto BLOB,
-	descripcion TEXT NOT NULL,
-	gustos TEXT,
-	hobbies TEXT,
-	estado BOOL NOT NULL DEFAULT TRUE,
-	dpi INT,
+	dpi INT NOT NULL UNIQUE,
+	telefono VARCHAR(20) NOT NULL,
+	direccion VARCHAR(250) NOT NULL,
+	descripcion TEXT NOT NULL DEFAULT 'Sin descripción',
+	gustos TEXT DEFAULT 'No especificado',
+	hobbies TEXT DEFAULT 'No especificado',
+	activo BOOL NOT NULL DEFAULT TRUE,
 	listaNegra BOOL NOT NULL DEFAULT FALSE,
-	direccion VARCHAR(250),
-	telefono VARCHAR(20),
 	CONSTRAINT pk_usuario PRIMARY KEY(idUsuario)
+);
+
+CREATE TABLE FotoUsuario(
+	idUsuario int NOT NULL,
+	foto BLOB,
+	CONSTRAINT pk_foto_usuario PRIMARY KEY(idUsuario),
+	CONSTRAINT fk_usuario FOREIGN KEY(idUsuario) REFERENCES Usuario(idUsuario)
 );
 
 CREATE TABLE Servicio(
