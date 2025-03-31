@@ -1,0 +1,157 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.salondebellezabe.repositorio.servicios;
+
+import com.mycompany.salondebellezabe.modelos.Servicio;
+import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
+import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import java.sql.Connection;
+import java.sql.JDBCType;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Time;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ *
+ * @author rafael-cayax
+ */
+public class ServicioDAO extends Repositorio<Servicio, Integer> implements BusquedaPorAtributo<Servicio>{
+
+    public ServicioDAO(Connection coneccion) {
+        super(coneccion);
+    }
+
+    /**
+     * metodo usado para guardar la siguiente informacion del servicio:
+     * nombre, precio, duracion y descripcion para guardar el pdf y la imagen
+     * usar la clase ArchivosServicioDAO
+     * @param servicio con los datos antes mencionados
+     * @return el id con el que ingreso el servicio
+     */
+    @Override
+    public Integer insertar(Servicio servicio) {
+        String query = "INSERT INTO Servicio(nombreServicio, precio, duracion, descripcion) "
+                + "VALUES(?, ?, ?, ?)";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+            stmt.setString(1, servicio.getNombreServicio());
+            stmt.setDouble(2, servicio.getPrecio());
+            stmt.setTime(3, Time.valueOf(servicio.getDuracion()));
+            stmt.setString(4, servicio.getDescripcion());
+            if (stmt.executeUpdate() > 0) {
+                try (ResultSet result = stmt.getGeneratedKeys()){
+                    if (result.next()) {
+                        return result.getInt(1);
+                    }
+                } catch (Exception e) {
+                }
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                //error el servicio con ese nombre ya esta ingresado
+            }
+            //error de insertar valores validos
+        }
+        return 0;
+    }
+
+    /**
+     * metodo usado para poder cambiar el estado de un servicio para que ya no se
+     * muestre
+     * @param id el id del servicio 
+     */
+    @Override
+    public void eliminar(Integer id) {
+        String query = "UPDATE Servicio SET activo = FALSE WHERE idServicio = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setInt(1, id);
+            if (stmt.executeUpdate() <= 0) {
+                //mandar error de servicio no encontrado
+            }
+        } catch (SQLException e) {
+            //mandar error de id ingresado invalido
+        }
+    }
+
+    /**
+     * metodo usado para poder obtente el servicio usando el id del servicio
+     * @param id el id del servicio
+     * @return un optional con el servicio si es encontrado
+     */
+    @Override
+    public Optional<Servicio> obtenerPorID(Integer id) {
+        String query = "SELECT * FROM Servicio WHERE idServicio = ?";
+        return buscar(query, id, JDBCType.INTEGER);
+    }
+
+    @Override
+    public void actualizar(Servicio servicio) {
+        String query = "UPDATE Servicio SET nombreServicio = ? , precio = ?, "
+                + "duracion = ?, descripcion = ? WHERE idServicio = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setString(1, servicio.getNombreServicio());
+            stmt.setDouble(2, servicio.getPrecio());
+            stmt.setTime(3, Time.valueOf(servicio.getDuracion()));
+            stmt.setString(4, servicio.getDescripcion());
+            stmt.setInt(5, servicio.getIdServicio());
+            if (stmt.executeUpdate() <= 0) {
+                //error servicio no encontrado
+            }
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 1062) {
+                //error el servicio con el nombre ya esta ingresado en la base de datos
+            }
+            // error datos ingresados invalidos
+        }
+    }
+
+    /**
+     * metodo usado para obtener todos los servicios
+     * @return una lista con los servicios registrados en el sistema
+     */
+    @Override
+    public List<Servicio> obtenerTodo() {
+        return listarPorAtributos("SELECT * FROM Servicio");
+    }
+
+    /**
+     * metodo usado para obtener los datos de un servicio
+     * @param result los datos del servicio
+     * @return el servicio
+     * @throws SQLException 
+     */
+    @Override
+    protected Servicio obtenerDatos(ResultSet result) throws SQLException {
+        Servicio servicio = new Servicio();
+        servicio.setNombreServicio(result.getString("nombreServicio"));
+        servicio.setIdServicio(result.getInt("idServicio"));
+        servicio.setDescripcion(result.getString("descripcion"));
+        servicio.setDuracion(result.getTime("duracion").toLocalTime());
+        servicio.setPrecio(result.getDouble("precio"));
+        return servicio;
+    }
+
+    /**
+     * metodo usado para encontrar servicio por nombre
+     * @param nombre el nombre del servicio
+     * @return un optional que tiene el servicio de ser encontrado
+     */
+    @Override
+    public Optional<Servicio> buscarPorAtributo(String nombre) {
+        String query = "SELECT * FROM Servicio WHERE nombreServicio = ?";
+        return buscar(query, nombre, JDBCType.VARCHAR);
+    }
+    
+    /**
+     * metodo usado para obtener todos los servicios disponibles para agendar citas
+     * @return la lista con los servicios disponibles
+     */
+    public List<Servicio> obtenerServiciosActivos(){
+        return listarPorAtributos("SELECT * FROM Servicio WHERE activo = TRUE");
+    }
+}

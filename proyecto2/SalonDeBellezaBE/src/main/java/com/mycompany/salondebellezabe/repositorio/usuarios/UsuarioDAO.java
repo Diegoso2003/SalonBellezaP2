@@ -12,10 +12,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
+import java.sql.JDBCType;
 
 /**
  *
@@ -47,7 +47,9 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             statement.setString(8, usuario.getDescripcion());
             if (statement.executeUpdate() > 0) {
                 try(ResultSet result = statement.getGeneratedKeys()){
-                    return result.getInt(1);
+                    if (result.next()) {
+                        return result.getInt(1);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -84,13 +86,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     @Override
     public Optional<Usuario> obtenerPorID(Integer id) {
         String query = "SELECT * FROM Usuario WHERE idUsuario = ?";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, id);
-            return buscar(stmt);
-        } catch (SQLException e) {
-            //mandar mensaje sobre enviar un id valido
-        }
-        return Optional.empty();
+        return buscar(query, id, JDBCType.INTEGER);
     }
 
     /**
@@ -117,7 +113,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             //mandar error sobre ingresar datos validos
         }
     }
-
+    
     /**
      * metodo usado para obtener todos los datos de la tabla de usuarios
      * @return lista con los usuarios registrados en el sistema
@@ -125,25 +121,6 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     @Override
     public List<Usuario> obtenerTodo() {
         return listarPorAtributos("SELECT * FROM Usuario");
-    }
-    
-    /**
-     * metodo para obtener los datos de la tabla usuarios en base a la consulta
-     * @param consulta la consulta 
-     * @return la lista de usuarios en base a la consulta
-     */
-    protected List<Usuario> listarPorAtributos(String consulta){
-        List<Usuario> usuarios = new ArrayList<>();
-        try (Statement stmt = coneccion.createStatement();
-                ResultSet result = stmt.executeQuery(consulta)){
-            while(result.next()){
-                Usuario usuario = obtenerDatos(result);
-                usuarios.add(usuario);
-            }
-        } catch (SQLException e) {
-            //algo salio mal
-        }
-        return usuarios;
     }
 
     /**
@@ -154,29 +131,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     @Override
     public Optional<Usuario> buscarPorAtributo(String correo) {
         String query = "SELECT * FROM Usuario WHERE correo = ?";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setString(1, correo);
-            return buscar(stmt);
-        } catch (SQLException e) {
-            //metodo indicando enviar un correo valido
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * metodo usado para encontrar los datos del usuario
-     * @param stmt el statement con la consulta
-     * @return optional con el usuario
-     * @throws SQLException 
-     */
-    private Optional<Usuario> buscar(PreparedStatement stmt) throws SQLException {
-        try (ResultSet result = stmt.executeQuery()) {
-            if (result.next()) {
-                Usuario usuario = obtenerDatos(result);
-                return Optional.of(usuario);
-            }
-        }
-        return Optional.empty();
+        return buscar(query, correo, JDBCType.VARCHAR);
     }
 
     /**
@@ -204,4 +159,20 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
         return usuario;
     }
 
+    /**
+     * metodo usado para actualizar la contraseña del usuario
+     * @param usuario usuario con la contraseña actual
+     */
+    public void actualizarContraseña(Usuario usuario){
+        String query = "UPDATE Usuario SET Contraseña = ? WHERE idUsuario = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setString(1, usuario.getContraseña());
+            stmt.setInt(2, usuario.getIdUsuario());
+            if (stmt.executeUpdate() <= 0) {
+                //usuario no encontrado
+            }
+        } catch (SQLException e) {
+            //id de usuario ingresado invalido
+        }
+    }
 }

@@ -13,7 +13,10 @@ import java.io.InputStream;
 public class ArchivosServicio {
     private Integer idArchivos;
     private InputStream fotografia;
+    private byte[] foto;
     private InputStream catalogo;
+    private byte[] catalogoBytes;
+    private String extension;
 
     public Integer getIdArchivos() {
         return idArchivos;
@@ -37,6 +40,30 @@ public class ArchivosServicio {
 
     public void setCatalogo(InputStream catalogo) {
         this.catalogo = catalogo;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public byte[] getFoto() {
+        return foto;
+    }
+
+    public void setFoto(byte[] foto) {
+        this.foto = foto;
+    }
+
+    public byte[] getCatalogoBytes() {
+        return catalogoBytes;
+    }
+
+    public void setCatalogoBytes(byte[] catalogoBytes) {
+        this.catalogoBytes = catalogoBytes;
     }
     
 }

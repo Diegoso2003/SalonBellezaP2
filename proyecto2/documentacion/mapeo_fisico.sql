@@ -13,26 +13,28 @@ CREATE TABLE Usuario(
 	telefono VARCHAR(20) NOT NULL,
 	direccion VARCHAR(250) NOT NULL,
 	descripcion TEXT NOT NULL DEFAULT 'Sin descripción',
-	gustos TEXT DEFAULT 'No especificado',
-	hobbies TEXT DEFAULT 'No especificado',
+	gustos TEXT NOT NULL DEFAULT 'No especificado',
+	hobbies TEXT NOT NULL DEFAULT 'No especificado',
 	activo BOOL NOT NULL DEFAULT TRUE,
 	listaNegra BOOL NOT NULL DEFAULT FALSE,
 	CONSTRAINT pk_usuario PRIMARY KEY(idUsuario)
 );
 
 CREATE TABLE FotoUsuario(
-	idUsuario int NOT NULL,
+	idUsuario int,
 	foto BLOB,
+	extension VARCHAR(10),
 	CONSTRAINT pk_foto_usuario PRIMARY KEY(idUsuario),
 	CONSTRAINT fk_usuario FOREIGN KEY(idUsuario) REFERENCES Usuario(idUsuario)
 );
 
 CREATE TABLE Servicio(
 	idServicio INT AUTO_INCREMENT,
-	nombreServicio VARCHAR(200) NOT NULL,
-	precio DECIMAL(10,2) NOT NULL,
+	nombreServicio VARCHAR(200) NOT NULL UNIQUE,
+	precio DECIMAL(10,2) UNSIGNED NOT NULL,
 	duracion TIME NOT NULL,
 	descripcion TEXT NOT NULL,
+	activo BOOL NOT NULL DEFAULT TRUE,
 	CONSTRAINT pk_servicio PRIMARY KEY(idServicio)
 );
 
@@ -40,6 +42,7 @@ CREATE TABLE ArchivosServicio(
 	idArchivos INT,
 	catalogo MEDIUMBLOB NOT NULL,
 	fotografia MEDIUMBLOB NOT NULL,
+	extension VARCHAR(10) NOT NULL,
 	CONSTRAINT pk_catalogo PRIMARY KEY(idArchivos),
 	CONSTRAINT fk_servicio1 FOREIGN KEY(idArchivos) REFERENCES Servicio(idServicio)
 );
@@ -67,7 +70,8 @@ CREATE TABLE HistorialAnuncio(
 	fechaPublicacion DATE NOT NULL,
 	cantidad INT NOT NULL DEFAULT 1,
 	idAnuncio INT NOT NULL,
-	CONSTRAINT pk_historial PRIMARY KEY(url, fechaPublicacion)
+	CONSTRAINT pk_historial PRIMARY KEY(url, fechaPublicacion),
+	CONSTRAINT fk_anuncio1 FOREIGN KEY(idAnuncio) REFERENCES Anuncio(idAnuncio)
 );
 
 CREATE TABLE Vigencia(
@@ -77,7 +81,7 @@ CREATE TABLE Vigencia(
 	fechaPublicacion DATE NOT NULL,
 	precio DECIMAL(10, 2) UNSIGNED NOT NULL,
 	CONSTRAINT pk_vigencia PRIMARY KEY(idVigencia),
-	CONSTRAINT fk_anuncio1 FOREIGN KEY(idAnuncio) REFERENCES Anuncio(idAnuncio)
+	CONSTRAINT fk_anuncio2 FOREIGN KEY(idAnuncio) REFERENCES Anuncio(idAnuncio)
 );
 
 CREATE TABLE Cita(

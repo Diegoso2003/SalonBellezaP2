@@ -13,6 +13,8 @@ import java.io.InputStream;
 public class FotografiaUsuario {
     private int idUsuario;
     private InputStream foto;
+    private byte[] fotografia;
+    private String extension;
 
     public int getIdUsuario() {
         return idUsuario;
@@ -28,6 +30,22 @@ public class FotografiaUsuario {
 
     public void setFoto(InputStream foto) {
         this.foto = foto;
+    }
+
+    public byte[] getFotografia() {
+        return fotografia;
+    }
+
+    public void setFotografia(byte[] fotografia) {
+        this.fotografia = fotografia;
+    }
+
+    public String getExtension() {
+        return extension;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
     }
     
 }

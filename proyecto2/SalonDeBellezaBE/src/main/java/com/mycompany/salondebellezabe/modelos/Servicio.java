@@ -18,6 +18,7 @@ public class Servicio {
     private LocalTime duracion;
     private String descripcion;
     private ArchivosServicio archivos;
+    private boolean activo;
     private List<Usuario> empleados;
 
     public Integer getIdServicio() {
@@ -74,6 +75,14 @@ public class Servicio {
 
     public void setEmpleados(List<Usuario> empleados) {
         this.empleados = empleados;
+    }
+
+    public boolean isActivo() {
+        return activo;
+    }
+
+    public void setActivo(boolean activo) {
+        this.activo = activo;
     }
     
 }
