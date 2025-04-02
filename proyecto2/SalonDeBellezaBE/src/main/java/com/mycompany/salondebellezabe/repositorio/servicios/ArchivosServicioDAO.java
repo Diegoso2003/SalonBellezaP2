@@ -21,20 +21,10 @@ import java.util.Optional;
 public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
 
     private boolean catalogo = false;
-    
+
     /**
-     * usar para recuperar la foto o el catalogo
-     * @param coneccion la coneccion a la base de datos
-     * @param catalogo valor para indicar si debe recuperar el catalogo, true para
-     * recuperar el catalogo, false para recuperar la imagen
-     */
-    public ArchivosServicioDAO(Connection coneccion, boolean catalogo) {
-        super(coneccion);
-        this.catalogo = catalogo;
-    }
-    
-    /**
-     * usar para insertar, eliminar o actualizar el catalogo e imagen
+     * clase para insertar, modificar y obtener el catalogo y la imagen de un
+     * servicio o servicios
      * @param coneccion la coneccion a la base de datos
      */
     public ArchivosServicioDAO(Connection coneccion){
@@ -44,10 +34,9 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
     /**
      * metodo usado para insertar los archivos de un servicio a la base de datos
      * @param archivos los archivos del servicio
-     * @return el id con el archivos servicio ingresado aunque en este caso es cero
      */
     @Override
-    public Integer insertar(ArchivosServicio archivos) {
+    public void insertar(ArchivosServicio archivos) {
         String query = "INSERT INTO ArchivosServicio(idArchivos, catalogo, fotografia, extension) "
                 + "VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
@@ -61,7 +50,6 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
         } catch (SQLException e) {
             //error al insertat la imagen o el pdf
         }
-        return 0;
     }
 
     @Override
@@ -81,20 +69,43 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
         if (catalogo) {
             consulta.append("catalago ");
         } else {
-            consulta.append("foto ");
+            consulta.append("fotografia , extension");
         }
         consulta.append("FROM ArchivosServicio WHERE idArchivo = ?");
         return buscar(consulta.toString(), id, JDBCType.INTEGER);
     }
 
     /**
-     * metodo exclusivo para actualizar el catalogo del servicio, para la imagen
-     * usar el metodo actualizaFoto
-     * @param entidad los datos del archivo
+     * metodo usado para actualizar los archivos del servicio, por defecto solo
+     * actualizara la imagen, para actualizar el catalogo use el setter de la 
+     * variable catalogo para ponerlo como true
+     * @param archivos los datos del archivo del servicio
      */
     @Override
-    public void actualizar(ArchivosServicio entidad) {
-        
+    public void actualizar(ArchivosServicio archivos) {
+        String query;
+        if (catalogo) {
+            query = "UPDATE ArchivosServicio SET catalogo = ? WHERE idArchivo = ?";
+        } else {
+            query = "UPDATE ArchivosServicio SET fotografia = ?, extension = ? WHERE idArchivo = ?";
+        }
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            int posicion;
+            if (catalogo) {
+                stmt.setBlob(1, archivos.getCatalogo());
+                posicion = 2;
+            } else {
+                stmt.setBlob(1, archivos.getFotografia());
+                stmt.setString(2, archivos.getExtension());
+                posicion = 3;
+            }
+            stmt.setInt(posicion, archivos.getIdArchivos());
+            if (stmt.executeUpdate() <= 0) {
+                //error servicio no encontrado
+            }
+        } catch (SQLException e) {
+            //archivo enviado invalidos
+        }
     }
 
     @Override
@@ -123,12 +134,12 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
     }
 
     /**
-     * metodo exclusivo para poder actualizar la foto del servicio, para actualizar
-     * el catalogo usar el metodo actualizar
-     * @param entidad los datos del servicio
+     * ingresar true para actualizar el catalogo del servicio, false para la imagen
+     * por defecto al usar el metodo actualizar se actualizara la imagen
+     * @param catalogo 
      */
-    public void actualizarFoto(ArchivosServicio entidad) {
-        
+    public void setCatalogo(boolean catalogo) {
+        this.catalogo = catalogo;
     }
-    
+
 }

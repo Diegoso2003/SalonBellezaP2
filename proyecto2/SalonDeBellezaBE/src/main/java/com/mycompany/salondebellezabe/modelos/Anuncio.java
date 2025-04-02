@@ -5,7 +5,6 @@
 package com.mycompany.salondebellezabe.modelos;
 
 import com.mycompany.salondebellezabe.modelos.enums.TipoAnuncio;
-import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -17,7 +16,6 @@ public class Anuncio {
     private TipoAnuncio tipo;
     private String texto;
     private String urlVideo;
-    private InputStream foto;
     private boolean estado;
     private List<HistorialAnuncio> historial;
     private Vigencia vigencia;
@@ -68,14 +66,6 @@ public class Anuncio {
 
     public void setUrlVideo(String urlVideo) {
         this.urlVideo = urlVideo;
-    }
-
-    public InputStream getFoto() {
-        return foto;
-    }
-
-    public void setFoto(InputStream foto) {
-        this.foto = foto;
     }
 
     public boolean isEstado() {

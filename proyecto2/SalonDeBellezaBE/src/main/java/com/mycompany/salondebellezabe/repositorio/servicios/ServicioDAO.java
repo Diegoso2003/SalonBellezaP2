@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.Servicio;
+import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import java.sql.Connection;
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,8 @@ import java.util.Optional;
  */
 public class ServicioDAO extends Repositorio<Servicio, Integer> implements BusquedaPorAtributo<Servicio>{
 
+    private boolean obtenerEmpleados = false;
+    
     public ServicioDAO(Connection coneccion) {
         super(coneccion);
     }
@@ -32,10 +36,9 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
      * nombre, precio, duracion y descripcion para guardar el pdf y la imagen
      * usar la clase ArchivosServicioDAO
      * @param servicio con los datos antes mencionados
-     * @return el id con el que ingreso el servicio
      */
     @Override
-    public Integer insertar(Servicio servicio) {
+    public void insertar(Servicio servicio) {
         String query = "INSERT INTO Servicio(nombreServicio, precio, duracion, descripcion) "
                 + "VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
@@ -46,7 +49,7 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
             if (stmt.executeUpdate() > 0) {
                 try (ResultSet result = stmt.getGeneratedKeys()){
                     if (result.next()) {
-                        return result.getInt(1);
+                        idGenerado = result.getInt(1);
                     }
                 } catch (Exception e) {
                 }
@@ -57,7 +60,6 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
             }
             //error de insertar valores validos
         }
-        return 0;
     }
 
     /**
@@ -86,6 +88,7 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
     @Override
     public Optional<Servicio> obtenerPorID(Integer id) {
         String query = "SELECT * FROM Servicio WHERE idServicio = ?";
+        obtenerEmpleados = true;
         return buscar(query, id, JDBCType.INTEGER);
     }
 
@@ -133,6 +136,11 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
         servicio.setDescripcion(result.getString("descripcion"));
         servicio.setDuracion(result.getTime("duracion").toLocalTime());
         servicio.setPrecio(result.getDouble("precio"));
+        if (obtenerEmpleados) {
+            EmpleadosServicioDAO repositorio = new EmpleadosServicioDAO(coneccion, servicio);
+            List<Usuario> empleados = repositorio.obtenerTodo();
+            servicio.setEmpleados(new HashSet<>(empleados));
+        }
         return servicio;
     }
 

@@ -11,7 +11,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
@@ -23,6 +22,8 @@ import java.sql.JDBCType;
  */
 public class UsuarioDAO extends Repositorio<Usuario, Integer> implements BusquedaPorAtributo<Usuario> {
 
+    private boolean obtenerContraseña = false;
+    
     public UsuarioDAO(Connection coneccion) {
         super(coneccion);
     }
@@ -30,13 +31,12 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     /**
      * metodo usado para insertar solo los datos mas esenciales del usuario
      * @param usuario datos del usuario que se va a insertar
-     * @return el id del dato ingresado
      */
     @Override
-    public Integer insertar(Usuario usuario) {
+    public void insertar(Usuario usuario) {
         String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, direccion, descripcion) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement statement = coneccion.prepareStatement(query)){
             statement.setString(1, usuario.getNombre());
             statement.setString(2, usuario.getCorreo());
             statement.setString(3, usuario.getRol().name());
@@ -45,20 +45,13 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             statement.setString(6, usuario.getTelefono());
             statement.setString(7, usuario.getDireccion());
             statement.setString(8, usuario.getDescripcion());
-            if (statement.executeUpdate() > 0) {
-                try(ResultSet result = statement.getGeneratedKeys()){
-                    if (result.next()) {
-                        return result.getInt(1);
-                    }
-                }
-            }
+            statement.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 //mandar mensaje de correo duplicado o dpi duplicado
             }
             //mandar mensaje de datos invalidos
         }
-        return 0;
     }
 
     /**
@@ -68,7 +61,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
      */
     @Override
     public void eliminar(Integer id) {
-        String query = "UPDATE Usuario SET activo = 0 WHERE idUsuario = ?";
+        String query = "UPDATE Usuario SET activo = 0 WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, id);
             if (stmt.executeUpdate() <= 0) {
@@ -85,7 +78,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
      */
     @Override
     public Optional<Usuario> obtenerPorID(Integer id) {
-        String query = "SELECT * FROM Usuario WHERE idUsuario = ?";
+        String query = "SELECT * FROM Usuario WHERE dpi = ?";
         return buscar(query, id, JDBCType.INTEGER);
     }
 
@@ -105,7 +98,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             stmt.setString(4, usuario.getHobbies());
             stmt.setString(5, usuario.getGustos());
             stmt.setString(6, usuario.getDescripcion());
-            stmt.setInt(7, usuario.getIdUsuario());
+            stmt.setInt(7, usuario.getDpi());
             if (stmt.executeUpdate() <= 0) {
                 //mandar error sobre usuario no encontrado
             }
@@ -143,12 +136,13 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     @Override
     protected Usuario obtenerDatos(ResultSet result) throws SQLException{
         Usuario usuario = new Usuario();
-        usuario.setIdUsuario(result.getInt("idUsuario"));
-        usuario.setNombre(result.getString("nombre"));
-        usuario.setCorreo(result.getString("correo"));
-        usuario.setRol(Rol.valueOf(result.getString("rol")));
-        usuario.setContraseña(result.getString("contraseña"));
         usuario.setDpi(result.getInt("dpi"));
+        usuario.setNombre(result.getString("nombre"));
+        usuario.setRol(Rol.valueOf(result.getString("rol")));
+        if (obtenerContraseña) {
+            usuario.setCorreo(result.getString("correo"));
+            usuario.setContraseña(result.getString("contraseña"));
+        }
         usuario.setGustos(result.getString("gustos"));
         usuario.setHobbies(result.getString("hobbies"));
         usuario.setDireccion(result.getString("direccion"));
@@ -164,10 +158,10 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
      * @param usuario usuario con la contraseña actual
      */
     public void actualizarContraseña(Usuario usuario){
-        String query = "UPDATE Usuario SET Contraseña = ? WHERE idUsuario = ?";
+        String query = "UPDATE Usuario SET Contraseña = ? WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, usuario.getContraseña());
-            stmt.setInt(2, usuario.getIdUsuario());
+            stmt.setInt(2, usuario.getDpi());
             if (stmt.executeUpdate() <= 0) {
                 //usuario no encontrado
             }
@@ -175,4 +169,14 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             //id de usuario ingresado invalido
         }
     }
+
+    /**
+     * enviar true solo para poder tener acceso a la contraseña del usuario
+     * @param obtenerContraseña true para obtener la contraseña del usuario en los
+     * datos
+     */
+    public void setObtenerContraseña(boolean obtenerContraseña) {
+        this.obtenerContraseña = obtenerContraseña;
+    }
+    
 }

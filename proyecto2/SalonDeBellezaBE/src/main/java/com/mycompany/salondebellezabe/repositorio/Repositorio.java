@@ -22,12 +22,13 @@ import java.util.Optional;
  */
 public abstract class Repositorio<T, ID> {
     protected Connection coneccion;
+    protected Integer idGenerado;
 
     public Repositorio(Connection coneccion) {
         this.coneccion = coneccion;
     }
     
-    public abstract Integer insertar(T entidad);
+    public abstract void insertar(T entidad);
     public abstract void eliminar(ID id);
     public abstract Optional<T> obtenerPorID(ID id);
     public abstract void actualizar(T entidad);
@@ -76,4 +77,15 @@ public abstract class Repositorio<T, ID> {
         }
         return Optional.empty();
     }
+
+    /**
+     * metodo para obtener el id generado al insertar un elemento en una tabla 
+     * con una columna incrementable
+     * @return el id generado si es usado para insertar en una tabla con auto incrementable
+     * de lo contrario devuelve null
+     */
+    public Integer getIdGenerado() {
+        return idGenerado;
+    }
+    
 }

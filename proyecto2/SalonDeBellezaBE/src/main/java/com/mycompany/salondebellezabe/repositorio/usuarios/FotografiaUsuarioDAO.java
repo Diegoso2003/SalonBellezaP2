@@ -26,10 +26,9 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer
     /**
      * metodo usado para insertar la foto del usuario en la base de datos
      * @param foto foto del usuario
-     * @return el id de la foto
      */
     @Override
-    public Integer insertar(FotografiaUsuario foto) {
+    public void insertar(FotografiaUsuario foto) {
         String query = "INSERT INTO FotoUsuario(foto, idUsuario, extension) VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
@@ -44,7 +43,6 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer
             }
             //foto enviada invalida
         }
-        return 0;
     }
 
     @Override

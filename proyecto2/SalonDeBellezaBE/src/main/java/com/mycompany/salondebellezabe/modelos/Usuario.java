@@ -5,18 +5,18 @@
 package com.mycompany.salondebellezabe.modelos;
 
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
+import java.util.Objects;
 
 /**
  *
  * @author rafael-cayax
  */
 public class Usuario {
-    private Integer idUsuario;
+    private Integer dpi;
     private String nombre;
     private String correo;
     private Rol rol;
     private String contraseña;
-    private Integer dpi;
     private String confirmacionContraseña;
     private String gustos;
     private String hobbies;
@@ -25,14 +25,6 @@ public class Usuario {
     private String telefono;
     private boolean activo;
     private boolean listaNegra;
-
-    public Integer getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Integer idUsuario) {
-        this.idUsuario = idUsuario;
-    }
 
     public String getNombre() {
         return nombre;
@@ -136,6 +128,28 @@ public class Usuario {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 61 * hash + Objects.hashCode(this.dpi);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Usuario other = (Usuario) obj;
+        return Objects.equals(this.dpi, other.dpi);
     }
     
 }

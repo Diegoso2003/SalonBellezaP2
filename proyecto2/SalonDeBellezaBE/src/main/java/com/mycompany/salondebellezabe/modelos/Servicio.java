@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.modelos;
 
 import java.time.LocalTime;
-import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -19,7 +19,7 @@ public class Servicio {
     private String descripcion;
     private ArchivosServicio archivos;
     private boolean activo;
-    private List<Usuario> empleados;
+    private Set<Usuario> empleados;
 
     public Integer getIdServicio() {
         return idServicio;
@@ -69,11 +69,11 @@ public class Servicio {
         this.archivos = archivos;
     }
 
-    public List<Usuario> getEmpleados() {
+    public Set<Usuario> getEmpleados() {
         return empleados;
     }
 
-    public void setEmpleados(List<Usuario> empleados) {
+    public void setEmpleados(Set<Usuario> empleados) {
         this.empleados = empleados;
     }
 
