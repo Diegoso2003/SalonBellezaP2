@@ -23,6 +23,7 @@ import java.sql.JDBCType;
 public class UsuarioDAO extends Repositorio<Usuario, Integer> implements BusquedaPorAtributo<Usuario> {
 
     private boolean obtenerContraseña = false;
+    private boolean obtenerDatos = false;
     
     public UsuarioDAO(Connection coneccion) {
         super(coneccion);
@@ -143,13 +144,15 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             usuario.setCorreo(result.getString("correo"));
             usuario.setContraseña(result.getString("contraseña"));
         }
-        usuario.setGustos(result.getString("gustos"));
-        usuario.setHobbies(result.getString("hobbies"));
-        usuario.setDireccion(result.getString("direccion"));
+        if (obtenerDatos) {
+            usuario.setGustos(result.getString("gustos"));
+            usuario.setHobbies(result.getString("hobbies"));
+            usuario.setDireccion(result.getString("direccion"));
+            usuario.setDescripcion(result.getString("descripcion"));
+        }
         usuario.setTelefono(result.getString("telefono"));
         usuario.setActivo(result.getBoolean("activo"));
         usuario.setListaNegra(result.getBoolean("listaNegra"));
-        usuario.setDescripcion(result.getString("descripcion"));
         return usuario;
     }
 
@@ -177,6 +180,10 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
      */
     public void setObtenerContraseña(boolean obtenerContraseña) {
         this.obtenerContraseña = obtenerContraseña;
+    }
+
+    public void setObtenerDatos(boolean obtenerDatos) {
+        this.obtenerDatos = obtenerDatos;
     }
     
 }

@@ -2,9 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.salondebellezabe.repositorio;
+package com.mycompany.salondebellezabe.repositorio.citas;
 
 import com.mycompany.salondebellezabe.modelos.Cita;
+import com.mycompany.salondebellezabe.modelos.Usuario;
+import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
+import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.JDBCType;
@@ -48,7 +52,8 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
 
     @Override
     public void eliminar(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String query = "UPDATE Cita SET estado = 'RECHAZADA' WHERE idCita = ?";
+        actualizarCita(id, query);
     }
 
     @Override
@@ -62,15 +67,50 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
+    /**
+     * selecciona todos las citas con sus datos
+     * @return una lista con todas las citas
+     */
     @Override
     public List<Cita> obtenerTodo() {
         return listarPorAtributos("SELECT * FROM Cita");
     }
 
+    /**
+     * metodo para obtener los datos de la cita que se haya obtenido de la consulta
+     * @param result los resultados de la consulta
+     * @return la cita con los datos
+     * @throws SQLException 
+     */
     @Override
     protected Cita obtenerDatos(ResultSet result) throws SQLException {
         Cita cita = new Cita();
+        cita.setCostoTotal(result.getDouble("costoTotal"));
+        cita.setFecha(result.getDate("fecha").toLocalDate());
+        cita.setHora(result.getTime("hora").toLocalTime());
+        cita.setEstado(EstadoCita.valueOf(result.getString("estado")));
+        UsuarioDAO repositorioUsuario = new UsuarioDAO(coneccion);
+        Optional<Usuario> cliente = repositorioUsuario.obtenerPorID(result.getInt("cliente"));
+        cita.setCliente(cliente.get());
+        Optional<Usuario> empleado = repositorioUsuario.obtenerPorID(result.getInt("empleado"));
+        cita.setEmpleado(empleado.get());
         return cita;
+    }
+
+    /**
+     * metodo para actualizar el estado de una cita
+     * @param id el id de la cita
+     * @param consulta la query a ejecutar
+     */
+    private void actualizarCita(Integer id, String consulta) {
+        try (PreparedStatement stmt = coneccion.prepareStatement(consulta)){
+            stmt.setInt(1, id);
+            if (stmt.executeUpdate() <= 0) {
+                //no se encontro la cita
+            }
+        } catch (SQLException e) {
+            //otro error
+        }
     }
     
 }
