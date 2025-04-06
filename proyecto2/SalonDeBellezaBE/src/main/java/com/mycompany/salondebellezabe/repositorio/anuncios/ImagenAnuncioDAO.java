@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.ImagenAnuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import java.sql.Connection;
@@ -20,9 +21,6 @@ import java.util.Optional;
  */
 public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
 
-    public ImagenAnuncioDAO(Connection coneccion) {
-        super(coneccion);
-    }
 
     /**
      * metodo para insertar la imagen de un anuncio a la base de datos
@@ -32,7 +30,8 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
     public void insertar(ImagenAnuncio imagen) {
         String query = "INSERT INTO ImagenAnuncio(idAnuncio, imagen, extension)"
                 + " VALUES(?, ?, ?)";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, imagen.getIdAnuncio());
             stmt.setBlob(2, imagen.getImagen());
             stmt.setString(3, imagen.getExtension());
@@ -65,7 +64,8 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
     @Override
     public void actualizar(ImagenAnuncio imagen) {
         String query = "UPDATE ImagenAnuncio SET extension = ?, imagen = ? WHERE idAnuncio = ?";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, imagen.getExtension());
             stmt.setBlob(2, imagen.getImagen());
             stmt.setInt(3, imagen.getIdAnuncio());

@@ -6,7 +6,6 @@ package com.mycompany.salondebellezabe.repositorio.usuarios;
 
 import com.mycompany.salondebellezabe.modelos.FotografiaUsuario;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,11 +16,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer>{
-
-    public FotografiaUsuarioDAO(Connection coneccion) {
-        super(coneccion);
-    }
+public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
 
     /**
      * metodo usado para insertar la foto del usuario en la base de datos
@@ -29,10 +24,10 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer
      */
     @Override
     public void insertar(FotografiaUsuario foto) {
-        String query = "INSERT INTO FotoUsuario(foto, idUsuario, extension) VALUES(?, ?, ?)";
+        String query = "INSERT INTO FotoUsuario(foto, dpi, extension) VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
-            stmt.setInt(2, foto.getIdUsuario());
+            stmt.setLong(2, foto.getDpi());
             stmt.setString(3, foto.getExtension());
             if (stmt.executeUpdate() <= 0) {
                 //error al insertar
@@ -46,21 +41,21 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer
     }
 
     @Override
-    public void eliminar(Integer id) {
+    public void eliminar(Long dpi) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     /**
      * metodo para obtener la foto de perfil del usuario guaradada en la base de
      * datos
-     * @param id el id del usuario
+     * @param dpi el id del usuario
      * @return optional de la foto del usuario si existe
      */
     @Override
-    public Optional<FotografiaUsuario> obtenerPorID(Integer id) {
-        String query = "SELECT * FROM FotoUsuario WHERE idUsuario = ?";
+    public Optional<FotografiaUsuario> obtenerPorID(Long dpi) {
+        String query = "SELECT * FROM FotoUsuario WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, id);
+            stmt.setLong(1, dpi);
             try(ResultSet result = stmt.executeQuery()){
                 if (result.next()) {
                     return Optional.of(obtenerDatos(result));
@@ -82,7 +77,7 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
             stmt.setString(2, foto.getExtension());
-            stmt.setInt(3, foto.getIdUsuario());
+            stmt.setLong(3, foto.getDpi());
             if (stmt.executeUpdate() <= 0) {
                 //no se encontro al usuario
             }
@@ -105,9 +100,9 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Integer
     @Override
     protected FotografiaUsuario obtenerDatos(ResultSet result) throws SQLException {
         FotografiaUsuario foto = new FotografiaUsuario();
-        foto.setIdUsuario(result.getInt("idUsuario"));
+        foto.setDpi(result.getLong("dpi"));
         foto.setFotografia(result.getBytes("foto"));
-        foto.setExtension(result.getString("foto"));
+        foto.setExtension(result.getString("extension"));
         return foto;
     }
 

@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.citas;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.Cita;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
@@ -26,17 +27,14 @@ import java.util.Optional;
  */
 public class CitaDAO extends Repositorio<Cita, Integer>{
 
-    public CitaDAO(Connection coneccion) {
-        super(coneccion);
-    }
-
     @Override
     public void insertar(Cita cita) {
         String query = "INSERT INTO Cita(cliente, empleado, fecha, hora, estado)"
                 + " VALUES(?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
-            stmt.setInt(1, cita.getCliente().getDpi());
-            stmt.setInt(2, cita.getEmpleado().getDpi());
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+            stmt.setLong(1, cita.getCliente().getDpi());
+            stmt.setLong(2, cita.getEmpleado().getDpi());
             stmt.setDate(3, Date.valueOf(cita.getFecha()));
             stmt.setTime(4, Time.valueOf(cita.getHora()));
             stmt.setString(5, cita.getEstado().toString());
@@ -89,10 +87,10 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
         cita.setFecha(result.getDate("fecha").toLocalDate());
         cita.setHora(result.getTime("hora").toLocalTime());
         cita.setEstado(EstadoCita.valueOf(result.getString("estado")));
-        UsuarioDAO repositorioUsuario = new UsuarioDAO(coneccion);
-        Optional<Usuario> cliente = repositorioUsuario.obtenerPorID(result.getInt("cliente"));
+        UsuarioDAO repositorioUsuario = new UsuarioDAO();
+        Optional<Usuario> cliente = repositorioUsuario.obtenerPorID(result.getLong("cliente"));
         cita.setCliente(cliente.get());
-        Optional<Usuario> empleado = repositorioUsuario.obtenerPorID(result.getInt("empleado"));
+        Optional<Usuario> empleado = repositorioUsuario.obtenerPorID(result.getLong("empleado"));
         cita.setEmpleado(empleado.get());
         return cita;
     }
@@ -103,7 +101,8 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
      * @param consulta la query a ejecutar
      */
     private void actualizarCita(Integer id, String consulta) {
-        try (PreparedStatement stmt = coneccion.prepareStatement(consulta)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(consulta)){
             stmt.setInt(1, id);
             if (stmt.executeUpdate() <= 0) {
                 //no se encontro la cita

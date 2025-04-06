@@ -4,13 +4,13 @@ CREATE DATABASE SalonDeBelleza;
 USE SalonDeBelleza;
 
 CREATE TABLE Usuario(
-	dpi VARCHAR(15),
+	dpi BIGINT,
 	nombre VARCHAR(250) NOT NULL,
 	correo VARCHAR(250) NOT NULL UNIQUE,
 	rol ENUM('CLIENTE','EMPLEADO','MARKETING','SERVICIOS','ADMINISTRADOR'),
 	contraseña VARCHAR(60) NOT NULL,
 	telefono VARCHAR(20) NOT NULL,
-	direccion VARCHAR(250) NOT NULL,
+	direccion VARCHAR(250) NOT NULL DEFAULT 'No especificada',
 	descripcion TEXT NOT NULL DEFAULT 'Sin descripción',
 	gustos TEXT NOT NULL DEFAULT 'No especificado',
 	hobbies TEXT NOT NULL DEFAULT 'No especificado',
@@ -20,7 +20,7 @@ CREATE TABLE Usuario(
 );
 
 CREATE TABLE FotoUsuario(
-	dpi int,
+	dpi BIGINT,
 	foto BLOB,
 	extension VARCHAR(10),
 	CONSTRAINT pk_foto_usuario PRIMARY KEY(dpi),
@@ -47,7 +47,7 @@ CREATE TABLE ArchivosServicio(
 );
 
 CREATE TABLE EmpleadosServicio(
-	empleado INT NOT NULL,
+	empleado BIGINT NOT NULL,
 	servicio INT NOT NULL,
 	CONSTRAINT pk_empleados_servicio PRIMARY KEY(empleado, servicio),
 	CONSTRAINT fk_empleado1 FOREIGN KEY(empleado) REFERENCES Usuario(dpi),
@@ -92,8 +92,8 @@ CREATE TABLE Vigencia(
 
 CREATE TABLE Cita(
 	idCita INT AUTO_INCREMENT,
-	cliente INT NOT NULL,
-	empleado INT NOT NULL,
+	cliente BIGINT NOT NULL,
+	empleado BIGINT NOT NULL,
 	fecha DATE NOT NULL,
 	costoTotal DECIMAL(10, 2) UNSIGNED NOT NULL DEFAULT 0.00,
 	hora TIME NOT NULL,
@@ -117,3 +117,51 @@ CREATE TABLE HorarioSalon(
 );
 
 INSERT INTO HorarioSalon(horaInicio, horaFin) VALUES('08:00:00', '18:00:00');
+
+Casos de uso de un usuario de servicio
+crear servicios
+listar servicios
+	actualizar servicios
+	ocultar
+	reactivar
+reportes
+perfil
+cerrar sesion
+
+Administrador
+registrar nuevo empleado
+	listar empleados
+		dar de baja a empleados
+		reactivar empleado
+gestionar precios de anuncios
+listar citas pendientes
+	aprobar rechazar citas
+horario del salon
+perfil
+reportes
+cerrar sesion
+
+Marketing
+publicar nuevo anuncio
+listar todos los anuncios
+	quitar anuncio
+	republicar anuncio
+reportes
+perfil
+cerrar sesion
+
+Cliente
+listar servicios disponibles
+	agendar cita
+perfil
+listar reservaciones
+listar citas finalizadas
+perfil
+cerrar sesion
+	
+Empleado 
+consultar agenda
+	marcar citas como atendidas o ausentes
+perfil
+cerrar sesion
+

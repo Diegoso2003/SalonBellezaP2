@@ -1,9 +1,16 @@
-<div class="d-flex align-items-center justify-content-center vh-100">
+<app-informacion [informacion]="informacion"></app-informacion>
+<div class="d-flex align-items-center justify-content-center">
+
   <div class="card w-25 m-3">
     <div class="card-body custom-card">
         <h5 class="card-title text-center mb-3">Iniciar sesion</h5>
       <form class="needs-validation" novalidate [formGroup]='loginForm' (submit)="enviar()">
-        <div class="mb-5 position-relative">
+        
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : (faltaEmail() || esEmailInvalido()),
+            'mb-3' : !(faltaEmail() || esEmailInvalido())
+          }"
+          >
           <label for="validationTooltip01" class="form-label">Email</label>
           <input
             type="email"
@@ -25,7 +32,11 @@
           </div>
         </div>
 
-        <div class="mb-5 position-relative">
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : faltaPassword(),
+                'mb-3' : !(faltaPassword())
+              }"
+          >
             <label for="validationTooltip02" class="form-label">Contraseña</label>
             <input
               type="password"

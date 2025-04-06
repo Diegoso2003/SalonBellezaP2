@@ -27,10 +27,6 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
 
     private boolean obtenerEmpleados = false;
     
-    public ServicioDAO(Connection coneccion) {
-        super(coneccion);
-    }
-
     /**
      * metodo usado para guardar la siguiente informacion del servicio:
      * nombre, precio, duracion y descripcion para guardar el pdf y la imagen
@@ -137,7 +133,8 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
         servicio.setDuracion(result.getTime("duracion").toLocalTime());
         servicio.setPrecio(result.getDouble("precio"));
         if (obtenerEmpleados) {
-            EmpleadosServicioDAO repositorio = new EmpleadosServicioDAO(coneccion, servicio);
+            EmpleadosServicioDAO repositorio = new EmpleadosServicioDAO(servicio);
+            repositorio.setConeccion(coneccion);
             List<Usuario> empleados = repositorio.obtenerTodo();
             servicio.setEmpleados(new HashSet<>(empleados));
         }

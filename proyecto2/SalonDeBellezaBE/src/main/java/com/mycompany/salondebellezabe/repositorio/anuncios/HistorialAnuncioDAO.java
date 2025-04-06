@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import java.sql.Connection;
@@ -20,11 +21,6 @@ import java.util.Optional;
  */
 public class HistorialAnuncioDAO extends Repositorio<HistorialAnuncio, HistorialAnuncio>{
 
-    
-    public HistorialAnuncioDAO(Connection coneccion) {
-        super(coneccion);
-    }
-
     /**
      * metodo para insertar la fecha y el url donde se mostro el anuncio, en caso 
      * de ya existir en la base de datos el contador aumenta en uno por cada visita
@@ -34,7 +30,8 @@ public class HistorialAnuncioDAO extends Repositorio<HistorialAnuncio, Historial
     public void insertar(HistorialAnuncio historial) {
         String query = "INSERT INTO HistorialAnuncio(url, fechaPublicacion, idAnuncio)"
                 + " VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE contador = contador + 1";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, historial.getUrl());
             stmt.setDate(2, Date.valueOf(historial.getFechaPublicacion()));
             stmt.setInt(3, historial.getIdAnuncio());

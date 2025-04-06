@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.Vigencia;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import java.sql.Connection;
@@ -21,15 +22,12 @@ import java.util.Optional;
  */
 public class VigenciaDAO extends Repositorio<Vigencia, Integer>{
 
-    public VigenciaDAO(Connection coneccion) {
-        super(coneccion);
-    }
-
     @Override
     public void insertar(Vigencia vigencia) {
         String query = "INSERT INTO Vigencia(idAnuncio, dias, fechaPublicacion, precio) "
                 + "VALUES(?, ?, ?, ?)";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
             stmt.setInt(1, vigencia.getIdAnuncio());
             stmt.setInt(2, vigencia.getDias());
             stmt.setDate(3, Date.valueOf(vigencia.getFechaPublicacion()));

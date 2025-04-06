@@ -39,3 +39,10 @@ body {
         background-color: darken($cocoa-brown, 10%);
     }
 }
+
+.custom-alert {
+    background-color: $light-yellow;
+    color: $black-olive;
+    border: 1px solid $cocoa-brown;
+  }
+  

@@ -1,10 +1,14 @@
+<app-informacion [informacion]="informacion"></app-informacion>
 <div class="d-flex justify-content-center">
     <div class="card w-25 m-3">
       <div class="card-body custom-card">
-          <h5 class="card-title text-center mb-3">Iniciar sesion</h5>
+          <h5 class="card-title text-center mb-3">Registro</h5>
         <form class="needs-validation" novalidate [formGroup]='registroForm' (submit)="enviar()">
 
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                [ngClass]="{'mb-5' : (faltaNombre() || esNombreInvalido()),
+                'mb-3' : !(faltaNombre() || esNombreInvalido())
+                }">
                 <label for="validationTooltip03" class="form-label">Nombre</label>
                 <input
                   type="text"
@@ -25,7 +29,10 @@
                 </div>
             </div>
 
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                [ngClass]="{'mb-5' : (faltaDpi() || esDpiInvalido()),
+                'mb-3' : !(faltaDpi() || esDpiInvalido())
+                }">
                 <label for="validationTooltip04" class="form-label">DPI</label>
                 <input
                   type="text"
@@ -46,7 +53,11 @@
                 </div>
             </div>
 
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                    [ngClass]="{'mb-5' : (faltaTelefono() || esTelefonoInvalido()),
+                    'mb-3' : !(faltaTelefono() || esTelefonoInvalido())
+                    }"
+                >
                 <label for="validationTooltip05" class="form-label">Telefono</label>
                 <input
                   type="text"
@@ -67,7 +78,11 @@
                 </div>
             </div>
 
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                    [ngClass]="{'mb-5' : (faltaEmail() || esEmailInvalido()),
+                    'mb-3' : !(faltaEmail() || esEmailInvalido())
+                    }"
+                >
                 <label for="validationTooltip01" class="form-label">Email</label>
                 <input
                     type="email"
@@ -89,7 +104,11 @@
                 </div>
             </div>
   
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                    [ngClass]="{'mb-5' : (faltaDireccion() || esDireccionInvalida()),
+                    'mb-3' : !(faltaDireccion() || esDireccionInvalida())
+                    }"
+                >
                 <label for="validationTooltip06" class="form-label">Direccion</label>
                 <input
                   type="text"
@@ -110,7 +129,11 @@
                 </div>
             </div>
 
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                    [ngClass]="{'mb-5' : faltaPassword(),
+                    'mb-3' : !(faltaPassword())
+                    }"
+                >
                 <label for="validationTooltip02" class="form-label">Contraseña</label>
                 <input
                     type="password"
@@ -125,7 +148,11 @@
                 <div class="invalid-tooltip">Ingrese su contraseña</div>
             </div>
   
-            <div class="mb-5 position-relative">
+            <div class="position-relative"
+                    [ngClass]="{'mb-5' : (faltaConfirmacionPassword() || esPasswordIgualInvalido()),
+                    'mb-3' : !(faltaConfirmacionPassword() || esPasswordIgualInvalido())
+                    }"
+                >
                 <label for="validationTooltip07" class="form-label">Confirmar contraseña</label>
                 <input
                     type="password"
@@ -139,7 +166,7 @@
                     />
                 <div class="invalid-tooltip">
                     @if(faltaConfirmacionPassword()) {
-                        Ingrese su contraseña
+                        Ingrese nuevamente la contraseña
                     } @else {
                         Las contraseñas no coinciden
                     }

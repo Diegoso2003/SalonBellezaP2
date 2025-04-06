@@ -2,17 +2,26 @@ import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ValidadorFormService } from '../../services/validador-form.service';
 import { NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { Informacion } from '../../models/informacion';
+import { InformacionComponent } from '../../informacion/informacion.component';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass],
+  imports: [ReactiveFormsModule, NgClass, RouterLink, InformacionComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss'
 })
 export class RegistroComponent {
   registroForm !: FormGroup;
   private _validadorForm = inject(ValidadorFormService);
+  informacion: Informacion = {
+    hayError: false,
+    mensaje: '',
+    exito: false,
+    mostrarAlertaExito: false
+  };
 
   constructor(private formBuilder: FormBuilder) {
     this.registroForm = this.formBuilder.group({
@@ -22,7 +31,7 @@ export class RegistroComponent {
       direccion: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
-      confirmarContraseña: ['', [Validators.required, Validators.minLength(6)]]
+      confirmarContraseña: ['', [Validators.required]]
     })
     this._validadorForm.initForm(this.registroForm);
   }
@@ -30,7 +39,14 @@ export class RegistroComponent {
   enviar() {
     if (this.registroForm.valid) {
       console.log(this.registroForm.value);
+      this.informacion.exito = true;
+      this.informacion.hayError = false;
+      this.informacion.mensaje = 'Formulario enviado correctamente';
+      this.informacion.mostrarAlertaExito = true;
     } else {
+      this.informacion.hayError = true;
+      this.informacion.mensaje = 'Formulario inválido';
+      this.informacion.exito = false;
       console.log('Formulario inválido');
     }
   }
@@ -124,10 +140,10 @@ export class RegistroComponent {
   }
 
   esPasswordIgualValido() {
-    return this.esPasswordIgual() && this.esConfirmacionPasswordValido() && this.esPasswordValido();
+    return this.esPasswordIgual() &&  this.esConfirmacionPasswordValido() &&this.esPasswordValido();
   }
 
   esPasswordIgualInvalido() {
-    return !this.esPasswordIgual() && this.esConfirmacionPasswordValido() && this.esPasswordValido();
+    return !this.esPasswordIgual() && this.esConfirmacionPasswordValido() &&this.esPasswordValido();
   }
 }

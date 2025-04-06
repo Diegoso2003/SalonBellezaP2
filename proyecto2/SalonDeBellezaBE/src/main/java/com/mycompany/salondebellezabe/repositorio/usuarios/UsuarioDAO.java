@@ -7,7 +7,6 @@ package com.mycompany.salondebellezabe.repositorio.usuarios;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,14 +19,10 @@ import java.sql.JDBCType;
  *
  * @author rafael-cayax
  */
-public class UsuarioDAO extends Repositorio<Usuario, Integer> implements BusquedaPorAtributo<Usuario> {
+public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPorAtributo<Usuario> {
 
     private boolean obtenerContraseña = false;
     private boolean obtenerDatos = false;
-    
-    public UsuarioDAO(Connection coneccion) {
-        super(coneccion);
-    }
 
     /**
      * metodo usado para insertar solo los datos mas esenciales del usuario
@@ -42,7 +37,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             statement.setString(2, usuario.getCorreo());
             statement.setString(3, usuario.getRol().name());
             statement.setString(4, usuario.getContraseña());
-            statement.setInt(5, usuario.getDpi());
+            statement.setLong(5, usuario.getDpi());
             statement.setString(6, usuario.getTelefono());
             statement.setString(7, usuario.getDireccion());
             statement.setString(8, usuario.getDescripcion());
@@ -58,13 +53,13 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     /**
      * metodo usado para cambiar el estado de un usuario de activo a desativado
      * en la base de datos 
-     * @param id el id registrado en la base de datos del usuario
+     * @param dpi el dpi registrado en la base de datos del usuario
      */
     @Override
-    public void eliminar(Integer id) {
+    public void eliminar(Long dpi) {
         String query = "UPDATE Usuario SET activo = 0 WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, id);
+            stmt.setLong(1, dpi);
             if (stmt.executeUpdate() <= 0) {
                 //mandar mensaje de que no se encontro el usuario con el id
             }
@@ -74,13 +69,13 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
 
     /**
      * metodo para recuperar los datos del usuario por medio del id 
-     * @param id numero de id registrado en la base de datos
+     * @param dpi numero de dpi registrado en la base de datos
      * @return optional que contiene al posible usuario
      */
     @Override
-    public Optional<Usuario> obtenerPorID(Integer id) {
+    public Optional<Usuario> obtenerPorID(Long dpi) {
         String query = "SELECT * FROM Usuario WHERE dpi = ?";
-        return buscar(query, id, JDBCType.INTEGER);
+        return buscar(query, dpi, JDBCType.BIGINT);
     }
 
     /**
@@ -99,7 +94,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             stmt.setString(4, usuario.getHobbies());
             stmt.setString(5, usuario.getGustos());
             stmt.setString(6, usuario.getDescripcion());
-            stmt.setInt(7, usuario.getDpi());
+            stmt.setLong(7, usuario.getDpi());
             if (stmt.executeUpdate() <= 0) {
                 //mandar error sobre usuario no encontrado
             }
@@ -137,7 +132,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
     @Override
     protected Usuario obtenerDatos(ResultSet result) throws SQLException{
         Usuario usuario = new Usuario();
-        usuario.setDpi(result.getInt("dpi"));
+        usuario.setDpi(result.getLong("dpi"));
         usuario.setNombre(result.getString("nombre"));
         usuario.setRol(Rol.valueOf(result.getString("rol")));
         if (obtenerContraseña) {
@@ -149,8 +144,8 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
             usuario.setHobbies(result.getString("hobbies"));
             usuario.setDireccion(result.getString("direccion"));
             usuario.setDescripcion(result.getString("descripcion"));
+            usuario.setTelefono(result.getString("telefono"));
         }
-        usuario.setTelefono(result.getString("telefono"));
         usuario.setActivo(result.getBoolean("activo"));
         usuario.setListaNegra(result.getBoolean("listaNegra"));
         return usuario;
@@ -164,7 +159,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
         String query = "UPDATE Usuario SET Contraseña = ? WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, usuario.getContraseña());
-            stmt.setInt(2, usuario.getDpi());
+            stmt.setLong(2, usuario.getDpi());
             if (stmt.executeUpdate() <= 0) {
                 //usuario no encontrado
             }
@@ -182,6 +177,12 @@ public class UsuarioDAO extends Repositorio<Usuario, Integer> implements Busqued
         this.obtenerContraseña = obtenerContraseña;
     }
 
+    /**
+     * metodo usado para obtener los datos del usuario como descripcion, gustos,
+     * hobbies, gustos y telefono, por defecto solo se obtine lo esencial dpi,
+     * correo, nombre, rol si esta activo y si esta en la lista negra
+     * @param obtenerDatos true para obtener los datos
+     */
     public void setObtenerDatos(boolean obtenerDatos) {
         this.obtenerDatos = obtenerDatos;
     }

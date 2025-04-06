@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,15 +19,10 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  * @param <T> la clase de la entidad
- * @param <ID> la clase que use como id
+ * @param <ID> el tipo de dato que use como id
  */
 public abstract class Repositorio<T, ID> {
-    protected Connection coneccion;
     protected Integer idGenerado;
-
-    public Repositorio(Connection coneccion) {
-        this.coneccion = coneccion;
-    }
     
     public abstract void insertar(T entidad);
     public abstract void eliminar(ID id);
@@ -43,7 +39,8 @@ public abstract class Repositorio<T, ID> {
      */
     protected List<T> listarPorAtributos(String consulta){
         List<T> entidades = new ArrayList<>();
-        try (Statement stmt = coneccion.createStatement();
+        try (Connection coneccion = Coneccion.getConeccion();
+                Statement stmt = coneccion.createStatement();
                 ResultSet result = stmt.executeQuery(consulta)){
             while(result.next()){
                 T entidad = obtenerDatos(result);
@@ -64,7 +61,8 @@ public abstract class Repositorio<T, ID> {
      * @return un optional con la entidad si es encontrada
      */
     protected Optional<T> buscar(String query, Object columna, SQLType tipo){
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setObject(1, columna, tipo);
             try(ResultSet result = stmt.executeQuery()){
                 if (result.next()) {

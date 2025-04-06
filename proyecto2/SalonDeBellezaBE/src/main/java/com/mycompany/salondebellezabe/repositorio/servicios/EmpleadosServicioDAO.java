@@ -8,7 +8,6 @@ import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,17 +19,15 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class EmpleadosServicioDAO extends Repositorio<Usuario, Integer>{
+public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
 
     private final Servicio servicio;
     
     /**
      * clase para insertar obtener y eliminar los empleados asignados a un servicio
-     * @param coneccion la coneccion a la base de datos
      * @param servicio servicio en el cual se va a trabajar
      */
-    public EmpleadosServicioDAO(Connection coneccion, Servicio servicio) {
-        super(coneccion);
+    public EmpleadosServicioDAO(Servicio servicio) {
         this.servicio = servicio;
     }
 
@@ -42,7 +39,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Integer>{
     public void insertar(Usuario empleado) {
         String query = "INSERT INTO EmpleadosServicio(empleado, servicio) VALUES(?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, empleado.getDpi());
+            stmt.setLong(1, empleado.getDpi());
             stmt.setInt(2, servicio.getIdServicio());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -61,10 +58,10 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Integer>{
      * @param id el dpi del empleado
      */
     @Override
-    public void eliminar(Integer id) {
+    public void eliminar(Long id) {
         String query = "DELETE FROM EmpleadosServicio WHERE empleado = ? AND servicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, id);
+            stmt.setLong(1, id);
             stmt.setInt(2, servicio.getIdServicio());
             if (stmt.executeUpdate() <= 0) {
                 //empleado no asignado a este servicio
@@ -80,10 +77,10 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Integer>{
      * @return los datos del empleado
      */
     @Override
-    public Optional<Usuario> obtenerPorID(Integer dpi) {
+    public Optional<Usuario> obtenerPorID(Long dpi) {
         String query = "SELECT * FROM EmpleadosServicio WHERE empleado = ? AND servicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, dpi);
+            stmt.setLong(1, dpi);
             stmt.setInt(2, servicio.getIdServicio());
             try(ResultSet result = stmt.executeQuery()){
                 if (result.next()) {
@@ -134,7 +131,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Integer>{
      */
     @Override
     protected Usuario obtenerDatos(ResultSet result) throws SQLException {
-        Integer dpi = result.getInt("empleado");
+        Long dpi = result.getLong("empleado");
         UsuarioDAO repositorio = new UsuarioDAO(coneccion);
         Optional<Usuario> usuario = repositorio.obtenerPorID(dpi);
         return usuario.get();

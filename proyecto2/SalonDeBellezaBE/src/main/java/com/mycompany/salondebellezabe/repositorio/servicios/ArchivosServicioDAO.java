@@ -6,7 +6,6 @@ package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,15 +20,6 @@ import java.util.Optional;
 public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
 
     private boolean catalogo = false;
-
-    /**
-     * clase para insertar, modificar y obtener el catalogo y la imagen de un
-     * servicio o servicios
-     * @param coneccion la coneccion a la base de datos
-     */
-    public ArchivosServicioDAO(Connection coneccion){
-        super(coneccion);
-    }
 
     /**
      * metodo usado para insertar los archivos de un servicio a la base de datos

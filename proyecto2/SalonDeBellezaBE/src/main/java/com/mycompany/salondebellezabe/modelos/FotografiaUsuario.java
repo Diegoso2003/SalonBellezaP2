@@ -11,17 +11,17 @@ import java.io.InputStream;
  * @author rafael-cayax
  */
 public class FotografiaUsuario {
-    private int idUsuario;
+    private Long dpi;
     private InputStream foto;
     private byte[] fotografia;
     private String extension;
 
-    public int getIdUsuario() {
-        return idUsuario;
+    public Long getDpi() {
+        return dpi;
     }
 
-    public void setIdUsuario(int idUsuario) {
-        this.idUsuario = idUsuario;
+    public void setDpi(Long dpi) {
+        this.dpi = dpi;
     }
 
     public InputStream getFoto() {

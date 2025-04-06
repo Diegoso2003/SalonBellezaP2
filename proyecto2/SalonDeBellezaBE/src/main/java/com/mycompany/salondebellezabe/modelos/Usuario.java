@@ -12,7 +12,7 @@ import java.util.Objects;
  * @author rafael-cayax
  */
 public class Usuario {
-    private Integer dpi;
+    private Long dpi;
     private String nombre;
     private String correo;
     private Rol rol;
@@ -82,11 +82,11 @@ public class Usuario {
         this.hobbies = hobbies;
     }
 
-    public Integer getDpi() {
+    public Long getDpi() {
         return dpi;
     }
 
-    public void setDpi(Integer dpi) {
+    public void setDpi(Long dpi) {
         this.dpi = dpi;
     }
 
