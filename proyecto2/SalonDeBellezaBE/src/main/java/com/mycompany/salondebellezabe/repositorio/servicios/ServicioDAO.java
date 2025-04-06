@@ -8,7 +8,6 @@ import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -134,7 +133,6 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
         servicio.setPrecio(result.getDouble("precio"));
         if (obtenerEmpleados) {
             EmpleadosServicioDAO repositorio = new EmpleadosServicioDAO(servicio);
-            repositorio.setConeccion(coneccion);
             List<Usuario> empleados = repositorio.obtenerTodo();
             servicio.setEmpleados(new HashSet<>(empleados));
         }

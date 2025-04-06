@@ -6,6 +6,7 @@ package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

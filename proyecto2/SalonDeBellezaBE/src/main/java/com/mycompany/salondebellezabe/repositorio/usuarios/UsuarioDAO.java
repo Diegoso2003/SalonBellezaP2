@@ -186,5 +186,23 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
     public void setObtenerDatos(boolean obtenerDatos) {
         this.obtenerDatos = obtenerDatos;
     }
+
+    /**
+     * metodo usado para retornar la lista con todos los clientes que esten en la
+     * lista negra
+     * @return 
+     */
+    public List<Usuario> obtenerClientesListaNegra(){
+        return listarPorAtributos("SELECT * FROM Usuario WHERE rol = 'CLIENTE' AND listaNegra = TRUE");
+        
+    }
     
+    /**
+     * metodo para obtener a todos los usuarios que formen parte del personal del
+     * salon de belleza
+     * @return lista con el personal del salon
+     */
+    public List<Usuario> obtenerPersonal(){
+        return listarPorAtributos("SELECT * FROM Usuario WHERE rol != 'CLIENTE'");
+    }
 }

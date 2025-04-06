@@ -4,11 +4,9 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
-import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.Anuncio;
 import com.mycompany.salondebellezabe.modelos.enums.TipoAnuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,13 +29,12 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
     @Override
     public void insertar(Anuncio anuncio) {
         String query = "INSERT INTO Anuncio(tipo, texto, urlVideo) VALUES(?, ?, ?)";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
+        try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, anuncio.getTipo().toString());
             stmt.setString(2, anuncio.getTexto());
             stmt.setString(3, anuncio.getUrlVideo());
             if (stmt.executeUpdate() > 0) {
-                try(ResultSet result = stmt.getGeneratedKeys()){
+                try (ResultSet result = stmt.getGeneratedKeys()) {
                     idGenerado = result.getInt(1);
                 }
             }
@@ -53,8 +50,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
     @Override
     public void eliminar(Integer id) {
         String query = "UPDATE Anuncio SET estado = FALSE WHERE idAnuncio = ?";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, id);
             if (stmt.executeUpdate() <= 0) {
                 //no se encontro el anuncio
@@ -78,8 +74,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
     @Override
     public void actualizar(Anuncio anuncio) {
         String query = "UPDATE Anuncio SET texto = ?, urlVideo = ? WHERE idAnuncio = ?";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, anuncio.getTexto());
             stmt.setString(2, anuncio.getUrlVideo());
             stmt.setInt(3, anuncio.getIdAnuncio());
@@ -129,8 +124,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
                 + "INNER JOIN Vigencia v ON a.idAnuncio = v.idAnuncio "
                 + "WHERE (DATEDIFF(CURDATE(), v.fechaPublicacion)) > v.dias";
         String query = "SELECT idAnuncio FROM Anuncio WHERE estado = TRUE";
-        try (Connection coneccion = Coneccion.getConeccion();
-                Statement stmt = coneccion.createStatement();
+        try (Statement stmt = coneccion.createStatement();
                 Statement stmt2 = coneccion.createStatement()){
             stmt.executeUpdate(actu);
             try(ResultSet result = stmt2.executeQuery(query)){

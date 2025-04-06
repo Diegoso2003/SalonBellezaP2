@@ -4,7 +4,6 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
-import com.mycompany.salondebellezabe.Coneccion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +22,7 @@ import java.util.Optional;
  */
 public abstract class Repositorio<T, ID> {
     protected Integer idGenerado;
+    protected Connection coneccion;
     
     public abstract void insertar(T entidad);
     public abstract void eliminar(ID id);
@@ -39,8 +39,7 @@ public abstract class Repositorio<T, ID> {
      */
     protected List<T> listarPorAtributos(String consulta){
         List<T> entidades = new ArrayList<>();
-        try (Connection coneccion = Coneccion.getConeccion();
-                Statement stmt = coneccion.createStatement();
+        try (Statement stmt = coneccion.createStatement();
                 ResultSet result = stmt.executeQuery(consulta)){
             while(result.next()){
                 T entidad = obtenerDatos(result);
@@ -61,8 +60,7 @@ public abstract class Repositorio<T, ID> {
      * @return un optional con la entidad si es encontrada
      */
     protected Optional<T> buscar(String query, Object columna, SQLType tipo){
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setObject(1, columna, tipo);
             try(ResultSet result = stmt.executeQuery()){
                 if (result.next()) {
@@ -84,6 +82,10 @@ public abstract class Repositorio<T, ID> {
      */
     public Integer getIdGenerado() {
         return idGenerado;
+    }
+
+    public void setConeccion(Connection coneccion) {
+        this.coneccion = coneccion;
     }
     
 }

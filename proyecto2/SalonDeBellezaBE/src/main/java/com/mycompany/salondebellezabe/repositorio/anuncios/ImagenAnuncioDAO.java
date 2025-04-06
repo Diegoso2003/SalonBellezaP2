@@ -4,7 +4,6 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
-import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.ImagenAnuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import java.sql.Connection;
@@ -30,8 +29,7 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
     public void insertar(ImagenAnuncio imagen) {
         String query = "INSERT INTO ImagenAnuncio(idAnuncio, imagen, extension)"
                 + " VALUES(?, ?, ?)";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, imagen.getIdAnuncio());
             stmt.setBlob(2, imagen.getImagen());
             stmt.setString(3, imagen.getExtension());
@@ -64,8 +62,7 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
     @Override
     public void actualizar(ImagenAnuncio imagen) {
         String query = "UPDATE ImagenAnuncio SET extension = ?, imagen = ? WHERE idAnuncio = ?";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, imagen.getExtension());
             stmt.setBlob(2, imagen.getImagen());
             stmt.setInt(3, imagen.getIdAnuncio());

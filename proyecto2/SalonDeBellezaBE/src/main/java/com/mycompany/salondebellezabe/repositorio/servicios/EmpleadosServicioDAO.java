@@ -132,7 +132,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
     @Override
     protected Usuario obtenerDatos(ResultSet result) throws SQLException {
         Long dpi = result.getLong("empleado");
-        UsuarioDAO repositorio = new UsuarioDAO(coneccion);
+        UsuarioDAO repositorio = new UsuarioDAO();
         Optional<Usuario> usuario = repositorio.obtenerPorID(dpi);
         return usuario.get();
     }
