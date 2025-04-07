@@ -1,0 +1,99 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package com.mycompany.salondebellezabe.servicios.usuario;
+
+import com.mycompany.salondebellezabe.Coneccion;
+import com.mycompany.salondebellezabe.Encriptador;
+import com.mycompany.salondebellezabe.excepciones.ConeccionException;
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.excepciones.NoAutorizadoException;
+import com.mycompany.salondebellezabe.modelos.Usuario;
+import com.mycompany.salondebellezabe.modelos.enums.Rol;
+import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
+import com.mycompany.salondebellezabe.servicios.Service;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Optional;
+
+/**
+ *
+ * @author rafael-cayax
+ */
+public class UsuarioService extends Service<Usuario>{
+    private Usuario usuario;
+    private UsuarioDAO repositorioUsuario;
+    
+    public UsuarioService(){
+        super(new UsuarioDAO());
+        repositorioUsuario = (UsuarioDAO) repositorio;
+    }
+    
+    @Override
+    protected void validarDatos(Usuario usuario) {
+        if (usuario == null) {
+            
+        }
+    }
+    
+    /**
+     * metodo para obtener los datos del usuario en base a su contraseña y correo
+     * @param usuario el correo y la contraseña del usuario
+     * @return los datos que deba almacenar la aplicacion
+     * @throws InvalidDataException en caso de no ingresar correctamente los datos
+     * solicitados
+     */
+    public Usuario iniciarSesion(Usuario usuario){
+        if (usuario == null || !usuario.esCorreoValido() || usuario.getContraseña() == null) {
+            throw new InvalidDataException("ingrese correctamente los datos solicitados");
+        }
+        obtenerUsuario();
+        comparaContraseñas(usuario);
+        validarEstado();
+        this.usuario.setContraseña(null);
+        this.usuario.setCorreo(null);
+        return this.usuario;
+    }
+
+    /**
+     * metodo para obtener los datos del usuario 
+     * @throws InvalidDataException en caso de que no se encuentre el usuario por
+     * el correo
+     * @throws ConeccionException en caso de que falle la coneccion a la base de datos
+     */
+    private void obtenerUsuario() {
+        try (Connection coneccion = Coneccion.getConeccion()){
+            repositorioUsuario.setConeccion(coneccion);
+            repositorioUsuario.setObtenerContraseña(true);
+            Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(usuario.getCorreo());
+            this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo o contraseña incorrectos"));
+        } catch (SQLException e) {
+            throw new ConeccionException();
+        }
+    }
+
+    /**
+     * metodo para comparar contraseñas y verificar si es la contraseña correcta
+     * @param usuario la contraseña del usuario
+     * @throws InvalidDataException en caso de no ser iguales
+     */
+    private void comparaContraseñas(Usuario usuario) {
+        Encriptador encriptador = new Encriptador();
+        if (!encriptador.esValida(usuario.getContraseña(), this.usuario.getContraseña())) {
+            throw new InvalidDataException("correo o contraseña incorrectos");
+        }
+    }
+
+    /**
+     * metodo para validar el estado del usuario y si puede iniciar sesion
+     * @throws NoAutorizadoException en caso de que el usuario no sea un cliente y
+     * este desactivado
+     */
+    private void validarEstado() {
+        if (!this.usuario.isActivo() && this.usuario.getRol() != Rol.CLIENTE) {
+            throw new NoAutorizadoException("usuario desactivado, contacte con el administrador para reactivar");
+        }
+    }
+    
+}

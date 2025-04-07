@@ -129,6 +129,10 @@ public class Usuario {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+    
+    public boolean esCorreoValido(){
+        return this.correo != null || !this.correo.isBlank() || this.correo.length() >= 6;
+    }
 
     @Override
     public int hashCode() {

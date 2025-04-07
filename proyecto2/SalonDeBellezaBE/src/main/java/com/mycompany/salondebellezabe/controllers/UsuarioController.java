@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.controllers;
 
 import com.mycompany.salondebellezabe.modelos.Usuario;
+import com.mycompany.salondebellezabe.servicios.usuario.UsuarioService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -24,6 +25,9 @@ public class UsuarioController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response iniciarSesion(Usuario usuario){
-        return Response.ok().build();
+        UsuarioService servicio = new UsuarioService();
+        Usuario usuario2 = servicio.iniciarSesion(usuario);
+        return Response.ok(usuario2)
+                .build();
     }
 }

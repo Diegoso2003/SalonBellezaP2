@@ -4,6 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio.usuarios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
@@ -13,6 +15,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
+import java.sql.Connection;
 import java.sql.JDBCType;
 
 /**
@@ -27,6 +30,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
     /**
      * metodo usado para insertar solo los datos mas esenciales del usuario
      * @param usuario datos del usuario que se va a insertar
+     * @apiNote es necesario setear la coneccion para poder insertar datos
      */
     @Override
     public void insertar(Usuario usuario) {
@@ -44,9 +48,9 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
             statement.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
-                //mandar mensaje de correo duplicado o dpi duplicado
+                throw new InvalidDataException("dpi o correo ya ingresados verificar los datos ingresados");
             }
-            //mandar mensaje de datos invalidos
+            throw new InvalidDataException("datos ingresados no validos");
         }
     }
 
@@ -54,6 +58,8 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
      * metodo usado para cambiar el estado de un usuario de activo a desativado
      * en la base de datos 
      * @param dpi el dpi registrado en la base de datos del usuario
+     * @throws NotFoundException en caso de no encontrar al usuario
+     * @throws InvalidDataException en caso de el id ingresado no sea valido
      */
     @Override
     public void eliminar(Long dpi) {
@@ -61,9 +67,10 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setLong(1, dpi);
             if (stmt.executeUpdate() <= 0) {
-                //mandar mensaje de que no se encontro el usuario con el id
+                throw new NotFoundException("no se pudo encontrar al usuario con dpi: '" + dpi + "'");
             }
         } catch (SQLException e) {
+            throw new InvalidDataException("el dpi: '" + dpi +"' ingresado no es valido");
         }
     }
 
@@ -116,6 +123,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
      * metodo usado para poder buscar al usuario por el correo
      * @param correo el correo con el cual esta registrado el usuario
      * @return un optional con los datos del posible usuario
+     * @apiNote es necesario settear la coneccion
      */
     @Override
     public Optional<Usuario> buscarPorAtributo(String correo) {
