@@ -1,10 +1,10 @@
 import { Component, inject, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ValidadorFormService } from '../../services/validador-form.service';
 import { NgClass } from '@angular/common';
 import { InformacionComponent } from "../../informacion/informacion.component";
 import { Informacion } from '../../models/informacion';
+import { Validador } from '../../class/validador-form';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ import { Informacion } from '../../models/informacion';
 })
 export class LoginComponent {
 
-  loginForm !: FormGroup;
+  loginForm: FormGroup;
   informacion: Informacion = {
     hayError: false,
     mensaje: '',
@@ -23,14 +23,14 @@ export class LoginComponent {
     mostrarAlertaExito: false
   };
 
-  private _validadorForm = inject(ValidadorFormService);
+  private _validadorForm!: Validador;
 
   constructor(private formBuilder: FormBuilder) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required]]
     });
-    this._validadorForm.initForm(this.loginForm);
+    this._validadorForm = new Validador(this.loginForm);
   }
 
   enviar() {

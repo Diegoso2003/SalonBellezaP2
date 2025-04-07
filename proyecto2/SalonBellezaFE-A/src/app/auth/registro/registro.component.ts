@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ValidadorFormService } from '../../services/validador-form.service';
 import { NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Informacion } from '../../models/informacion';
 import { InformacionComponent } from '../../informacion/informacion.component';
+import { Validador } from '../../class/validador-form';
 
 @Component({
   selector: 'app-registro',
@@ -15,7 +15,7 @@ import { InformacionComponent } from '../../informacion/informacion.component';
 })
 export class RegistroComponent {
   registroForm !: FormGroup;
-  private _validadorForm = inject(ValidadorFormService);
+  private _validadorForm!: Validador;
   informacion: Informacion = {
     hayError: false,
     mensaje: '',
@@ -33,7 +33,7 @@ export class RegistroComponent {
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
       confirmarContraseña: ['', [Validators.required]]
     })
-    this._validadorForm.initForm(this.registroForm);
+    this._validadorForm = new Validador(this.registroForm);
   }
 
   enviar() {
