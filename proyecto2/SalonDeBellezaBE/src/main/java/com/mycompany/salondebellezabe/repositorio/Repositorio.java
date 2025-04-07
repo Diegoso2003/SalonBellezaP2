@@ -4,6 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
+import com.mycompany.salondebellezabe.Coneccion;
+import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +25,7 @@ import java.util.Optional;
 public abstract class Repositorio<T, ID> {
     protected Integer idGenerado;
     protected Connection coneccion;
+    private boolean obtenerConeccion = true;
     
     public abstract void insertar(T entidad);
     public abstract void eliminar(ID id);
@@ -73,6 +76,38 @@ public abstract class Repositorio<T, ID> {
         }
         return Optional.empty();
     }
+    
+    /**
+     * metodo usado para obtener la coneccion a la base de datos si no ha sido 
+     * setteada de lo contrario no la consigue
+     * @throws ConeccionException si al conseguir la coneccion falla algo
+     */
+    protected void obtenerConeccion(){
+        if (obtenerConeccion) {
+            try {
+                this.coneccion = Coneccion.getConeccion();
+            } catch (SQLException e) {
+                throw new ConeccionException();
+            }
+        }
+    }
+    
+    /**
+     * metodo para cerrar la conexion si no ha sido cerrada
+     */
+    protected void cerrar(){
+        if (obtenerConeccion) {
+            try {
+                this.coneccion.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
+    public void reiniciarEstado(){
+        this.obtenerConeccion = true;
+    }
 
     /**
      * metodo para obtener el id generado al insertar un elemento en una tabla 
@@ -85,6 +120,7 @@ public abstract class Repositorio<T, ID> {
     }
 
     public void setConeccion(Connection coneccion) {
+        this.obtenerConeccion = false;
         this.coneccion = coneccion;
     }
     

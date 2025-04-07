@@ -29,6 +29,12 @@
             <artifactId>jbcrypt</artifactId>
             <version>0.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>10.1.28</version>
+            <type>jar</type>
+        </dependency>
     </dependencies>
     
     <build>

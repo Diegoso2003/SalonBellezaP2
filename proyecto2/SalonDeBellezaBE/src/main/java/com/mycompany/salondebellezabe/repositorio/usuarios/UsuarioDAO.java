@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
-import java.sql.Connection;
 import java.sql.JDBCType;
 
 /**

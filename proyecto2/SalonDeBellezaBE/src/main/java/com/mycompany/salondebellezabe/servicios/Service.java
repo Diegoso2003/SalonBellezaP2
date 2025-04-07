@@ -4,7 +4,6 @@
  */
 package com.mycompany.salondebellezabe.servicios;
 
-import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,24 +22,14 @@ public abstract class Service<T> {
     
     public void crearEntidad(T entidad){
         validarDatos(entidad);
-        try (Connection coneccion = Coneccion.getConeccion()){
-            repositorio.setConeccion(coneccion);
-            repositorio.insertar(entidad);
-        } catch (SQLException e) {
-            //error al conectarse a la base de datos
-        }
+        
     }
     
     protected abstract void validarDatos(T entidad);
     
     public void actualizar(T entidad){
         validarDatos(entidad);
-        try (Connection coneccion = Coneccion.getConeccion()){
-            repositorio.setConeccion(coneccion);
-            repositorio.actualizar(entidad);
-        } catch (SQLException e) {
         
-        }
     }
 
     public Repositorio getRepositorio() {

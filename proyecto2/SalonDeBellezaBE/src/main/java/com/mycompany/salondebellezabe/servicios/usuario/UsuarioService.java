@@ -4,7 +4,6 @@
  */
 package com.mycompany.salondebellezabe.servicios.usuario;
 
-import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.Encriptador;
 import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
@@ -63,14 +62,10 @@ public class UsuarioService extends Service<Usuario>{
      * @throws ConeccionException en caso de que falle la coneccion a la base de datos
      */
     private void obtenerUsuario() {
-        try (Connection coneccion = Coneccion.getConeccion()){
-            repositorioUsuario.setConeccion(coneccion);
             repositorioUsuario.setObtenerContraseña(true);
             Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(usuario.getCorreo());
             this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo o contraseña incorrectos"));
-        } catch (SQLException e) {
-            throw new ConeccionException();
-        }
+        
     }
 
     /**
