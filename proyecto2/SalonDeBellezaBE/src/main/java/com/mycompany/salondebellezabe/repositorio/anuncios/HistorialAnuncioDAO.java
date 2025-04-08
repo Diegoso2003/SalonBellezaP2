@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class HistorialAnuncioDAO extends Repositorio<HistorialAnuncio, HistorialAnuncio>{
+public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnuncio>{
 
     /**
      * metodo para insertar la fecha y el url donde se mostro el anuncio, en caso 

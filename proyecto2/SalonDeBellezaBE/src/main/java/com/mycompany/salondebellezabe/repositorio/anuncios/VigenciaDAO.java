@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.Vigencia;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,7 +18,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class VigenciaDAO extends Repositorio<Vigencia, Integer>{
+public class VigenciaDAO extends ClaseDAO<Vigencia, Integer>{
 
     @Override
     public void insertar(Vigencia vigencia) {

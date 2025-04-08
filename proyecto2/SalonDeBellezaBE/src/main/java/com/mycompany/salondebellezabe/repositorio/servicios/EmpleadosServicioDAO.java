@@ -6,7 +6,7 @@ package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,7 +19,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
+public class EmpleadosServicioDAO extends ClaseDAO<Usuario, Long>{
 
     private final Servicio servicio;
     

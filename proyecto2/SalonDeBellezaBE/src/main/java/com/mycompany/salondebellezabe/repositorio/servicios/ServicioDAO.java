@@ -7,7 +7,7 @@ package com.mycompany.salondebellezabe.repositorio.servicios;
 import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +22,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class ServicioDAO extends Repositorio<Servicio, Integer> implements BusquedaPorAtributo<Servicio>{
+public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements BusquedaPorAtributo<Servicio>{
 
     private boolean obtenerEmpleados = false;
     

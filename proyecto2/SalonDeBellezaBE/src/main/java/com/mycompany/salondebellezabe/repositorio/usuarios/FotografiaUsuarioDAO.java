@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.usuarios;
 
 import com.mycompany.salondebellezabe.modelos.FotografiaUsuario;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
+public class FotografiaUsuarioDAO extends ClaseDAO<FotografiaUsuario, Long>{
 
     /**
      * metodo usado para insertar la foto del usuario en la base de datos

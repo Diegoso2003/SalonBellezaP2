@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.ImagenAnuncio;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
+public class ImagenAnuncioDAO extends ClaseDAO<ImagenAnuncio, Integer>{
 
 
     /**

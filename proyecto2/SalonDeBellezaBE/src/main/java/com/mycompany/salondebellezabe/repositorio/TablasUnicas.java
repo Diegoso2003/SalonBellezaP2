@@ -15,7 +15,7 @@ import java.sql.Statement;
  * @author rafael-cayax
  * @param <T>
  */
-public abstract class TablasUnicas<T> {
+public abstract class TablasUnicas<T> extends Repositorio{
     
     private final String nombreTabla;
 
@@ -25,15 +25,17 @@ public abstract class TablasUnicas<T> {
 
     public T obtenerDatos(){
         T entidad = null;
+        obtenerConeccion();
         String query = "SELECT * FROM " + nombreTabla;
-        try (Connection coneccion = Coneccion.getConeccion();
-                Statement stmt = coneccion.createStatement();
+        try (Statement stmt = coneccion.createStatement();
                 ResultSet result = stmt.executeQuery(query)){
             if (result.next()) {
                 entidad = obtenerDatos(result);
             }
         } catch (SQLException e) {
             //algo salio mal
+        } finally {
+            cerrar();
         }
         return entidad;
     }

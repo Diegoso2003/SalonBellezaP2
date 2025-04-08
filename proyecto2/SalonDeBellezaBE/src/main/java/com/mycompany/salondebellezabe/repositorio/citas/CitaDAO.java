@@ -7,7 +7,7 @@ package com.mycompany.salondebellezabe.repositorio.citas;
 import com.mycompany.salondebellezabe.modelos.Cita;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import java.sql.Date;
 import java.sql.JDBCType;
@@ -23,7 +23,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class CitaDAO extends Repositorio<Cita, Integer>{
+public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
     @Override
     public void insertar(Cita cita) {

@@ -6,7 +6,7 @@ package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.Anuncio;
 import com.mycompany.salondebellezabe.modelos.enums.TipoAnuncio;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
+public class AnuncioDAO extends ClaseDAO<Anuncio, Integer>{
 
     /**
      * metodo usado para insertar publicar un nuevo anuncio

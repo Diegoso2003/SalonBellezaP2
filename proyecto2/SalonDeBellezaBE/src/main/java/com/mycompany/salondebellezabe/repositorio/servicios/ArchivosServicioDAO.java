@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,7 +17,7 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
+public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
 
     private boolean catalogo = false;
 

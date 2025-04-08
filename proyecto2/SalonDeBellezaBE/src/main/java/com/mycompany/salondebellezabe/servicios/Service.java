@@ -4,7 +4,7 @@
  */
 package com.mycompany.salondebellezabe.servicios;
 
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 
 
 /**
@@ -12,25 +12,25 @@ import com.mycompany.salondebellezabe.repositorio.Repositorio;
  * @author rafael-cayax
  */
 public abstract class Service<T> {
-    protected Repositorio repositorio;
+    protected ClaseDAO repositorio;
 
-    public Service(Repositorio repositorio) {
+    public Service(ClaseDAO repositorio) {
         this.repositorio = repositorio;
     }
     
     public void crearEntidad(T entidad){
         validarDatos(entidad);
-        
+        repositorio.insertar(entidad);
     }
     
     protected abstract void validarDatos(T entidad);
     
     public void actualizar(T entidad){
         validarDatos(entidad);
-        
+        repositorio.actualizar(entidad);
     }
 
-    public Repositorio getRepositorio() {
+    public ClaseDAO getRepositorio() {
         return repositorio;
     }
     

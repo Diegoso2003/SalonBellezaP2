@@ -30,14 +30,16 @@ public class HorarioSalonRep extends TablasUnicas<HorarioSalon> {
      */
     @Override
     public void actualizarTabla(HorarioSalon horario) {
+        obtenerConeccion();
         String query = "UPDATE HorarioSalon SET horaInicio = ?, horaFin = ?";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)) {
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)) {
             stmt.setTime(1, Time.valueOf(horario.getHoraInicio()));
             stmt.setTime(2, Time.valueOf(horario.getHoraFin()));
             stmt.executeUpdate();
         } catch (SQLException e) {
             //valores ingresados invalidos
+        } finally{
+            cerrar();
         }
     }
 

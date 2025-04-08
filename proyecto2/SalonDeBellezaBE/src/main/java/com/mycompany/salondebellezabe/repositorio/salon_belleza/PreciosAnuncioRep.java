@@ -29,14 +29,16 @@ public class PreciosAnuncioRep extends TablasUnicas<PreciosAnuncio>{
     @Override
     public void actualizarTabla(PreciosAnuncio entidad) {
         String query = "UPDATE PreciosAnuncio SET texto = ?, video = ?, imagen = ?";
-        try (Connection coneccion = Coneccion.getConeccion();
-                PreparedStatement stmt = coneccion.prepareStatement(query)){
+        obtenerConeccion();
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setDouble(1, entidad.getTexto());
             stmt.setDouble(2, entidad.getVideo());
             stmt.setDouble(3, entidad.getImagen());
             stmt.executeUpdate();
         } catch (SQLException e) {
             //valores ingresados invalidos
+        } finally {
+            cerrar();
         }
     }
 

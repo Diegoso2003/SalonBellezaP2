@@ -8,7 +8,7 @@ import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
-import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ import java.sql.JDBCType;
  *
  * @author rafael-cayax
  */
-public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPorAtributo<Usuario> {
+public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAtributo<Usuario> {
 
     private boolean obtenerContraseña = false;
     private boolean obtenerDatos = false;
