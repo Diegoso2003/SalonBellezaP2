@@ -5,8 +5,6 @@
 package com.mycompany.salondebellezabe.servicios;
 
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
-import java.sql.SQLException;
 
 
 /**

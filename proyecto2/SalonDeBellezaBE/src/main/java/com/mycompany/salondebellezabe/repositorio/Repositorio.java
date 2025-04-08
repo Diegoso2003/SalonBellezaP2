@@ -17,7 +17,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- *
+ * clase diseñada para seguir el patron dao para bases de datos usando mysql
+ * @implSpec todos los metodos que usen una coneccion deben de usarl el metodo
+ * de obtener coneccion {@link #obtenerConeccion()} ya que otras clases repositorio
+ * podrian hacer procesos por lo cual compartiran la misma coneccion usando 
+ * {@link #setConeccion(java.sql.Connection) } para asegurar usar la misma coneccion
+ * ademas de usar internamente {@link #cerrar() } para cerrar la coneccion al final
  * @author rafael-cayax
  * @param <T> la clase de la entidad
  * @param <ID> el tipo de dato que use como id
@@ -27,11 +32,71 @@ public abstract class Repositorio<T, ID> {
     protected Connection coneccion;
     private boolean obtenerConeccion = true;
     
+    /**
+     * metodo usado para insertar una entidad en la base de datos
+     * @implSpec este metodo debe ser implementado para poder insertar una fila
+     * a la tabla de una base de datos, de trabajar con ids auto increment usar 
+     * {@link #idGenerado} para almacenar el id generado
+     * @apiNote debe de usar {@link #obtenerConeccion() } para obtener una coneccion
+     * y en el finally usar {@link #cerrar() } para cerrar la coneccion
+     * @param entidad la entidad a guardar
+     */
     public abstract void insertar(T entidad);
+    
+    /**
+     * metodo usado para eliminar o desactivar una entidad en la base de datos
+     * @implSpec este metodo debe de ser implementado para eliminar un dato de la 
+     * base de datos o solo cambiar su estado
+     * @apiNote debe de usar {@link #obtenerConeccion() } para obtener una coneccion
+     * y en el finally usar {@link #cerrar() } para cerrar la coneccion
+     * @param id el id de la entidad
+     */
     public abstract void eliminar(ID id);
+    
+    /**
+     * metodo para obtener una entidad de la base de datos por su primary key
+     * @implSpec este metodo debe de ser implementado para obtener un posible dato
+     * que exista en la base de datos en caso de no existir el optional debe de regresar
+     * vacio
+     * @apiNote si se va a usar {@link #buscar(java.lang.String, java.lang.Object, java.sql.SQLType) }
+     * no es necesario aplicar lo siguiente:
+     * debe de usar {@link #obtenerConeccion() } para obtener una coneccion
+     * y en el finally usar {@link #cerrar() } para cerrar la coneccion
+     * @param id el id de la entidad
+     * @return un optional con la entidad
+     */
     public abstract Optional<T> obtenerPorID(ID id);
+    
+    /**
+     * metodo para actualizar un dato de la base de datos
+     * @implSpec este metodo debe de ser implementado para actualizar una fila en 
+     * alguna tabla de la base de datos, debe de ingresar la entidad con los datos
+     * a actualizar
+     * @apiNote debe de usar {@link #obtenerConeccion() } para obtener una coneccion
+     * y en el finally usar {@link #cerrar() } para cerrar la coneccion
+     * @param entidad los datos de la entidad
+     */
     public abstract void actualizar(T entidad);
+    
+    /**
+     * @implSpec para consultas simples solo es necesario armar la consulta
+     * y usar {@link #listarPorAtributos(java.lang.String) }
+     * @apiNote si se va a usar {@link #listarPorAtributos(java.lang.String) }
+     * no es necesario aplicar lo siguiente
+     * debe de usar {@link #obtenerConeccion() } para obtener una coneccion
+     * y en el finally usar {@link #cerrar() } para cerrar la coneccion
+     * @return 
+     */
     public abstract List<T> obtenerTodo();
+    
+    /**
+     * metodo usado para obtener los resultados de una consulta
+     * @apiNote metodo que debe ser implementado para obtener los datos de la entida
+     * en base a una consulta
+     * @param result los datos de la consulta
+     * @return el objeto entidad
+     * @throws SQLException 
+     */
     protected abstract T obtenerDatos(ResultSet result) throws SQLException;
     
     /**
@@ -105,6 +170,10 @@ public abstract class Repositorio<T, ID> {
         }
     }
     
+    /**
+     * al usar este metodo se reinicia el valor de la variable {@link #obtenerConeccion}
+     * a su valor por defecto
+     */
     public void reiniciarEstado(){
         this.obtenerConeccion = true;
     }
@@ -119,6 +188,11 @@ public abstract class Repositorio<T, ID> {
         return idGenerado;
     }
 
+    /**
+     * metodo usado por otras clases que hereden de {@link #Repositorio() }
+     * para compartir la misma coneccion
+     * @param coneccion la coneccion compartida
+     */
     public void setConeccion(Connection coneccion) {
         this.obtenerConeccion = false;
         this.coneccion = coneccion;
