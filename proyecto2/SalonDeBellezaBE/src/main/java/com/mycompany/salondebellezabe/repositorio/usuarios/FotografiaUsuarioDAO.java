@@ -6,6 +6,7 @@ package com.mycompany.salondebellezabe.repositorio.usuarios;
 
 import com.mycompany.salondebellezabe.modelos.FotografiaUsuario;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -24,6 +25,7 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
      */
     @Override
     public void insertar(FotografiaUsuario foto) {
+        obtenerConeccion();
         String query = "INSERT INTO FotoUsuario(foto, dpi, extension) VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
@@ -37,6 +39,8 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
                 //error al asignar la foto
             }
             //foto enviada invalida
+        } finally {
+            cerrar();
         }
     }
 
@@ -53,18 +57,9 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
      */
     @Override
     public Optional<FotografiaUsuario> obtenerPorID(Long dpi) {
+        obtenerConeccion();
         String query = "SELECT * FROM FotoUsuario WHERE dpi = ?";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setLong(1, dpi);
-            try(ResultSet result = stmt.executeQuery()){
-                if (result.next()) {
-                    return Optional.of(obtenerDatos(result));
-                }
-            }
-        } catch (SQLException e) {
-            //mensaje de id invalido
-        }
-        return Optional.empty();
+        return buscar(query, dpi, JDBCType.BIGINT);
     }
 
     /**
@@ -73,6 +68,7 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
      */
     @Override
     public void actualizar(FotografiaUsuario foto) {
+        obtenerConeccion();
         String query = "UPDATE FotoUsuario SET foto = ?, extension = ? WHERE idUsuario = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
@@ -83,6 +79,8 @@ public class FotografiaUsuarioDAO extends Repositorio<FotografiaUsuario, Long>{
             }
         } catch (SQLException e) {
             //foto ingresada invalida
+        } finally {
+            cerrar();
         }
     }
 

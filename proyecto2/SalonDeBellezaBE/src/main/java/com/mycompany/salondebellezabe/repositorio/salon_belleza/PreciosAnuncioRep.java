@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.salon_belleza;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.PreciosAnuncio;
 import com.mycompany.salondebellezabe.repositorio.TablasUnicas;
 import java.sql.Connection;
@@ -17,8 +18,8 @@ import java.sql.SQLException;
  */
 public class PreciosAnuncioRep extends TablasUnicas<PreciosAnuncio>{
 
-    public PreciosAnuncioRep(Connection coneccion) {
-        super(coneccion, "PreciosAnuncio");
+    public PreciosAnuncioRep() {
+        super("PreciosAnuncio");
     }
 
     /**
@@ -28,7 +29,8 @@ public class PreciosAnuncioRep extends TablasUnicas<PreciosAnuncio>{
     @Override
     public void actualizarTabla(PreciosAnuncio entidad) {
         String query = "UPDATE PreciosAnuncio SET texto = ?, video = ?, imagen = ?";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setDouble(1, entidad.getTexto());
             stmt.setDouble(2, entidad.getVideo());
             stmt.setDouble(3, entidad.getImagen());

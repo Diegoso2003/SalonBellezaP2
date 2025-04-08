@@ -9,7 +9,6 @@ import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
@@ -28,6 +27,7 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
 
     @Override
     public void insertar(Cita cita) {
+        obtenerConeccion();
         String query = "INSERT INTO Cita(cliente, empleado, fecha, hora, estado)"
                 + " VALUES(?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
@@ -43,6 +43,8 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
             }
         } catch (SQLException e) {
             //ingresar valores validos
+        } finally {
+            cerrar();
         }
     }
 
@@ -100,6 +102,7 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
      * @param consulta la query a ejecutar
      */
     private void actualizarCita(Integer id, String consulta) {
+        obtenerConeccion();
         try (PreparedStatement stmt = coneccion.prepareStatement(consulta)){
             stmt.setInt(1, id);
             if (stmt.executeUpdate() <= 0) {
@@ -107,6 +110,8 @@ public class CitaDAO extends Repositorio<Cita, Integer>{
             }
         } catch (SQLException e) {
             //otro error
+        } finally {
+            cerrar();
         }
     }
     

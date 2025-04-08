@@ -6,7 +6,6 @@ package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.Vigencia;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +22,7 @@ public class VigenciaDAO extends Repositorio<Vigencia, Integer>{
 
     @Override
     public void insertar(Vigencia vigencia) {
+        obtenerConeccion();
         String query = "INSERT INTO Vigencia(idAnuncio, dias, fechaPublicacion, precio) "
                 + "VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
@@ -40,6 +40,8 @@ public class VigenciaDAO extends Repositorio<Vigencia, Integer>{
                // anuncio no encontrado 
             }
             //valores ingresados no son validos
+        } finally {
+            cerrar();
         }
     }
 

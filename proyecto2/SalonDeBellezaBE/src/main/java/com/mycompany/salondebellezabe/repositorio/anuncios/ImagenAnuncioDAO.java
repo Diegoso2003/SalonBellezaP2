@@ -6,7 +6,6 @@ package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.ImagenAnuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +26,7 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
      */
     @Override
     public void insertar(ImagenAnuncio imagen) {
+        obtenerConeccion();
         String query = "INSERT INTO ImagenAnuncio(idAnuncio, imagen, extension)"
                 + " VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
@@ -36,6 +36,8 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
             stmt.executeUpdate();
         } catch (SQLException e) {
             //imagen ingresada invalida
+        } finally {
+            cerrar();
         }
     }
 
@@ -61,6 +63,7 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
      */
     @Override
     public void actualizar(ImagenAnuncio imagen) {
+        obtenerConeccion();
         String query = "UPDATE ImagenAnuncio SET extension = ?, imagen = ? WHERE idAnuncio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, imagen.getExtension());
@@ -71,6 +74,8 @@ public class ImagenAnuncioDAO extends Repositorio<ImagenAnuncio, Integer>{
             }
         } catch (SQLException e) {
             //imagen ingresada es invalida
+        } finally {
+            cerrar();
         }
     }
 

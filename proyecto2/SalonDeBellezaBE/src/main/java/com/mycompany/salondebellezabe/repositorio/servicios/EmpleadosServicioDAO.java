@@ -37,6 +37,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
      */
     @Override
     public void insertar(Usuario empleado) {
+        obtenerConeccion();
         String query = "INSERT INTO EmpleadosServicio(empleado, servicio) VALUES(?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setLong(1, empleado.getDpi());
@@ -49,6 +50,8 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
                 // empleado o servicio no encontrados
             }
             // valores ingresados invalidos
+        } finally {
+            cerrar();
         }
     }
 
@@ -59,6 +62,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
      */
     @Override
     public void eliminar(Long id) {
+        obtenerConeccion();
         String query = "DELETE FROM EmpleadosServicio WHERE empleado = ? AND servicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setLong(1, id);
@@ -68,6 +72,8 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
             }
         } catch (SQLException e) {
             //valores ingresados invalidos
+        } finally {
+            cerrar();
         }
     }
 
@@ -78,6 +84,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
      */
     @Override
     public Optional<Usuario> obtenerPorID(Long dpi) {
+        obtenerConeccion();
         String query = "SELECT * FROM EmpleadosServicio WHERE empleado = ? AND servicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setLong(1, dpi);
@@ -90,6 +97,8 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
             }
         } catch (SQLException e) {
             //valores ingresados invalidos
+        } finally {
+            cerrar();
         }
         return Optional.empty();
     }
@@ -107,6 +116,7 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
     @Override
     public List<Usuario> obtenerTodo() {
         List<Usuario> empleados = new ArrayList<>();
+        obtenerConeccion();
         String query = "SELECT * FROM EmpleadosServicio WHERE servicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, servicio.getIdServicio());
@@ -118,6 +128,8 @@ public class EmpleadosServicioDAO extends Repositorio<Usuario, Long>{
             }
         } catch (SQLException e) {
             //informar de un error
+        } finally {
+            cerrar();
         }
         return empleados;
     }

@@ -33,6 +33,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
      */
     @Override
     public void insertar(Usuario usuario) {
+        obtenerConeccion();
         String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, direccion, descripcion) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = coneccion.prepareStatement(query)){
@@ -50,6 +51,8 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
                 throw new InvalidDataException("dpi o correo ya ingresados verificar los datos ingresados");
             }
             throw new InvalidDataException("datos ingresados no validos");
+        } finally {
+            cerrar();
         }
     }
 
@@ -62,6 +65,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
      */
     @Override
     public void eliminar(Long dpi) {
+        obtenerConeccion();
         String query = "UPDATE Usuario SET activo = 0 WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setLong(1, dpi);
@@ -70,6 +74,8 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
             }
         } catch (SQLException e) {
             throw new InvalidDataException("el dpi: '" + dpi +"' ingresado no es valido");
+        } finally {
+            cerrar();
         }
     }
 
@@ -90,6 +96,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
      */
     @Override
     public void actualizar(Usuario usuario) {
+        obtenerConeccion();
         String query = "UPDATE Usuario SET nombre = ?, telefono = ?, direccion = ?, "
                 + "hobbies = IFNULL(?, 'No especificado'), gustos = IFNULL(?, 'No especificado'), "
                 + "descripcion = IFNULL(?, 'Sin descripcion') WHERE idUsuario = ?";
@@ -106,6 +113,8 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
             }
         } catch (SQLException e) {
             //mandar error sobre ingresar datos validos
+        } finally {
+            cerrar();
         }
     }
     
@@ -163,6 +172,7 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
      * @param usuario usuario con la contraseña actual
      */
     public void actualizarContraseña(Usuario usuario){
+        obtenerConeccion();
         String query = "UPDATE Usuario SET Contraseña = ? WHERE dpi = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, usuario.getContraseña());
@@ -172,6 +182,8 @@ public class UsuarioDAO extends Repositorio<Usuario, Long> implements BusquedaPo
             }
         } catch (SQLException e) {
             //id de usuario ingresado invalido
+        } finally {
+            cerrar();
         }
     }
 

@@ -34,6 +34,7 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
      */
     @Override
     public void insertar(Servicio servicio) {
+        obtenerConeccion();
         String query = "INSERT INTO Servicio(nombreServicio, precio, duracion, descripcion) "
                 + "VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
@@ -54,6 +55,8 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
                 //error el servicio con ese nombre ya esta ingresado
             }
             //error de insertar valores validos
+        } finally {
+            cerrar();
         }
     }
 
@@ -64,6 +67,7 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
      */
     @Override
     public void eliminar(Integer id) {
+        obtenerConeccion();
         String query = "UPDATE Servicio SET activo = FALSE WHERE idServicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, id);
@@ -72,6 +76,8 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
             }
         } catch (SQLException e) {
             //mandar error de id ingresado invalido
+        } finally {
+            cerrar();
         }
     }
 
@@ -89,6 +95,7 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
 
     @Override
     public void actualizar(Servicio servicio) {
+        obtenerConeccion();
         String query = "UPDATE Servicio SET nombreServicio = ? , precio = ?, "
                 + "duracion = ?, descripcion = ? WHERE idServicio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
@@ -105,6 +112,8 @@ public class ServicioDAO extends Repositorio<Servicio, Integer> implements Busqu
                 //error el servicio con el nombre ya esta ingresado en la base de datos
             }
             // error datos ingresados invalidos
+        } finally {
+            cerrar();
         }
     }
 

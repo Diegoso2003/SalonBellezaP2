@@ -4,8 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,18 +17,17 @@ import java.sql.Statement;
  */
 public abstract class TablasUnicas<T> {
     
-    protected Connection coneccion;
     private final String nombreTabla;
 
-    public TablasUnicas(Connection coneccion, String nombreTabla) {
-        this.coneccion = coneccion;
+    public TablasUnicas(String nombreTabla) {
         this.nombreTabla = nombreTabla;
     }
 
     public T obtenerDatos(){
         T entidad = null;
         String query = "SELECT * FROM " + nombreTabla;
-        try (Statement stmt = coneccion.createStatement();
+        try (Connection coneccion = Coneccion.getConeccion();
+                Statement stmt = coneccion.createStatement();
                 ResultSet result = stmt.executeQuery(query)){
             if (result.next()) {
                 entidad = obtenerDatos(result);

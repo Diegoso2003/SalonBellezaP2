@@ -6,7 +6,6 @@ package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,6 +27,7 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
      */
     @Override
     public void insertar(ArchivosServicio archivos) {
+        obtenerConeccion();
         String query = "INSERT INTO ArchivosServicio(idArchivos, catalogo, fotografia, extension) "
                 + "VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
@@ -40,6 +40,8 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
             }
         } catch (SQLException e) {
             //error al insertat la imagen o el pdf
+        } finally {
+            cerrar();
         }
     }
 
@@ -75,6 +77,7 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
     @Override
     public void actualizar(ArchivosServicio archivos) {
         String query;
+        obtenerConeccion();
         if (catalogo) {
             query = "UPDATE ArchivosServicio SET catalogo = ? WHERE idArchivo = ?";
         } else {
@@ -96,6 +99,8 @@ public class ArchivosServicioDAO extends Repositorio<ArchivosServicio, Integer>{
             }
         } catch (SQLException e) {
             //archivo enviado invalidos
+        } finally {
+            cerrar();
         }
     }
 

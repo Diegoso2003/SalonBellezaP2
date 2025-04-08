@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.salon_belleza;
 
+import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.HorarioSalon;
 import com.mycompany.salondebellezabe.repositorio.TablasUnicas;
 import java.sql.Connection;
@@ -18,8 +19,8 @@ import java.sql.Time;
  */
 public class HorarioSalonRep extends TablasUnicas<HorarioSalon> {
 
-    public HorarioSalonRep(Connection coneccion) {
-        super(coneccion, "HorarioSalon");
+    public HorarioSalonRep() {
+        super("HorarioSalon");
     }
 
     /**
@@ -30,7 +31,8 @@ public class HorarioSalonRep extends TablasUnicas<HorarioSalon> {
     @Override
     public void actualizarTabla(HorarioSalon horario) {
         String query = "UPDATE HorarioSalon SET horaInicio = ?, horaFin = ?";
-        try (PreparedStatement stmt = coneccion.prepareStatement(query)) {
+        try (Connection coneccion = Coneccion.getConeccion();
+                PreparedStatement stmt = coneccion.prepareStatement(query)) {
             stmt.setTime(1, Time.valueOf(horario.getHoraInicio()));
             stmt.setTime(2, Time.valueOf(horario.getHoraFin()));
             stmt.executeUpdate();

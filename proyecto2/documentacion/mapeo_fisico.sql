@@ -10,19 +10,22 @@ CREATE TABLE Usuario(
 	rol ENUM('CLIENTE','EMPLEADO','MARKETING','SERVICIOS','ADMINISTRADOR'),
 	contraseña VARCHAR(60) NOT NULL,
 	telefono VARCHAR(20) NOT NULL,
-	direccion VARCHAR(250) NOT NULL DEFAULT 'No especificada',
-	descripcion TEXT NOT NULL DEFAULT 'Sin descripción',
-	gustos TEXT NOT NULL DEFAULT 'No especificado',
-	hobbies TEXT NOT NULL DEFAULT 'No especificado',
+	direccion VARCHAR(250),
+	descripcion TEXT,
+	gustos TEXT,
+	hobbies TEXT,
 	activo BOOL NOT NULL DEFAULT TRUE,
 	listaNegra BOOL NOT NULL DEFAULT FALSE,
 	CONSTRAINT pk_usuario PRIMARY KEY(dpi)
 );
 
+INSERT INTO Usuario(dpi, nombre, correo, rol, contraseña, telefono) VALUES(3355700050901, 'diego rafael', 'diegocayax@gmail.com', 'ADMINISTRADOR', 
+	'$2a$10$V8VR4nTQXhmvs5SSiZUrwOXy5td1K30K.873W/FdnZe4vwuEX5422', '+502 38162870');
+
 CREATE TABLE FotoUsuario(
 	dpi BIGINT,
-	foto BLOB,
-	extension VARCHAR(10),
+	foto BLOB NOT NULL,
+	extension VARCHAR(10) NOT NULL,
 	CONSTRAINT pk_foto_usuario PRIMARY KEY(dpi),
 	CONSTRAINT fk_usuario FOREIGN KEY(dpi) REFERENCES Usuario(dpi)
 );
@@ -87,7 +90,7 @@ CREATE TABLE Vigencia(
 	fechaPublicacion DATE NOT NULL,
 	precio DECIMAL(10, 2) UNSIGNED NOT NULL,
 	CONSTRAINT pk_vigencia PRIMARY KEY(idVigencia),
-	CONSTRAINT fk_anuncio2 FOREIGN KEY(idAnuncio) REFERENCES Anuncio(idAnuncio)
+	CONSTRAINT fk_anuncio3 FOREIGN KEY(idAnuncio) REFERENCES Anuncio(idAnuncio)
 );
 
 CREATE TABLE Cita(
@@ -99,7 +102,7 @@ CREATE TABLE Cita(
 	hora TIME NOT NULL,
 	estado ENUM('PENDIENTE','PROGRAMADA','RECHAZADA','AUSENTE','ATENDIDA') NOT NULL,
 	CONSTRAINT fk_cliente1 FOREIGN KEY(cliente) REFERENCES Usuario(dpi),
-	CONSTRAINT fk_empleado2 FOREIGN KEY(empleado) REFERENCES Usuario(pdi),
+	CONSTRAINT fk_empleado2 FOREIGN KEY(empleado) REFERENCES Usuario(dpi),
 	CONSTRAINT pk_cita PRIMARY KEY(idCita)
 );
 

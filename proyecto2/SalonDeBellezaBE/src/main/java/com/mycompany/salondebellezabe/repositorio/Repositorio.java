@@ -107,6 +107,7 @@ public abstract class Repositorio<T, ID> {
      */
     protected List<T> listarPorAtributos(String consulta){
         List<T> entidades = new ArrayList<>();
+        obtenerConeccion();
         try (Statement stmt = coneccion.createStatement();
                 ResultSet result = stmt.executeQuery(consulta)){
             while(result.next()){
@@ -115,6 +116,8 @@ public abstract class Repositorio<T, ID> {
             }
         } catch (SQLException e) {
             //algo salio mal
+        } finally {
+            cerrar();
         }
         return entidades;
     }
@@ -128,6 +131,7 @@ public abstract class Repositorio<T, ID> {
      * @return un optional con la entidad si es encontrada
      */
     protected Optional<T> buscar(String query, Object columna, SQLType tipo){
+        obtenerConeccion();
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setObject(1, columna, tipo);
             try(ResultSet result = stmt.executeQuery()){
@@ -138,6 +142,8 @@ public abstract class Repositorio<T, ID> {
             }
         } catch (SQLException e) {
             //informar sobre un error con el parametro enviado
+        } finally {
+            cerrar();
         }
         return Optional.empty();
     }

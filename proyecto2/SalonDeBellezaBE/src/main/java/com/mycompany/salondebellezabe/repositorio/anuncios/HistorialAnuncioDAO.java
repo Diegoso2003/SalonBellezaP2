@@ -6,7 +6,6 @@ package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,6 +26,7 @@ public class HistorialAnuncioDAO extends Repositorio<HistorialAnuncio, Historial
      */
     @Override
     public void insertar(HistorialAnuncio historial) {
+        obtenerConeccion();
         String query = "INSERT INTO HistorialAnuncio(url, fechaPublicacion, idAnuncio)"
                 + " VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE contador = contador + 1";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
@@ -36,6 +36,8 @@ public class HistorialAnuncioDAO extends Repositorio<HistorialAnuncio, Historial
             stmt.executeUpdate();
         } catch (SQLException e) {
             //error al ingresar los datos
+        } finally {
+            cerrar();
         }
     }
 

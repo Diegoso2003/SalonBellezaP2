@@ -28,6 +28,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
      */
     @Override
     public void insertar(Anuncio anuncio) {
+        obtenerConeccion();
         String query = "INSERT INTO Anuncio(tipo, texto, urlVideo) VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, anuncio.getTipo().toString());
@@ -40,6 +41,8 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
             }
         } catch (SQLException e) {
             //datos ingresados no validos
+        } finally {
+            cerrar();
         }
     }
 
@@ -49,6 +52,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
      */
     @Override
     public void eliminar(Integer id) {
+        obtenerConeccion();
         String query = "UPDATE Anuncio SET estado = FALSE WHERE idAnuncio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, id);
@@ -57,6 +61,8 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
             }
         } catch (SQLException e) {
             //hubo un error
+        } finally {
+            cerrar();
         }
     }
 
@@ -73,6 +79,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
 
     @Override
     public void actualizar(Anuncio anuncio) {
+        obtenerConeccion();
         String query = "UPDATE Anuncio SET texto = ?, urlVideo = ? WHERE idAnuncio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, anuncio.getTexto());
@@ -83,6 +90,8 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
             }
         } catch (SQLException e) {
             //datos ingresados invalidos
+        } finally {
+            cerrar();
         }
     }
 
@@ -118,6 +127,7 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
      * @return lista con los id de anuncios vigentes
      */
     public List<Integer> obtenerIDactivos(){
+        obtenerConeccion();
         List<Integer> idsActivos = new ArrayList<>();
         String actu = "UPDATE Anuncio SET estado = FALSE WHERE idAnuncio IN "
                 + "(SELECT DISTINCT a.idAnuncio FROM Anuncio a "
@@ -134,6 +144,8 @@ public class AnuncioDAO extends Repositorio<Anuncio, Integer>{
             }
         } catch (SQLException e) {
             e.printStackTrace();//algo salio mal
+        } finally {
+            cerrar();
         }
         return idsActivos;
     }
