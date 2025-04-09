@@ -34,8 +34,8 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
     @Override
     public void insertar(Usuario usuario) {
         obtenerConeccion();
-        String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, estado) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, activo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, usuario.getNombre().trim().replaceAll("\\s+", " "));
             stmt.setString(2, usuario.getCorreo().trim());
@@ -46,6 +46,7 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
             stmt.setBoolean(7, usuario.isActivo());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            e.printStackTrace();
             if (e.getErrorCode() == 1062) {
                 throw new InvalidDataException("dpi o correo ya ingresados verificar los datos ingresados");
             }
@@ -135,7 +136,7 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
     @Override
     public Optional<Usuario> buscarPorAtributo(String correo) {
         String query = "SELECT * FROM Usuario WHERE correo = ?";
-        return buscar(query, correo, JDBCType.VARCHAR);
+        return buscar(query, correo.trim(), JDBCType.VARCHAR);
     }
 
     /**

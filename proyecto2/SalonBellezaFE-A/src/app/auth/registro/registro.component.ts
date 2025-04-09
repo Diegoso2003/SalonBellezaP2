@@ -34,9 +34,9 @@ export class RegistroComponent {
       nombre: ['', [Validators.required, Validators.minLength(6)]],
       dpi: ['', [Validators.required, Validators.pattern(/^[1-9]\d{12}$/)]],
       telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-      email: ['', [Validators.required, Validators.email]],
+      correo: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
-      confirmarContraseña: ['', [Validators.required]]
+      confirmacionContraseña: ['', [Validators.required]]
     })
     this._validadorForm = new Validador(this.registroForm);
   }
@@ -54,7 +54,7 @@ export class RegistroComponent {
         error: (error) => {
           console.log(error);
           this.informacion.hayError = true;
-          this.informacion.mensaje = error.mensaje || 'Error al registrar el usuario';
+          this.informacion.mensaje = error.error.mensaje || 'Error al registrar el usuario';
           this.informacion.mostrarAlertaExito = false;
           this.registroForm.markAllAsTouched();
           this.informacion.exito = false;
@@ -107,15 +107,15 @@ export class RegistroComponent {
   }
 
   faltaEmail() {
-    return this._validadorForm.hasErrors('email', 'required');
+    return this._validadorForm.hasErrors('correo', 'required');
   }
 
   esEmailInvalido() {
-    return this._validadorForm.hasErrors('email', 'email');
+    return this._validadorForm.hasErrors('correo', 'email');
   }
 
   esEmailValido() {
-    return this._validadorForm.esValido('email');
+    return this._validadorForm.esValido('correo');
   }
 
   esPasswordInvalido() {
@@ -131,19 +131,19 @@ export class RegistroComponent {
   }
 
   esConfirmacionPasswordInvalido() {
-    return this._validadorForm.hasErrors('confirmarContraseña', 'minlength');
+    return this._validadorForm.hasErrors('confirmacionContraseña', 'minlength');
   }
 
   faltaConfirmacionPassword() {
-    return this._validadorForm.hasErrors('confirmarContraseña', 'required');
+    return this._validadorForm.hasErrors('confirmacionContraseña', 'required');
   }
 
   esConfirmacionPasswordValido() {
-    return this._validadorForm.esValido('confirmarContraseña');
+    return this._validadorForm.esValido('confirmacionContraseña');
   }
 
   esPasswordIgual() {
-    return this.registroForm.get('contraseña')?.value === this.registroForm.get('confirmarContraseña')?.value;
+    return this.registroForm.get('contraseña')?.value === this.registroForm.get('confirmacionContraseña')?.value;
   }
 
   esPasswordIgualValido() {

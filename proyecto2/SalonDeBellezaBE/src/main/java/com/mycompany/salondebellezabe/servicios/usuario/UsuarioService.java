@@ -46,7 +46,7 @@ public class UsuarioService extends Service<Usuario>{
         if (!validadorUsuario.esInicioDeSesionValido(usuario)) {
             throw new InvalidDataException("ingrese correctamente sus credenciales");
         }
-        obtenerUsuario();
+        obtenerUsuario(usuario.getCorreo());
         comparaContraseñas(usuario);
         validarEstado();
         this.usuario.setContraseña(null);
@@ -60,9 +60,9 @@ public class UsuarioService extends Service<Usuario>{
      * el correo
      * @throws ConeccionException en caso de que falle la coneccion a la base de datos
      */
-    private void obtenerUsuario() {
+    private void obtenerUsuario(String correo) {
             repositorioUsuario.setObtenerContraseña(true);
-            Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(usuario.getCorreo());
+            Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(correo);
             this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo o contraseña incorrectos"));
         
     }

@@ -70,7 +70,7 @@ public class ValidadorUsuario extends Validador<Usuario>{
     
     public boolean esClienteValido(){
         return esCorreoValido() && esContraseñaValida() && esConfirmacionContraseñaValida()
-                && esNombreValido() && esTelefonoValido() && esDireccionValida() && esDpiValido();
+                && esNombreValido() && esTelefonoValido() && esDpiValido();
     }
     
     public boolean esAdministradorValido(){
