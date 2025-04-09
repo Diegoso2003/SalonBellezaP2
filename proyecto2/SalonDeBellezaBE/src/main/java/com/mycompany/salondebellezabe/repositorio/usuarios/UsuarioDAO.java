@@ -27,25 +27,24 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
     private boolean obtenerDatos = false;
 
     /**
-     * metodo usado para insertar solo los datos mas esenciales del usuario
+     * metodo usado para crear ingresar los datos necesarios para un usuario
      * @param usuario datos del usuario que se va a insertar
      * @apiNote es necesario setear la coneccion para poder insertar datos
      */
     @Override
     public void insertar(Usuario usuario) {
         obtenerConeccion();
-        String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, direccion, descripcion) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement statement = coneccion.prepareStatement(query)){
-            statement.setString(1, usuario.getNombre());
-            statement.setString(2, usuario.getCorreo());
-            statement.setString(3, usuario.getRol().name());
-            statement.setString(4, usuario.getContraseña());
-            statement.setLong(5, usuario.getDpi());
-            statement.setString(6, usuario.getTelefono());
-            statement.setString(7, usuario.getDireccion());
-            statement.setString(8, usuario.getDescripcion());
-            statement.executeUpdate();
+        String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, estado) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setString(1, usuario.getNombre().trim().replaceAll("\\s+", " "));
+            stmt.setString(2, usuario.getCorreo().trim());
+            stmt.setString(3, usuario.getRol().name());
+            stmt.setString(4, usuario.getContraseña());
+            stmt.setLong(5, usuario.getDpi());
+            stmt.setString(6, usuario.getTelefono().trim().replaceAll("\\s+", " "));
+            stmt.setBoolean(7, usuario.isActivo());
+            stmt.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
                 throw new InvalidDataException("dpi o correo ya ingresados verificar los datos ingresados");

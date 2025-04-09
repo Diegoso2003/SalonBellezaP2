@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.servicios;
 
+import com.mycompany.salondebellezabe.validador.Validador;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 
 
@@ -13,20 +14,22 @@ import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
  */
 public abstract class Service<T> {
     protected ClaseDAO repositorio;
+    protected Validador validador;
 
-    public Service(ClaseDAO repositorio) {
+    public Service(ClaseDAO repositorio, Validador validador) {
         this.repositorio = repositorio;
+        this.validador = validador;
     }
     
     public void crearEntidad(T entidad){
-        validarDatos(entidad);
+        validador.validarDatos(entidad);
         repositorio.insertar(entidad);
     }
     
     protected abstract void validarDatos(T entidad);
     
     public void actualizar(T entidad){
-        validarDatos(entidad);
+        validador.validarDatos(entidad);
         repositorio.actualizar(entidad);
     }
 

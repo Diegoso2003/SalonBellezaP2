@@ -30,4 +30,14 @@ public class UsuarioController {
         return Response.ok(usuario2)
                 .build();
     }
+    
+    @Path("registro_cliente")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response registrarCliente(Usuario usuario){
+        UsuarioService servicio = new UsuarioService();
+        servicio.crearEntidad(usuario);
+        return Response.ok()
+                .build();
+    }
 }

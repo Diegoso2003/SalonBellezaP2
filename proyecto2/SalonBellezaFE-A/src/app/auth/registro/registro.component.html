@@ -103,31 +103,6 @@
                     }
                 </div>
             </div>
-  
-            <div class="position-relative"
-                    [ngClass]="{'mb-5' : (faltaDireccion() || esDireccionInvalida()),
-                    'mb-3' : !(faltaDireccion() || esDireccionInvalida())
-                    }"
-                >
-                <label for="validationTooltip06" class="form-label">Direccion</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [ngClass]="{'is-invalid' : (faltaDireccion() || esDireccionInvalida()),
-                    'is-valid' : esDireccionValida()
-                  }"
-                  id="validationTooltip06"
-                  formControlName="direccion"
-                  required
-                  />
-                <div class="invalid-tooltip">
-                    @if(faltaDireccion()) {
-                        Ingrese su direccion
-                    } @else {
-                        Ingrese una direccion valida
-                    }
-                </div>
-            </div>
 
             <div class="position-relative"
                     [ngClass]="{'mb-5' : faltaPassword(),

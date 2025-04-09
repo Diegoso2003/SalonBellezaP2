@@ -12,8 +12,7 @@ import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.servicios.Service;
-import java.sql.Connection;
-import java.sql.SQLException;
+import com.mycompany.salondebellezabe.validador.ValidadorUsuario;
 import java.util.Optional;
 
 /**
@@ -22,18 +21,18 @@ import java.util.Optional;
  */
 public class UsuarioService extends Service<Usuario>{
     private Usuario usuario;
-    private UsuarioDAO repositorioUsuario;
+    private final UsuarioDAO repositorioUsuario;
+    private final ValidadorUsuario validadorUsuario;
     
     public UsuarioService(){
-        super(new UsuarioDAO());
-        repositorioUsuario = (UsuarioDAO) repositorio;
+        super(new UsuarioDAO(), new ValidadorUsuario());
+        this.repositorioUsuario = (UsuarioDAO) repositorio;
+        this.validadorUsuario = (ValidadorUsuario) validador;
     }
     
     @Override
     protected void validarDatos(Usuario usuario) {
-        if (usuario == null) {
-            
-        }
+        
     }
     
     /**
@@ -44,8 +43,8 @@ public class UsuarioService extends Service<Usuario>{
      * solicitados
      */
     public Usuario iniciarSesion(Usuario usuario){
-        if (usuario == null || !usuario.esCorreoValido() || usuario.getContraseña() == null) {
-            throw new InvalidDataException("ingrese correctamente los datos solicitados");
+        if (!validadorUsuario.esInicioDeSesionValido(usuario)) {
+            throw new InvalidDataException("ingrese correctamente sus credenciales");
         }
         obtenerUsuario();
         comparaContraseñas(usuario);

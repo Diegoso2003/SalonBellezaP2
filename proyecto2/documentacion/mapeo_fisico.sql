@@ -10,7 +10,7 @@ CREATE TABLE Usuario(
 	rol ENUM('CLIENTE','EMPLEADO','MARKETING','SERVICIOS','ADMINISTRADOR'),
 	contraseña VARCHAR(60) NOT NULL,
 	telefono VARCHAR(20) NOT NULL,
-	direccion VARCHAR(250),
+	direccion VARCHAR(250) NOT NULL DEFAULT 'no especificada',
 	descripcion TEXT,
 	gustos TEXT,
 	hobbies TEXT,
@@ -133,9 +133,9 @@ cerrar sesion
 
 Administrador
 registrar nuevo empleado
-	listar empleados
-		dar de baja a empleados
-		reactivar empleado
+listar empleados
+	dar de baja a empleados
+	reactivar empleado
 gestionar precios de anuncios
 listar citas pendientes
 	aprobar rechazar citas
@@ -156,7 +156,6 @@ cerrar sesion
 Cliente
 listar servicios disponibles
 	agendar cita
-perfil
 listar reservaciones
 listar citas finalizadas
 perfil

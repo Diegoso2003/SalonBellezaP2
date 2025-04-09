@@ -5,6 +5,9 @@ import { RouterLink } from '@angular/router';
 import { Informacion } from '../../models/informacion';
 import { InformacionComponent } from '../../informacion/informacion.component';
 import { Validador } from '../../class/validador-form';
+import { UsuarioService } from '../../services/usuario.service';
+import { Usuario } from '../../models/usuario';
+import { Rol } from '../../models/enums/Rol';
 
 @Component({
   selector: 'app-registro',
@@ -16,6 +19,9 @@ import { Validador } from '../../class/validador-form';
 export class RegistroComponent {
   registroForm !: FormGroup;
   private _validadorForm!: Validador;
+  private _usuarioServicio = inject(UsuarioService)
+  private usuario!: Usuario;
+
   informacion: Informacion = {
     hayError: false,
     mensaje: '',
@@ -28,7 +34,6 @@ export class RegistroComponent {
       nombre: ['', [Validators.required, Validators.minLength(6)]],
       dpi: ['', [Validators.required, Validators.pattern(/^[1-9]\d{12}$/)]],
       telefono: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(20)]],
-      direccion: ['', [Validators.required, Validators.minLength(6)]],
       email: ['', [Validators.required, Validators.email]],
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
       confirmarContraseña: ['', [Validators.required]]
@@ -37,15 +42,29 @@ export class RegistroComponent {
   }
 
   enviar() {
-    if (this.registroForm.valid) {
+    if (this.registroForm.valid && this.esPasswordIgualValido()) {
       console.log(this.registroForm.value);
-      this.informacion.exito = true;
-      this.informacion.hayError = false;
-      this.informacion.mensaje = 'Formulario enviado correctamente';
-      this.informacion.mostrarAlertaExito = true;
+      this.usuario = this.registroForm.value as Usuario;
+      this.usuario.rol = Rol.CLIENTE;
+      this._usuarioServicio.registrarCliente(this.usuario).subscribe({
+        next: () => {
+          this.usuario.activo = false;
+          this._usuarioServicio.redireccionarUsuario(this.usuario);
+        },
+        error: (error) => {
+          console.log(error);
+          this.informacion.hayError = true;
+          this.informacion.mensaje = error.mensaje || 'Error al registrar el usuario';
+          this.informacion.mostrarAlertaExito = false;
+          this.registroForm.markAllAsTouched();
+          this.informacion.exito = false;
+        }
+      });
     } else {
       this.informacion.hayError = true;
-      this.informacion.mensaje = 'Formulario inválido';
+      this.informacion.mensaje = 'ingresar correctamente los datos';
+      this.informacion.mostrarAlertaExito = false;
+      this.registroForm.markAllAsTouched();
       this.informacion.exito = false;
       console.log('Formulario inválido');
     }
@@ -85,18 +104,6 @@ export class RegistroComponent {
 
   esTelefonoValido(){
     return this._validadorForm.esValido('telefono');
-  }
-
-  faltaDireccion(){
-    return this._validadorForm.hasErrors('direccion', 'required');
-  }
-
-  esDireccionInvalida() {
-    return this._validadorForm.hasErrors('direccion', 'minlength');
-  }
-
-  esDireccionValida() {
-    return this._validadorForm.esValido('direccion');
   }
 
   faltaEmail() {

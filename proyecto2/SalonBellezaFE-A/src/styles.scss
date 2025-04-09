@@ -7,15 +7,62 @@ $light-yellow: #fffbdb;
 $cocoa-brown: #da7422;
 $soft-beige: #f1e6d7;
 
+// Font styles for span
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lobster&family=Dancing+Script:wght@400;700&display=swap');
+
 body {
     background-color: $soft-beige; /* Usa el color suave beige para el fondo */
-    font-family: Arial, sans-serif; /* Fuente recomendada para darle un toque limpio */
+    font-family: 'Playfair Display', serif, Arial, sans-serif; /* Fuente recomendada para darle un toque limpio */
+}
+
+
+.elegant-span {
+    font-family: 'Playfair Display', serif;
+}
+
+.creative-span {
+    font-family: 'Lobster', cursive;
+}
+
+.fluid-span {
+    font-family: 'Dancing Script', cursive;
 }
 
 // Header styles
 .custom-header {
     background-color: $black-olive;
     color: $light-yellow;
+    a {
+        color: $light-yellow;
+        text-decoration: none;
+
+        &:hover {
+            color: $cocoa-brown;
+        }
+    }
+
+    p, span, h1, h2, h3, h4, h5, h6 {
+        color: $light-yellow;
+    }
+}
+
+// Dropdown menu styles
+.custom-dropdown {
+    background-color: $field-drab;
+
+    .dropdown-item {
+        color: $light-yellow;
+        text-decoration: none;
+
+        &:hover {
+            background-color: $cocoa-brown;
+            color: $black-olive;
+        }
+    }
+
+    .dropdown-divider {
+        border-color: $satin-sheen-gold;
+    }
 }
 
 // Card styles

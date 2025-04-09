@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author rafael-cayax
  */
-public class Usuario {
+public class Usuario {  
     private Long dpi;
     private String nombre;
     private String correo;
@@ -23,7 +23,7 @@ public class Usuario {
     private String direccion;
     private String descripcion;
     private String telefono;
-    private boolean activo;
+    private boolean activo = true;
     private boolean listaNegra;
 
     public String getNombre() {
@@ -128,10 +128,6 @@ public class Usuario {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-    
-    public boolean esCorreoValido(){
-        return this.correo != null || !this.correo.isBlank() || this.correo.length() >= 6;
     }
 
     @Override
