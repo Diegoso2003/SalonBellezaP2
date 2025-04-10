@@ -25,7 +25,16 @@ public class Usuario {
     private String telefono;
     private boolean activo = true;
     private boolean listaNegra;
+    private Fotografia foto;
 
+    public Fotografia getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Fotografia foto) {
+        this.foto = foto;
+    }
+    
     public String getNombre() {
         return nombre;
     }

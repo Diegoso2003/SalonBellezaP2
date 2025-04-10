@@ -26,8 +26,6 @@ public abstract class Service<T> {
         repositorio.insertar(entidad);
     }
     
-    protected abstract void validarDatos(T entidad);
-    
     public void actualizar(T entidad){
         validador.validarDatos(entidad);
         repositorio.actualizar(entidad);

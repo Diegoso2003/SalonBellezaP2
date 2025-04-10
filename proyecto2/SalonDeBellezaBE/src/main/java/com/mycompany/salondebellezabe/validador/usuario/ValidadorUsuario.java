@@ -2,19 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.salondebellezabe.validador;
+package com.mycompany.salondebellezabe.validador.usuario;
 
 import com.mycompany.salondebellezabe.Encriptador;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
+import com.mycompany.salondebellezabe.validador.Validador;
 
 /**
  *
  * @author rafael-cayax
  */
 public class ValidadorUsuario extends Validador<Usuario>{
-    private Usuario usuario;
     
     private static final Long MENOR_DPI = 1_000_000_000_000L;
     private static final Long MAYOR_DPI = 9_999_999_999_999L;
@@ -35,7 +35,7 @@ public class ValidadorUsuario extends Validador<Usuario>{
     
     @Override
     protected boolean esValido() {
-        Rol rol = this.usuario.getRol();
+        Rol rol = this.entidad.getRol();
         if (rol == null) {
             return false;
         }
@@ -43,7 +43,7 @@ public class ValidadorUsuario extends Validador<Usuario>{
             case ADMINISTRADOR:
                 return esAdministradorValido();
             case CLIENTE:
-                this.usuario.setActivo(false);
+                this.entidad.setActivo(false);
                 return esClienteValido();
             case EMPLEADO:
             case MARKETING:
@@ -56,12 +56,12 @@ public class ValidadorUsuario extends Validador<Usuario>{
 
     @Override
     public void validarDatos(Usuario usuario) {
-        this.usuario = usuario;
+        this.entidad = usuario;
         if (!esValido()) {
             throw new InvalidDataException("ingresar correctamente los datos solicitados");
         }
         Encriptador encriptador = new Encriptador();
-        this.usuario.setContraseña(encriptador.encriptar(usuario.getContraseña()));
+        this.entidad.setContraseña(encriptador.encriptar(usuario.getContraseña()));
     }
     
     public boolean esEmpleadoValido(){
@@ -78,59 +78,73 @@ public class ValidadorUsuario extends Validador<Usuario>{
     }
     
     public boolean esInicioDeSesionValido(Usuario usuario){
-        this.usuario = usuario;
+        this.entidad = usuario;
         return usuario != null && esContraseñaValida() && esCorreoValido();
     }
     
     private boolean esContraseñaValida(){
-        String contraseña = this.usuario.getContraseña();
+        String contraseña = this.entidad.getContraseña();
         return cumpleRangoNormal(contraseña, CONTRASEÑA_MAS_CORTA, CONTRASEÑA_MAS_LARGA);
     }
     
     private boolean esConfirmacionContraseñaValida(){
-        return this.usuario.getContraseña().equals(this.usuario.getConfirmacionContraseña());
+        return this.entidad.getContraseña().equals(this.entidad.getConfirmacionContraseña());
     }
     
     private boolean esCorreoValido(){
-        String correo = this.usuario.getCorreo();
+        String correo = this.entidad.getCorreo();
         return cumpleRangoSinReemplazo(correo, CORREO_MAS_CORTO, CORREO_MAS_LARGO)
                 && correo.matches(EXPRESION_REGULAR_CORREO_ACEPTADO);
     }
     
     private boolean esNombreValido(){
-        String nombre = this.usuario.getNombre();
+        String nombre = this.entidad.getNombre();
         return cumpleRangoConReemplazo(nombre, NOMBRE_MAS_CORTO, NOMBRE_MAS_LARGO);
     }
     
     private boolean esDpiValido(){
-        Long dpi = this.usuario.getDpi();
+        Long dpi = this.entidad.getDpi();
         return dpi != null && dpi >= MENOR_DPI
                 && dpi <= MAYOR_DPI;
     }
     
     private boolean esTelefonoValido(){
-        String telefono = this.usuario.getTelefono();
+        String telefono = this.entidad.getTelefono();
         return cumpleRangoConReemplazo(telefono, TELEFONO_MAS_CORTO, TELEFONO_MAS_LARGO);
     }
     
     private boolean esDireccionValida(){
-        String direccion = this.usuario.getDireccion();
+        String direccion = this.entidad.getDireccion();
         return cumpleRangoConReemplazo(direccion, DIRECCION_MAS_CORTA, DIRECCION_MAS_LARGA);
     }
     
     private boolean sonHobbiesValidos(){
-        String hobbies = this.usuario.getHobbies();
+        String hobbies = this.entidad.getHobbies();
         return esLargoMinimo(hobbies, HOBBIES_MAS_CORTO);
     }
     
     private boolean sonGustosValidos(){
-        String gustos = this.usuario.getGustos();
+        String gustos = this.entidad.getGustos();
         return esLargoMinimo(gustos, GUSTOS_MAS_CORTO);
     }
     
     private boolean esDescripcionValida(){
-        String descripcion = this.usuario.getDescripcion();
+        String descripcion = this.entidad.getDescripcion();
         return esLargoMinimo(descripcion, DESCRIPCION_MAS_CORTA);
+    }
+
+    public void validarDetalles(Usuario usuario) {
+        this.entidad = usuario;
+        if (!sonDetallesValidos()) {
+            throw new InvalidDataException("ingresar correctamente los datos solicitados");
+        }
+        ValidadorFoto validador = new ValidadorFoto();
+        validador.validarDatos(usuario.getFoto());
+    }
+    
+    public boolean sonDetallesValidos(){
+        return esDescripcionValida() && sonHobbiesValidos() && sonGustosValidos() 
+                && esDireccionValida() && esDpiValido();
     }
     
 }

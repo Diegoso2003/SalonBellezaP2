@@ -15,19 +15,17 @@ import java.sql.SQLException;
  */
 public class Repositorio {
     protected Connection coneccion;    
-    private boolean obtenerConeccion = true;
+    private boolean compartirConeccion = false;
     /**
      * metodo usado para obtener la coneccion a la base de datos si no ha sido 
      * setteada de lo contrario no la consigue
      * @throws ConeccionException si al conseguir la coneccion falla algo
      */
     protected void obtenerConeccion(){
-        if (obtenerConeccion) {
-            try {
-                this.coneccion = Coneccion.getConeccion();
-            } catch (SQLException e) {
-                throw new ConeccionException();
-            }
+        try {
+            this.coneccion = Coneccion.getConeccion();
+        } catch (SQLException e) {
+            throw new ConeccionException();
         }
     }
     
@@ -35,7 +33,7 @@ public class Repositorio {
      * metodo para cerrar la conexion si no ha sido cerrada
      */
     protected void cerrar(){
-        if (obtenerConeccion) {
+        if (!compartirConeccion) {
             try {
                 this.coneccion.close();
             } catch (SQLException e) {
@@ -45,20 +43,18 @@ public class Repositorio {
     }
     
     /**
-     * al usar este metodo se reinicia el valor de la variable {@link #obtenerConeccion}
+     * al usar este metodo se reinicia el valor de la variable {@link #compartirConeccion}
      * a su valor por defecto
      */
     public void reiniciarEstado(){
-        this.obtenerConeccion = true;
+        this.compartirConeccion = false;
     }
 
     /**
      * metodo usado por otras clases que hereden de {@link #Repositorio() }
      * para compartir la misma coneccion
-     * @param coneccion la coneccion compartida
      */
-    public void setConeccion(Connection coneccion) {
-        this.obtenerConeccion = false;
-        this.coneccion = coneccion;
+    public void compartirConeccion() {
+        this.compartirConeccion = true;
     }
 }

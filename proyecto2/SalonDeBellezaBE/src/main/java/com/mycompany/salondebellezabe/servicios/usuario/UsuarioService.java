@@ -12,8 +12,10 @@ import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.servicios.Service;
-import com.mycompany.salondebellezabe.validador.ValidadorUsuario;
+import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
+import java.io.InputStream;
 import java.util.Optional;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 
 /**
  *
@@ -28,11 +30,6 @@ public class UsuarioService extends Service<Usuario>{
         super(new UsuarioDAO(), new ValidadorUsuario());
         this.repositorioUsuario = (UsuarioDAO) repositorio;
         this.validadorUsuario = (ValidadorUsuario) validador;
-    }
-    
-    @Override
-    protected void validarDatos(Usuario usuario) {
-        
     }
     
     /**
@@ -88,6 +85,10 @@ public class UsuarioService extends Service<Usuario>{
         if (!this.usuario.isActivo() && this.usuario.getRol() != Rol.CLIENTE) {
             throw new NoAutorizadoException("usuario desactivado, contacte con el administrador para reactivar");
         }
+    }
+
+    public void registrarUsuario(InputStream foto, FormDataContentDisposition detallesFoto, String detalles) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }

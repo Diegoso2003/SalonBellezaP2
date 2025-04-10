@@ -4,7 +4,6 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -154,4 +153,11 @@ public abstract class ClaseDAO<T, ID> extends Repositorio{
         return idGenerado;
     }
 
+    protected void regresar(){
+        try {
+            coneccion.rollback();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

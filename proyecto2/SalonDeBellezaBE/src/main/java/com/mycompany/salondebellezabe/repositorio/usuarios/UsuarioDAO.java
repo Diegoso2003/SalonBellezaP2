@@ -188,6 +188,41 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
     }
 
     /**
+     * metodo usado para ingresar los datos secundarios del usuario como direccion
+     * descripcion, gustos, hobbies y su foto de perfil
+     * @param usuario los datos del usuario que se mencionaron anteriormente
+     * @throws NotFoundException si no se encuentra al usuario
+     * @throws InvalidDataException si alguno de los datos ingresados no son validos
+     */
+    public void ingresarDetalles(Usuario usuario){
+        obtenerConeccion();
+        String query = "UPDATE Usuario SET direccion = ?, descripcion = ?, gustos = ?, hobbies = ? WHERE dpi = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            coneccion.setAutoCommit(false);
+            stmt.setString(1, usuario.getDireccion().trim().replaceAll("\\s+", " "));
+            stmt.setString(2, usuario.getDescripcion());
+            stmt.setString(3, usuario.getGustos());
+            stmt.setString(4, usuario.getHobbies());
+            stmt.setLong(5, usuario.getDpi());
+            if (stmt.executeUpdate() <= 0) {
+                throw new NotFoundException("cliente no encontrado intente de nuevo");
+            }
+            FotografiaUsuarioDAO foto = new FotografiaUsuarioDAO(usuario.getDpi());
+            foto.compartirConeccion();
+            foto.insertar(usuario.getFoto());
+            this.compartirConeccion();
+            reactivarUsuario(usuario.getDpi());
+            this.reiniciarEstado();
+            coneccion.commit();
+        } catch (SQLException e) {
+            regresar();
+            throw new InvalidDataException("datos ingresados no validos");
+        } finally {
+            cerrar();
+        }
+    }
+    
+    /**
      * enviar true solo para poder tener acceso a la contraseña del usuario
      * @param obtenerContraseña true para obtener la contraseña del usuario en los
      * datos
@@ -223,5 +258,20 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
      */
     public List<Usuario> obtenerPersonal(){
         return listarPorAtributos("SELECT * FROM Usuario WHERE rol != 'CLIENTE'");
+    }
+    
+    public void reactivarUsuario(Long dpi){
+        obtenerConeccion();
+        String query = "UPDATE Usuario SET activo = TRUE WHERE dpi = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setLong(1, dpi);
+            if (stmt.executeUpdate() <= 0) {
+                throw new NotFoundException("no se encontro al usuario con pdi: '" + dpi + "'");
+            }
+        } catch (SQLException e) {
+            throw new InvalidDataException("ingresar un dpi valido");
+        } finally {
+            cerrar();
+        }
     }
 }

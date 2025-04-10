@@ -1,6 +1,7 @@
 package com.mycompany.salondebellezabe;
 
 import jakarta.ws.rs.ApplicationPath;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 
 /**
@@ -9,5 +10,9 @@ import org.glassfish.jersey.server.ResourceConfig;
  */
 @ApplicationPath("api/v1")
 public class JakartaRestConfiguration extends ResourceConfig {
+
+    public JakartaRestConfiguration() {
+        packages("com.mycompany.salondebellezabe.controllers").register(MultiPartFeature.class);
+    }
     
 }

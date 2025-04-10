@@ -4,7 +4,9 @@
  */
 package com.mycompany.salondebellezabe.repositorio.usuarios;
 
-import com.mycompany.salondebellezabe.modelos.FotografiaUsuario;
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
+import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
@@ -17,28 +19,38 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class FotografiaUsuarioDAO extends ClaseDAO<FotografiaUsuario, Long>{
+public class FotografiaUsuarioDAO extends ClaseDAO<Fotografia, Long>{
 
+    private Long dpi;
+
+    public FotografiaUsuarioDAO(Long dpi) {
+        this.dpi = dpi;
+    }
+    
     /**
      * metodo usado para insertar la foto del usuario en la base de datos
      * @param foto foto del usuario
      */
     @Override
-    public void insertar(FotografiaUsuario foto) {
+    public void insertar(Fotografia foto) {
         obtenerConeccion();
         String query = "INSERT INTO FotoUsuario(foto, dpi, extension) VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
-            stmt.setLong(2, foto.getDpi());
+            stmt.setLong(2, dpi);
             stmt.setString(3, foto.getExtension());
-            if (stmt.executeUpdate() <= 0) {
-                //error al insertar
-            }
+            stmt.executeUpdate();
         } catch (SQLException e) {
-            if (e.getErrorCode() == 1062) {
-                //error al asignar la foto
+            switch (e.getErrorCode()) {
+                case 1062:
+                    throw new InvalidDataException("usuario con dpi: '" + dpi + "' ya tiene una foto, para cambiarla vaya al perfil");
+                case 1406:
+                    throw new InvalidDataException("la imagen ingresada es demasiado pesada ingrese otra");
+                case 1452:
+                    throw new NotFoundException("usuario con dpi: '" + dpi + "' no encontrado");
+                default:
+                    throw new InvalidDataException("datos ingresados invalidos");
             }
-            //foto enviada invalida
         } finally {
             cerrar();
         }
@@ -56,7 +68,7 @@ public class FotografiaUsuarioDAO extends ClaseDAO<FotografiaUsuario, Long>{
      * @return optional de la foto del usuario si existe
      */
     @Override
-    public Optional<FotografiaUsuario> obtenerPorID(Long dpi) {
+    public Optional<Fotografia> obtenerPorID(Long dpi) {
         obtenerConeccion();
         String query = "SELECT * FROM FotoUsuario WHERE dpi = ?";
         return buscar(query, dpi, JDBCType.BIGINT);
@@ -67,13 +79,13 @@ public class FotografiaUsuarioDAO extends ClaseDAO<FotografiaUsuario, Long>{
      * @param foto la nueva foto de perfil
      */
     @Override
-    public void actualizar(FotografiaUsuario foto) {
+    public void actualizar(Fotografia foto) {
         obtenerConeccion();
         String query = "UPDATE FotoUsuario SET foto = ?, extension = ? WHERE idUsuario = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setBlob(1, foto.getFoto());
             stmt.setString(2, foto.getExtension());
-            stmt.setLong(3, foto.getDpi());
+            stmt.setLong(3, dpi);
             if (stmt.executeUpdate() <= 0) {
                 //no se encontro al usuario
             }
@@ -85,7 +97,7 @@ public class FotografiaUsuarioDAO extends ClaseDAO<FotografiaUsuario, Long>{
     }
 
     @Override
-    public List<FotografiaUsuario> obtenerTodo() {
+    public List<Fotografia> obtenerTodo() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -96,9 +108,8 @@ public class FotografiaUsuarioDAO extends ClaseDAO<FotografiaUsuario, Long>{
      * @throws SQLException 
      */
     @Override
-    protected FotografiaUsuario obtenerDatos(ResultSet result) throws SQLException {
-        FotografiaUsuario foto = new FotografiaUsuario();
-        foto.setDpi(result.getLong("dpi"));
+    protected Fotografia obtenerDatos(ResultSet result) throws SQLException {
+        Fotografia foto = new Fotografia();
         foto.setFotografia(result.getBytes("foto"));
         foto.setExtension(result.getString("extension"));
         return foto;

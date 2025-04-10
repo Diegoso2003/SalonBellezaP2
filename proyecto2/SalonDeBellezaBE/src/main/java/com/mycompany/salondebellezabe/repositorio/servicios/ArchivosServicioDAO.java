@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.servicios;
 
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
+import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
@@ -33,8 +34,8 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, archivos.getIdArchivos());
             stmt.setBlob(2, archivos.getCatalogo());
-            stmt.setBlob(3, archivos.getFotografia());
-            stmt.setString(4, archivos.getExtension());
+            stmt.setBlob(3, archivos.getFoto().getFoto());
+            stmt.setString(4, archivos.getFoto().getExtension());
             if (stmt.executeUpdate() <= 0) {
                 //error al ingresar el archivo
             }
@@ -89,8 +90,8 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
                 stmt.setBlob(1, archivos.getCatalogo());
                 posicion = 2;
             } else {
-                stmt.setBlob(1, archivos.getFotografia());
-                stmt.setString(2, archivos.getExtension());
+                stmt.setBlob(1, archivos.getFoto().getFoto());
+                stmt.setString(2, archivos.getFoto().getExtension());
                 posicion = 3;
             }
             stmt.setInt(posicion, archivos.getIdArchivos());
@@ -122,8 +123,10 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
         if (catalogo) {
             archivo.setCatalogoBytes(result.getBytes("catalogo"));
         } else {
-            archivo.setFoto(result.getBytes("fotografia"));
-            archivo.setExtension(result.getString("extension"));
+            Fotografia foto = new Fotografia();
+            foto.setFotografia(result.getBytes("fotografia"));
+            foto.setExtension(result.getString("extension"));
+            archivo.setFoto(foto);
         }
         archivo.setIdArchivos(result.getInt("idArchivo"));
         return archivo;

@@ -1,1 +1,144 @@
-<p>detalles works!</p>
+<app-informacion [informacion]="informacion"></app-informacion>
+<div class="d-flex align-items-center justify-content-center">
+
+  <div class="card w-25 m-3">
+    <div class="card-body custom-card">
+        <h5 class="card-title text-center mb-3">Agregar detalles</h5>
+      <form class="needs-validation" novalidate [formGroup]='detallesForm' (submit)="enviar()">
+        
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : (faltaDescripcion() || esDescripcionInvalida()),
+            'mb-3' : !(faltaDescripcion() || esDescripcionInvalida())
+          }"
+          >
+          <label for="validationTooltip01" class="form-label">Descripcion</label>
+          <textarea
+            rows="3"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="descripcion"
+            [ngClass]="{'is-invalid' : (faltaDescripcion() || esDescripcionInvalida()),
+                'is-valid' : esDescripcionValida()
+             }"
+            required
+            ></textarea>
+          <div class="invalid-tooltip">
+            @if(faltaDescripcion()) {
+                Ingrese una descripcion
+            } @else {
+                descripcion demasiado corta
+            }
+          </div>
+        </div>
+
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : (faltaGustos() || esGustosInvalido()),
+                'mb-3' : !(faltaGustos() || esGustosInvalido())
+              }"
+          >
+            <label for="validationTooltip02" class="form-label">Gustos</label>
+            <textarea
+              rows="3"
+              class="form-control"
+              [ngClass]="{'is-invalid' : (faltaGustos() || esGustosInvalido()),
+                'is-valid' : esGustosValido()
+              }"
+              id="validationTooltip02"
+              formControlName="gustos"
+              required
+              ></textarea>
+            <div class="invalid-tooltip">
+                @if(faltaGustos()){
+                    Llene el campo
+                } @else {
+                    texto demasiado corto
+                } 
+            </div>
+        </div>
+
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : (faltaHobbies() || sonHobbiesInvalido()),
+                'mb-3' : !(faltaHobbies() || sonHobbiesInvalido())
+              }"
+          >
+            <label for="validationTooltip03" class="form-label">Hobbies</label>
+            <textarea
+              rows="3"
+              class="form-control"
+              [ngClass]="{'is-invalid' : (faltaHobbies() || sonHobbiesInvalido()),
+                'is-valid' : sonHobbiesValido()
+              }"
+              id="validationTooltip03"
+              formControlName="hobbies"
+              required
+              ></textarea>
+            <div class="invalid-tooltip">
+                @if(faltaHobbies()){
+                    escriba sus hobbies
+                } @else {
+                    texto demasiado corto
+                } 
+            </div>
+        </div>
+
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : (faltaDireccion() || esDireccionInvalida()),
+            'mb-3' : !(faltaDireccion() || esDireccionInvalida())
+          }"
+          >
+          <label for="validationTooltip04" class="form-label">Direccion</label>
+          <input
+            type="text"
+            class="form-control"
+            id="validationTooltip04"
+            formControlName="direccion"
+            [ngClass]="{'is-invalid' : (faltaDireccion() || esDireccionInvalida()),
+                'is-valid' : esDireccionValida()
+             }"
+            required
+            />
+          <div class="invalid-tooltip">
+            @if(faltaDireccion()) {
+                Ingrese su direccion 
+            }
+            @else {
+                Ingrese una direccion valida
+            }
+          </div>
+        </div>
+
+        <div class="position-relative"
+            [ngClass]="{'mb-5' : (faltaFoto()),
+            'mb-3' : !(faltaFoto())
+          }"
+          >
+          <label for="validationTooltip05" class="form-label">Fotografia</label>
+          <input
+            type="file"
+            accept="image/*"
+            class="form-control"
+            id="validationTooltip05"
+            [ngClass]="{'is-invalid' : (faltaFoto()),
+                'is-valid' : esFotoValida()
+             }"
+            (change)="archivoSeleccionado($event)"
+            (click)="inputFotoTocado = true"
+            required
+            />
+          <div class="invalid-tooltip">
+            @if(faltaFoto()) {
+                Ingrese su foto de perfil
+            }
+            @else {
+                foto demasiado grande, escoja una menor a 64kb
+            }
+          </div>
+        </div>
+
+        <div class="mb-3 d-flex justify-content-center">
+          <button class="custom-button" type="submit">Agregar detalles</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

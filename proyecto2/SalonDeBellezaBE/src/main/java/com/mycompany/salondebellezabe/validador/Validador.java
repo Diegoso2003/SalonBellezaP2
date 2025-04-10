@@ -9,7 +9,7 @@ package com.mycompany.salondebellezabe.validador;
  * @author rafael-cayax
  */
 public abstract class Validador<T> {
-    private T entidad;
+    protected T entidad;
     
     protected abstract boolean esValido();
     public abstract void validarDatos(T entidad);
@@ -25,8 +25,7 @@ public abstract class Validador<T> {
         if (cadena == null) {
             return false;
         }
-        cadena = cadena.trim().replaceAll("\\s+", " ");
-        return cadena.length() >= minimo;
+        return !cadena.isBlank() && cadena.length() >= minimo;
     }
     
     /**
