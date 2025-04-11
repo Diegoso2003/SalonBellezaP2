@@ -11,7 +11,6 @@ import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.servicios.Service;
-import com.mycompany.salondebellezabe.validador.usuario.ValidadorFoto;
 import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
@@ -20,8 +19,8 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
  * @author rafael-cayax
  */
 public class ClienteService extends Service<Usuario>{
-    private ValidadorUsuario validadorUsuario;
-    private UsuarioDAO usuarioDAO;
+    private final ValidadorUsuario validadorUsuario;
+    private final UsuarioDAO usuarioDAO;
     
     public ClienteService() {
         super(new UsuarioDAO(), new ValidadorUsuario());

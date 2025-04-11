@@ -4,18 +4,21 @@
  */
 package com.mycompany.salondebellezabe.servicios.usuario;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.salondebellezabe.Encriptador;
 import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NoAutorizadoException;
+import com.mycompany.salondebellezabe.modelos.Fotografia;
+import com.mycompany.salondebellezabe.modelos.LoginDTO;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.servicios.Service;
 import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
-import java.io.InputStream;
 import java.util.Optional;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 /**
  *
@@ -39,16 +42,20 @@ public class UsuarioService extends Service<Usuario>{
      * @throws InvalidDataException en caso de no ingresar correctamente los datos
      * solicitados
      */
-    public Usuario iniciarSesion(Usuario usuario){
+    public LoginDTO iniciarSesion(Usuario usuario){
         if (!validadorUsuario.esInicioDeSesionValido(usuario)) {
             throw new InvalidDataException("ingrese correctamente sus credenciales");
         }
         obtenerUsuario(usuario.getCorreo());
         comparaContraseñas(usuario);
         validarEstado();
-        this.usuario.setContraseña(null);
-        this.usuario.setCorreo(null);
-        return this.usuario;
+        LoginDTO login = new LoginDTO(
+                this.usuario.getDpi(),
+                this.usuario.isActivo(),
+                this.usuario.isListaNegra(),
+                this.usuario.getRol()
+        );
+        return login;
     }
 
     /**
@@ -58,10 +65,9 @@ public class UsuarioService extends Service<Usuario>{
      * @throws ConeccionException en caso de que falle la coneccion a la base de datos
      */
     private void obtenerUsuario(String correo) {
-            repositorioUsuario.setObtenerContraseña(true);
-            Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(correo);
-            this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo o contraseña incorrectos"));
-        
+        repositorioUsuario.setObtenerContraseña(true);
+        Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(correo);
+        this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo  incorrectos"));
     }
 
     /**
@@ -87,8 +93,26 @@ public class UsuarioService extends Service<Usuario>{
         }
     }
 
-    public void registrarUsuario(InputStream foto, FormDataContentDisposition detallesFoto, String detalles) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    /**
+     * metodo usado para registrar los datos del personal, en caso de ser un empleado
+     * ingresar la foto
+     * @param foto la foto del empleado
+     * @param detalles los detalles en formato json
+     */
+    public void registrarUsuario(FormDataBodyPart foto, String detalles) {
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            usuario = mapper.readValue(detalles, Usuario.class);
+            if (foto != null) {
+                Fotografia fotoUsuario = new Fotografia();
+                fotoUsuario.setFoto(foto.getContent());
+                fotoUsuario.setExtension(foto.getMediaType().toString());
+                usuario.setFoto(fotoUsuario);
+            }
+            this.crearEntidad(usuario);
+        } catch (JsonProcessingException ex) {
+            throw new InvalidDataException("ingrese correctamente los datos solicitados");
+        }
     }
     
 }

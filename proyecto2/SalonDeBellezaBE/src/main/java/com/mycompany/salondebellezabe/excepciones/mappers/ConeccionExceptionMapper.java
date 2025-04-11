@@ -20,7 +20,7 @@ public class ConeccionExceptionMapper implements ExceptionMapper<ConeccionExcept
     @Override
     public Response toResponse(ConeccionException e) {
         String mensaje = "{\"mensaje\":\"no se pudo llevar a cabo la accion, intentar mas tarde\"}";
-        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+        return Response.status(Response.Status.SERVICE_UNAVAILABLE)
                 .entity(mensaje)
                 .type(MediaType.APPLICATION_JSON)
                 .build();

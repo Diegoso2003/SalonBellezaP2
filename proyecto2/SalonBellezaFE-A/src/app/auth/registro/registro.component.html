@@ -1,166 +1,265 @@
 <app-informacion [informacion]="informacion"></app-informacion>
 <div class="d-flex justify-content-center">
-    <div class="card w-25 m-3">
-      <div class="card-body custom-card">
-          <h5 class="card-title text-center mb-3">Registro</h5>
-        <form class="needs-validation" novalidate [formGroup]='registroForm' (submit)="enviar()">
-
-            <div class="position-relative"
-                [ngClass]="{'mb-5' : (faltaNombre() || esNombreInvalido()),
-                'mb-3' : !(faltaNombre() || esNombreInvalido())
-                }">
-                <label for="validationTooltip03" class="form-label">Nombre</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [ngClass]="{'is-invalid' : (faltaNombre() || esNombreInvalido()),
-                    'is-valid' : esNombreValido()
-                  }"
-                  id="validationTooltip03"
-                  formControlName="nombre"
-                  required
-                  />
-                <div class="invalid-tooltip">
-                    @if(faltaNombre()) {
-                        Ingrese su nombre
-                    } @else {
-                        Ingrese un nombre valido
-                    }
-                </div>
-            </div>
-
-            <div class="position-relative"
-                [ngClass]="{'mb-5' : (faltaDpi() || esDpiInvalido()),
-                'mb-3' : !(faltaDpi() || esDpiInvalido())
-                }">
-                <label for="validationTooltip04" class="form-label">DPI</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [ngClass]="{'is-invalid' : (faltaDpi() || esDpiInvalido()),
-                    'is-valid' : esDpiValido()
-                  }"
-                  id="validationTooltip04"
-                  formControlName="dpi"
-                  required
-                  />
-                <div class="invalid-tooltip">
-                    @if(faltaDpi()) {
-                        Ingrese su dpi
-                    } @else {
-                        Ingrese un dpi valido
-                    }
-                </div>
-            </div>
-
-            <div class="position-relative"
-                    [ngClass]="{'mb-5' : (faltaTelefono() || esTelefonoInvalido()),
-                    'mb-3' : !(faltaTelefono() || esTelefonoInvalido())
-                    }"
-                >
-                <label for="validationTooltip05" class="form-label">Telefono</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [ngClass]="{'is-invalid' : (faltaTelefono() || esTelefonoInvalido()),
-                    'is-valid' : esTelefonoValido()
-                  }"
-                  id="validationTooltip05"
-                  formControlName="telefono"
-                  required
-                  />
-                <div class="invalid-tooltip">
-                    @if(faltaTelefono()) {
-                        Ingrese su telefono
-                    } @else {
-                        Ingrese un telefono valido
-                    }
-                </div>
-            </div>
-
-            <div class="position-relative"
-                    [ngClass]="{'mb-5' : (faltaEmail() || esEmailInvalido()),
-                    'mb-3' : !(faltaEmail() || esEmailInvalido())
-                    }"
-                >
-                <label for="validationTooltip01" class="form-label">Email</label>
-                <input
-                    type="email"
-                    class="form-control"
-                    id="validationTooltip01"
-                    formControlName="correo"
-                    [ngClass]="{'is-invalid' : (faltaEmail() || esEmailInvalido()),
-                      'is-valid' : esEmailValido()
-                    }"
-                    required
-                    />
-                <div class="invalid-tooltip">
-                    @if(faltaEmail()) {
-                        Ingrese su email 
-                    }
-                    @if(esEmailInvalido()) {
-                        Ingrese un email valido
-                    }
-                </div>
-            </div>
-
-            <div class="position-relative"
-                    [ngClass]="{'mb-5' : faltaPassword(),
-                    'mb-3' : !(faltaPassword())
-                    }"
-                >
-                <label for="validationTooltip02" class="form-label">Contraseña</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    [ngClass]="{'is-invalid' : faltaPassword(),
-                    'is-valid' : esPasswordValido()
-                    }"
-                    id="validationTooltip02"
-                    formControlName="contraseña"
-                    required
-                    />
-                <div class="invalid-tooltip">Ingrese su contraseña</div>
-            </div>
-  
-            <div class="position-relative"
-                    [ngClass]="{'mb-5' : (faltaConfirmacionPassword() || esPasswordIgualInvalido()),
-                    'mb-3' : !(faltaConfirmacionPassword() || esPasswordIgualInvalido())
-                    }"
-                >
-                <label for="validationTooltip07" class="form-label">Confirmar contraseña</label>
-                <input
-                    type="password"
-                    class="form-control"
-                    [ngClass]="{'is-invalid' : (faltaConfirmacionPassword() || esPasswordIgualInvalido()),
-                    'is-valid' : esPasswordIgualValido()
-                    }"
-                    id="validationTooltip07"
-                    formControlName="confirmacionContraseña"
-                    required
-                    />
-                <div class="invalid-tooltip">
-                    @if(faltaConfirmacionPassword()) {
-                        Ingrese nuevamente la contraseña
-                    } @else {
-                        Las contraseñas no coinciden
-                    }
-                </div>
-            </div>
-
-          <div class="mb-3 d-flex justify-content-center">
-            <button class="custom-button" type="submit">Registrarse</button>
+  <div class="card w-25 m-3">
+    <div class="card-body custom-card">
+      <h5 class="card-title text-center mb-3">Registro</h5>
+      <form
+        class="needs-validation"
+        novalidate
+        [formGroup]="registroForm"
+        (submit)="enviar()"
+      >
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaNombre() || esNombreInvalido(),
+            'mb-3': !(faltaNombre() || esNombreInvalido())
+          }"
+        >
+          <label for="validationTooltip03" class="form-label">Nombre</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': faltaNombre() || esNombreInvalido(),
+              'is-valid': esNombreValido()
+            }"
+            id="validationTooltip03"
+            formControlName="nombre"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaNombre()) { Ingrese un nombre } @else { Ingrese un nombre
+            valido }
           </div>
-          <div class="mb-3 d-flex justify-content-center">
-              <a class="icon-link" routerLink="/inicio">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-                  </svg>
-                  Iniciar sesion
-              </a>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaDpi() || esDpiInvalido(),
+            'mb-3': !(faltaDpi() || esDpiInvalido())
+          }"
+        >
+          <label for="validationTooltip04" class="form-label">DPI</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': faltaDpi() || esDpiInvalido(),
+              'is-valid': esDpiValido()
+            }"
+            id="validationTooltip04"
+            formControlName="dpi"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaDpi()) { Ingrese un dpi } @else { Ingrese un dpi valido }
           </div>
-        </form>
-      </div>
+        </div>
+
+        @if (!cliente) {
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaRol(),
+            'mb-3': !faltaRol()
+          }"
+        >
+          <label for="rol" class="form-label">Rol del usuario</label>
+          <select
+            class="form-select is-valid"
+            [ngClass]="{
+              'is-invalid': faltaRol(),
+              'is-valid': esRolValido()
+            }"
+            aria-label="Default select example"
+            required
+            formControlName="rol"
+            (change)="rolSeleccionado($event)"
+          >
+            <option value="ADMINISTRADOR">Administrador</option>
+            <option value="MARKETING">Encargado del area de marketing</option>
+            <option value="SERVICIOS">Encargado del area de servicios</option>
+            <option value="EMPLEADO">Encargado de atender clientes</option>
+          </select>
+          <div class="invalid-tooltip">seleccione un rol</div>
+        </div>
+        }
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaTelefono() || esTelefonoInvalido(),
+            'mb-3': !(faltaTelefono() || esTelefonoInvalido())
+          }"
+        >
+          <label for="validationTooltip05" class="form-label">Telefono</label>
+          <input
+            type="text"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': faltaTelefono() || esTelefonoInvalido(),
+              'is-valid': esTelefonoValido()
+            }"
+            id="validationTooltip05"
+            formControlName="telefono"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaTelefono()) { Ingrese un telefono } @else { Ingrese un
+            telefono valido }
+          </div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaEmail() || esEmailInvalido(),
+            'mb-3': !(faltaEmail() || esEmailInvalido())
+          }"
+        >
+          <label for="validationTooltip01" class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="correo"
+            [ngClass]="{
+              'is-invalid': faltaEmail() || esEmailInvalido(),
+              'is-valid': esEmailValido()
+            }"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaEmail()) { Ingrese un email } @if(esEmailInvalido()) {
+            Ingrese un email valido }
+          </div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{ 'mb-5': faltaPassword(), 'mb-3': !faltaPassword() }"
+        >
+          <label for="validationTooltip02" class="form-label">Contraseña</label>
+          <input
+            type="password"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': faltaPassword(),
+              'is-valid': esPasswordValido()
+            }"
+            id="validationTooltip02"
+            formControlName="contraseña"
+            required
+          />
+          <div class="invalid-tooltip">Ingrese su contraseña</div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaConfirmacionPassword() || esPasswordIgualInvalido(),
+            'mb-3': !(faltaConfirmacionPassword() || esPasswordIgualInvalido())
+          }"
+        >
+          <label for="validationTooltip07" class="form-label"
+            >Confirmar contraseña</label
+          >
+          <input
+            type="password"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid':
+                faltaConfirmacionPassword() || esPasswordIgualInvalido(),
+              'is-valid': esPasswordIgualValido()
+            }"
+            id="validationTooltip07"
+            formControlName="confirmacionContraseña"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaConfirmacionPassword()) { Ingrese nuevamente la contraseña
+            } @else { Las contraseñas no coinciden }
+          </div>
+        </div>
+
+        @if(empleado){
+        <div
+          class="position-relative"
+          [ngClass]="{ 'mb-5': faltaFoto(), 'mb-3': !faltaFoto() }"
+        >
+          <label for="validationTooltip05" class="form-label">Fotografia</label>
+          <input
+            type="file"
+            accept="image/*"
+            class="form-control"
+            id="validationTooltip05"
+            [ngClass]="{
+              'is-invalid': faltaFoto(),
+              'is-valid': esFotoValida()
+            }"
+            (change)="archivoSeleccionado($event)"
+            (click)="inputFotoTocado = true"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaFoto()) { Ingrese la foto del empleado } @else { foto
+            demasiado grande, escoja una menor a 64kb }
+          </div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaDescripcion() || esDescripcionInvalida(),
+            'mb-3': !(faltaDescripcion() || esDescripcionInvalida())
+          }"
+        >
+          <label for="validationTooltip01" class="form-label"
+            >Descripcion profesional</label
+          >
+          <textarea
+            rows="3"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="descripcion"
+            [ngClass]="{
+              'is-invalid': faltaDescripcion() || esDescripcionInvalida(),
+              'is-valid': esDescripcionValida()
+            }"
+            required
+          ></textarea>
+          <div class="invalid-tooltip">
+            @if(faltaDescripcion()) { Ingrese una descripcion del empleado } @else {
+            descripcion demasiado corta }
+          </div>
+        </div>
+        }
+
+        <div class="mb-3 d-flex justify-content-center">
+          <button class="custom-button" type="submit">Registrarse</button>
+        </div>
+        @if(cliente){
+        <div class="mb-3 d-flex justify-content-center">
+          <a class="icon-link" routerLink="/inicio">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-person"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"
+              />
+            </svg>
+            Iniciar sesion
+          </a>
+        </div>
+        }
+      </form>
     </div>
   </div>
-  
+</div>

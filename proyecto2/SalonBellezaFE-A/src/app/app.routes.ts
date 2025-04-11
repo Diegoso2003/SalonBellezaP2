@@ -1,35 +1,31 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login/login.component';
-import { RegistroComponent } from './auth/registro/registro.component';
-import { DetallesComponent } from './auth/detalles/detalles.component';
-import { NavbarAdminComponent } from './admin/navbar-admin/navbar-admin.component';
 import { NavbarClienteComponent } from './cliente/navbar-cliente/navbar-cliente.component';
 
 export const routes: Routes = [
     {
         path: 'inicio',
         title: 'Inicio',
-        component: LoginComponent
+        loadComponent: () => import('./auth/login/login.component').then(m => m.LoginComponent)
     },
     {
         path: 'registro',
         title: 'Registro',
-        component: RegistroComponent
+        loadComponent: () => import('./auth/registro/registro.component').then(m => m.RegistroComponent)
     },
     {
         path: 'detalles',
         title: 'Detalles',
-        component: DetallesComponent
+        loadComponent: () => import('./auth/detalles/detalles.component').then(m => m.DetallesComponent)
     },
     {
         path: 'admin',
         title: 'Admin',
-        component: NavbarAdminComponent
+        loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
     },
     {
         path: 'cliente',
         title: 'Cliente',
-        component: NavbarClienteComponent
+        loadComponent: () => import('./cliente/navbar-cliente/navbar-cliente.component').then(m => m.NavbarClienteComponent)
     },
     {
         path: '',

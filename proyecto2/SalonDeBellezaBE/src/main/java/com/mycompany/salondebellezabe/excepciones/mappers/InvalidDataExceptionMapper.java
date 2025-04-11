@@ -20,6 +20,7 @@ public class InvalidDataExceptionMapper implements ExceptionMapper<InvalidDataEx
     @Override
     public Response toResponse(InvalidDataException e) {
         String mensaje = "{\"mensaje\": \"" + e.getMessage() + "\"}";
+        System.out.println("mapper aplicado correctamente");
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(mensaje)
                 .type(MediaType.APPLICATION_JSON)

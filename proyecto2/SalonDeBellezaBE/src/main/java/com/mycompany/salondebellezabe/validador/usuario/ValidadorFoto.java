@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.validador.usuario;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.validador.Validador;
 
@@ -16,19 +17,20 @@ public class ValidadorFoto extends Validador<Fotografia>{
         "image/png",
         "image/jpeg",
         "image/svg+xml",
-        "image/webp"
+        "image/webp",
+        "image/avif"
     };
     
     @Override
     protected boolean esValido() {
-        return esImagenValida();
+        return this.entidad.getFoto() != null && esImagenValida();
     }
 
     @Override
     public void validarDatos(Fotografia foto) {
         this.entidad = foto;
-        if (esValido()) {
-            
+        if (!esValido()) {
+            throw new InvalidDataException("ingresar una fotografia valida");
         }
     }
     

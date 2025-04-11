@@ -34,9 +34,13 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
     @Override
     public void insertar(Usuario usuario) {
         obtenerConeccion();
-        String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, activo) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        boolean empleado = usuario.getRol() == Rol.EMPLEADO;
+        String query = "INSERT INTO Usuario(nombre, correo, rol, contraseña, dpi, telefono, activo";
+        query += empleado ? ", descripcion) ": ") ";
+        query += "VALUES (?, ?, ?, ?, ?, ?, ?";
+        query += empleado ? ", ?)": ")";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            coneccion.setAutoCommit(false);
             stmt.setString(1, usuario.getNombre().trim().replaceAll("\\s+", " "));
             stmt.setString(2, usuario.getCorreo().trim());
             stmt.setString(3, usuario.getRol().name());
@@ -44,8 +48,18 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
             stmt.setLong(5, usuario.getDpi());
             stmt.setString(6, usuario.getTelefono().trim().replaceAll("\\s+", " "));
             stmt.setBoolean(7, usuario.isActivo());
+            if (empleado) {
+                stmt.setString(8, usuario.getDescripcion());
+            }
             stmt.executeUpdate();
+            if (usuario.getRol() == Rol.EMPLEADO) {
+                FotografiaUsuarioDAO repFoto = new FotografiaUsuarioDAO(usuario.getDpi());
+                repFoto.compartirConeccion();
+                repFoto.insertar(usuario.getFoto());
+            }
+            coneccion.commit();
         } catch (SQLException e) {
+            regresar();
             e.printStackTrace();
             if (e.getErrorCode() == 1062) {
                 throw new InvalidDataException("dpi o correo ya ingresados verificar los datos ingresados");

@@ -19,12 +19,7 @@ import { Router } from '@angular/router';
 export class DetallesComponent {
 
   detallesForm: FormGroup;
-  informacion: Informacion = {
-    hayError: false,
-    mensaje: '',
-    exito: false,
-    mostrarAlertaExito: false
-  }
+  informacion: Informacion;
 
   private validadorform!: Validador
   private _clienteService = inject(ClienteService);
@@ -44,6 +39,7 @@ export class DetallesComponent {
       }
     );
     this.validadorform = new Validador(this.detallesForm);
+    this.informacion = new Informacion();
   }
 
   enviar() {
@@ -60,16 +56,12 @@ export class DetallesComponent {
         },
         error: (error) => {
           console.log(error);
-          this.informacion.hayError = true;
-          this.informacion.mensaje = error.error.mensaje || 'Error al añadir los detalles';
-          this.informacion.exito = false;
+          this.informacion.informarError(error.error.mensaje || 'Error al añadir detalles'); 
           this.detallesForm.markAllAsTouched();
         }
       });
     } else {
-      this.informacion.hayError = true;
-      this.informacion.mensaje = 'ingrese todos los campos';
-      this.informacion.exito = false;
+      this.informacion.informarError('Ingresa todos los campos');
       this.detallesForm.markAllAsTouched();
       this.inputFotoTocado = true;
     }

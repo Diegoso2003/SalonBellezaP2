@@ -153,6 +153,9 @@ public abstract class ClaseDAO<T, ID> extends Repositorio{
         return idGenerado;
     }
 
+    /**
+     * metodo usado para hacer un roolback si algo sale mal
+     */
     protected void regresar(){
         try {
             coneccion.rollback();

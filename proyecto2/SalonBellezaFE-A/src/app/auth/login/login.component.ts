@@ -18,12 +18,7 @@ import { Usuario } from '../../models/usuario';
 export class LoginComponent {
 
   loginForm: FormGroup;
-  informacion: Informacion = {
-    hayError: false,
-    mensaje: '',
-    exito: false,
-    mostrarAlertaExito: false
-  };
+  informacion: Informacion;
 
   private _validadorForm!: Validador;
   private _usuarioServicio = inject(UsuarioService);
@@ -35,31 +30,30 @@ export class LoginComponent {
       contraseña: ['', [Validators.required]]
     });
     this._validadorForm = new Validador(this.loginForm);
+    this.informacion = new Informacion();
   }
 
   enviar() {
-    this.usuario = this.loginForm.value as Usuario;
     if (this.loginForm.valid) {
-      
+      this.usuario = this.loginForm.value as Usuario;
+      console.log(this.usuario);  
       this._usuarioServicio.login(this.usuario).subscribe(
         {
           next: (usuario: Usuario) => {
+            console.log(usuario);
             this._usuarioServicio.redireccionarUsuario(usuario);
           },
           error: (error) => {
             console.log(error);
-            this.informacion.hayError = true;
-            this.informacion.mensaje = error.error.mensaje || 'Error al iniciar sesión';
-            this.informacion.exito = false;
+            this.informacion.informarError(error.error.mensaje || 'Error al iniciar sesión');
             this.loginForm.markAllAsTouched();
           }
         }
       );
     } else {
       console.log('Formulario inválido');
-      this.informacion.hayError = true;
-      this.informacion.mensaje = 'Formulario inválido';
-      this.informacion.exito = false;
+      this.informacion.informarError('Formulario inválido');
+      this.loginForm.markAllAsTouched();
     }
   }
 
@@ -76,7 +70,7 @@ export class LoginComponent {
   }
 
   esEmailValido(){
-    return this._validadorForm.esValido('email');
+    return this._validadorForm.esValido('correo');
   }
 
   esPasswordValido(){

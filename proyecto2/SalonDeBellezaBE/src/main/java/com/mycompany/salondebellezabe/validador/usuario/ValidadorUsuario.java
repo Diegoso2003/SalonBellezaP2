@@ -40,15 +40,16 @@ public class ValidadorUsuario extends Validador<Usuario>{
             return false;
         }
         switch(rol){
-            case ADMINISTRADOR:
-                return esAdministradorValido();
+            case EMPLEADO:
+                ValidadorFoto validadorFoto = new ValidadorFoto();
+                validadorFoto.validarDatos(this.entidad.getFoto());
+                return esEmpleadoValido();
             case CLIENTE:
                 this.entidad.setActivo(false);
-                return esClienteValido();
-            case EMPLEADO:
+            case ADMINISTRADOR:
             case MARKETING:
             case SERVICIOS:
-                return esEmpleadoValido();
+                return esUsuarioValido();
             default:
                 return false;
         }
@@ -64,17 +65,13 @@ public class ValidadorUsuario extends Validador<Usuario>{
         this.entidad.setContraseña(encriptador.encriptar(usuario.getContraseña()));
     }
     
-    public boolean esEmpleadoValido(){
-        return true;
-    }
-    
-    public boolean esClienteValido(){
+    private boolean esUsuarioValido(){
         return esCorreoValido() && esContraseñaValida() && esConfirmacionContraseñaValida()
                 && esNombreValido() && esTelefonoValido() && esDpiValido();
     }
     
-    public boolean esAdministradorValido(){
-        return true;
+    private boolean esEmpleadoValido(){
+        return esUsuarioValido() && esDescripcionValida();
     }
     
     public boolean esInicioDeSesionValido(Usuario usuario){

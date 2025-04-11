@@ -58,8 +58,12 @@ export class UsuarioService {
     this.router.navigate(['/login']);
   }
 
-  registrarCliente(usuario: Usuario): Observable<any> {
-    return this._http.post<Usuario>(`${this.url}/registro_cliente`, usuario);
+  registrarUsuario(usuario: Usuario): Observable<any> {
+    return this._http.post<Usuario>(`${this.url}/registro_usuario`, usuario);
+  }
+
+  registrarEmpleado(formData: FormData): Observable<void> {
+    return this._http.post<void>(`${this.url}/registro_empleado`, formData);
   }
 
 }
