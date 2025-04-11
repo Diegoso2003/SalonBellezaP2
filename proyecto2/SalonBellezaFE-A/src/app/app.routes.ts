@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { NavbarClienteComponent } from './cliente/navbar-cliente/navbar-cliente.component';
 
 export const routes: Routes = [
     {
@@ -19,8 +18,11 @@ export const routes: Routes = [
     },
     {
         path: 'admin',
-        title: 'Admin',
         loadChildren: () => import('./admin/admin.routes').then(m => m.ADMIN_ROUTES)
+    },
+    {
+        path: 'servicios',
+        loadChildren: () => import('./servicios/servicios.routes').then(m => m.SERVICIOS_ROUTES)
     },
     {
         path: 'cliente',
