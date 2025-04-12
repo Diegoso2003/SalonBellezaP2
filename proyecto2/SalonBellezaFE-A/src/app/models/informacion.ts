@@ -1,6 +1,6 @@
 export class Informacion {
     private hayError: boolean = false;
-    private mensaje: string = '';
+    mensaje: string = '';
     private exito: boolean = false;
     private mostrarAlertaExito: boolean = false;
 

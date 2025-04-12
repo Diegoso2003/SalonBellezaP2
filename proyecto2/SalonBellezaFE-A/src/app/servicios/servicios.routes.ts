@@ -7,7 +7,8 @@ export const SERVICIOS_ROUTES: Routes = [
         children: [
             {
                 path: 'crear_servicio',
-                title: 'Crear Servicio'
+                title: 'Crear Servicio',
+                loadComponent: () => import('./form-servicio/form-servicio.component').then(m => m.FormServicioComponent)
             },
             {
                 path: '',
