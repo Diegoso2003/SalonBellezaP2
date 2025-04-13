@@ -27,6 +27,9 @@ public class FotografiaUsuarioDAO extends ClaseDAO<Fotografia, Long>{
         this.dpi = dpi;
     }
     
+    public FotografiaUsuarioDAO() {
+    }
+    
     /**
      * metodo usado para insertar la foto del usuario en la base de datos
      * @param foto foto del usuario

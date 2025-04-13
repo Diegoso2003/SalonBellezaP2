@@ -4,7 +4,7 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
-import com.mycompany.salondebellezabe.servicios.usuario.ClienteService;
+import com.mycompany.salondebellezabe.service.usuario.ClienteService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;

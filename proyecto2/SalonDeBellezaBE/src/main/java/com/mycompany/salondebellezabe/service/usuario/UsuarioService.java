@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.salondebellezabe.servicios.usuario;
+package com.mycompany.salondebellezabe.service.usuario;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,12 +10,14 @@ import com.mycompany.salondebellezabe.Encriptador;
 import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NoAutorizadoException;
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.LoginDTO;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
+import com.mycompany.salondebellezabe.repositorio.usuarios.FotografiaUsuarioDAO;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
-import com.mycompany.salondebellezabe.servicios.Service;
+import com.mycompany.salondebellezabe.service.Service;
 import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
 import java.util.Optional;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
@@ -113,6 +115,17 @@ public class UsuarioService extends Service<Usuario>{
         } catch (JsonProcessingException ex) {
             throw new InvalidDataException("ingrese correctamente los datos solicitados");
         }
+    }
+    
+    /**
+     * metodo para recuperar la foto de perfil del usuario
+     * @param dpi el pdi del usuario
+     * @return la foto de perfil
+     */
+    public Fotografia obtenerFotoPerfil(Long dpi){
+        FotografiaUsuarioDAO foto = new FotografiaUsuarioDAO();
+        Optional<Fotografia> posibleFoto = foto.obtenerPorID(dpi);
+        return posibleFoto.orElseThrow(() -> new NotFoundException("imagen no encotrada"));
     }
     
 }

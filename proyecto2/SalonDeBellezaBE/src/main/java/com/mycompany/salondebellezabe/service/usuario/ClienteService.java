@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.salondebellezabe.servicios.usuario;
+package com.mycompany.salondebellezabe.service.usuario;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,7 @@ import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
-import com.mycompany.salondebellezabe.servicios.Service;
+import com.mycompany.salondebellezabe.service.Service;
 import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 

@@ -66,4 +66,7 @@ export class UsuarioService {
     return this._http.post<void>(`${this.url}/registro_empleado`, formData);
   }
 
+  obtenerImagenPerfil(dpi: string): Observable<Blob> {
+    return this._http.get(`${this.url}/imagen_perfil/${dpi}`, { responseType: 'blob' });
+  }
 }

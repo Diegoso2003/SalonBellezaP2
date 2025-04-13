@@ -4,12 +4,15 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
+import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.LoginDTO;
 import com.mycompany.salondebellezabe.modelos.Usuario;
-import com.mycompany.salondebellezabe.servicios.usuario.UsuarioService;
+import com.mycompany.salondebellezabe.service.usuario.UsuarioService;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -54,6 +57,17 @@ public class UsuarioController {
         UsuarioService servicio = new UsuarioService();
         servicio.registrarUsuario(foto, detalles);
         return Response.ok()
+                .build();
+    }
+    
+    @Path("/imagen_perfil/{dpi}")
+    @GET
+    public Response conseguirFotoPerfil(@PathParam("dpi") Long dpi){
+        UsuarioService servicio = new UsuarioService();
+        Fotografia foto = servicio.obtenerFotoPerfil(dpi);
+        return Response.ok(foto.getFotografia())
+                .header("Content-Type", foto.getExtension())
+                .header("Content-Disposition", "inline; filename=\"foto_perfil_"+ dpi + "\"")
                 .build();
     }
 }

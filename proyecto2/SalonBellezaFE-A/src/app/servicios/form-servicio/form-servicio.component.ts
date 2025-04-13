@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Informacion } from '../../models/informacion';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InformacionComponent } from "../../informacion/informacion.component";
 import { Validador } from '../../class/validador-form';
 import { NgClass } from '@angular/common';
+import { FormEmpleadosComponent } from "../form-empleados/form-empleados.component";
+import { Usuario } from '../../models/usuario';
+import { ServiciosService } from '../../services/servicios/servicios.service';
 
 @Component({
   selector: 'app-form-servicio',
   standalone: true,
-  imports: [InformacionComponent, ReactiveFormsModule, NgClass],
+  imports: [InformacionComponent, ReactiveFormsModule, NgClass, FormEmpleadosComponent],
   templateUrl: './form-servicio.component.html',
   styleUrl: './form-servicio.component.scss'
 })
-export class FormServicioComponent {
+export class FormServicioComponent implements OnInit{
 
   informacion: Informacion;
   servicioForm: FormGroup;
@@ -21,6 +24,9 @@ export class FormServicioComponent {
   private inputFotoTocado: boolean = false;
   private catalogo: File | null = null;
   private inputCatalogoTocado: boolean = false;
+  empleados!: Usuario[];
+
+  private _servicioService = inject(ServiciosService);
 
   constructor(private formBuilder: FormBuilder) {
     this.servicioForm = this.formBuilder.group(
@@ -34,6 +40,20 @@ export class FormServicioComponent {
     );
     this.informacion = new Informacion();
     this.validadorForm = new Validador(this.servicioForm);
+  }
+
+  ngOnInit(): void {
+    this._servicioService.obtenerEmpleados().subscribe(
+      {
+        next: (empleados: Usuario[]) => {
+          this.empleados = empleados;
+        },
+        error: (error) => {
+          console.error('Error al obtener los empleados:', error);
+          this.informacion.informarError('Error al obtener los empleados');
+        }
+      }
+    );
   }
 
   enviar() {

@@ -274,6 +274,14 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
         return listarPorAtributos("SELECT * FROM Usuario WHERE rol != 'CLIENTE'");
     }
     
+    /**
+     * metodo usado para obtener a todos los usuario con el rol de empleado
+     * @return una lista de empleados
+     */
+    public List<Usuario> obtenerEmpleados(){
+        return listarPorAtributos("SELECT * FROM Usuario WHERE rol = 'EMPLEADO' AND activo = TRUE");
+    }
+    
     public void reactivarUsuario(Long dpi){
         obtenerConeccion();
         String query = "UPDATE Usuario SET activo = TRUE WHERE dpi = ?";

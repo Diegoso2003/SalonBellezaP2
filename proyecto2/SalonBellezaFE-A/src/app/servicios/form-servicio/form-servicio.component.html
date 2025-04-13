@@ -1,205 +1,210 @@
 <app-informacion [informacion]="informacion"></app-informacion>
 <div class="d-flex align-items-center justify-content-center">
-  <div class="card w-25 m-3">
-    <div class="card-body custom-card">
-      <h5 class="card-title text-center mb-3">Crear nuevo servicio</h5>
-      <form
-        class="needs-validation"
-        novalidate
-        [formGroup]="servicioForm"
-        (submit)="enviar()"
-      >
-        <div
-          class="position-relative"
-          [ngClass]="{
-            'mb-5': faltaNombreServicio() || esNombreServicioInvalido(),
-            'mb-3': !(faltaNombreServicio() || esNombreServicioInvalido())
-          }"
-        >
-          <label for="validationTooltip01" class="form-label"
-            >Nombre del servicio</label
+  <div class="card m-3 custom-card" style="width: 60%;">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-5">
+          <h5 class="card-title text-center mb-3">Crear nuevo servicio</h5>
+          <form
+            class="needs-validation"
+            novalidate
+            [formGroup]="servicioForm"
+            (submit)="enviar()"
           >
-          <input
-            type="text"
-            class="form-control"
-            id="validationTooltip01"
-            formControlName="nombreServicio"
-            [ngClass]="{
-              'is-invalid': faltaNombreServicio() || esNombreServicioInvalido(),
-              'is-valid': esNombreServicioValido()
-            }"
-            required
-          />
-          <div class="invalid-tooltip">
-            @if(faltaNombreServicio()) { Ingrese un nombre }
-            @if(esNombreServicioInvalido()) { Ingrese un nombre valido }
-          </div>
-        </div>
+            <div
+              class="position-relative"
+              [ngClass]="{
+                'mb-5': faltaNombreServicio() || esNombreServicioInvalido(),
+                'mb-3': !(faltaNombreServicio() || esNombreServicioInvalido())
+              }"
+            >
+              <label for="validationTooltip01" class="form-label"
+                >Nombre del servicio</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="validationTooltip01"
+                formControlName="nombreServicio"
+                [ngClass]="{
+                  'is-invalid':
+                    faltaNombreServicio() || esNombreServicioInvalido(),
+                  'is-valid': esNombreServicioValido()
+                }"
+                required
+              />
+              <div class="invalid-tooltip">
+                @if(faltaNombreServicio()) { Ingrese un nombre }
+                @if(esNombreServicioInvalido()) { Ingrese un nombre valido }
+              </div>
+            </div>
 
-        <div
-          class="position-relative"
-          [ngClass]="{
-            'mb-5': faltaDescripcion() || esDescripcionInvalida(),
-            'mb-3': !(faltaDescripcion() || esDescripcionInvalida())
-          }"
-        >
-          <label for="validationTooltip02" class="form-label"
-            >Descripcion del servicio</label
-          >
-          <textarea
-            rows="3"
-            class="form-control"
-            id="validationTooltip02"
-            formControlName="descripcion"
-            [ngClass]="{
-              'is-invalid': faltaDescripcion() || esDescripcionInvalida(),
-              'is-valid': esDescripcionValida()
-            }"
-            required
-          ></textarea>
-          <div class="invalid-tooltip">
-            @if(faltaDescripcion()) { Ingrese una descripcion del servicio }
-            @else { descripcion demasiado corta }
-          </div>
-        </div>
+            <div
+              class="position-relative"
+              [ngClass]="{
+                'mb-5': faltaDescripcion() || esDescripcionInvalida(),
+                'mb-3': !(faltaDescripcion() || esDescripcionInvalida())
+              }"
+            >
+              <label for="validationTooltip02" class="form-label"
+                >Descripcion del servicio</label
+              >
+              <textarea
+                rows="3"
+                class="form-control"
+                id="validationTooltip02"
+                formControlName="descripcion"
+                [ngClass]="{
+                  'is-invalid': faltaDescripcion() || esDescripcionInvalida(),
+                  'is-valid': esDescripcionValida()
+                }"
+                required
+              ></textarea>
+              <div class="invalid-tooltip">
+                @if(faltaDescripcion()) { Ingrese una descripcion del servicio }
+                @else { descripcion demasiado corta }
+              </div>
+            </div>
 
-        <div
-          class="position-relative"
-          [ngClass]="{
-            'mb-5': faltaPrecio() || esPrecioInvalido(),
-            'mb-3': !(faltaPrecio() || esPrecioInvalido())
-          }"
-        >
-          <label for="validationTooltip03" class="form-label"
-            >Precio del servicio</label
-          >
-          <input
-            type="number"
-            step="0.01"
-            class="form-control"
-            id="validationTooltip03"
-            formControlName="precio"
-            [ngClass]="{
-              'is-invalid': faltaPrecio() || esPrecioInvalido(),
-              'is-valid': esPrecioValido()
-            }"
-            required
-          />
-          <div class="invalid-tooltip">
-            @if(faltaPrecio()) { Ingrese el precio del servicio }
-            @else { Ingrese un precio valido }
-          </div>
-        </div>
+            <div
+              class="position-relative"
+              [ngClass]="{
+                'mb-5': faltaPrecio() || esPrecioInvalido(),
+                'mb-3': !(faltaPrecio() || esPrecioInvalido())
+              }"
+            >
+              <label for="validationTooltip03" class="form-label"
+                >Precio del servicio</label
+              >
+              <input
+                type="number"
+                step="0.01"
+                class="form-control"
+                id="validationTooltip03"
+                formControlName="precio"
+                [ngClass]="{
+                  'is-invalid': faltaPrecio() || esPrecioInvalido(),
+                  'is-valid': esPrecioValido()
+                }"
+                required
+              />
+              <div class="invalid-tooltip">
+                @if(faltaPrecio()) { Ingrese el precio del servicio } @else {
+                Ingrese un precio valido }
+              </div>
+            </div>
 
-        <label for="validationTooltip04" class="form-label"
-            >Duracion del servicio</label
-          >
+            <label for="validationTooltip04" class="form-label"
+              >Duracion del servicio</label
+            >
+            <div
+              class="position-relative input-group"
+              [ngClass]="{
+                'mb-5':
+                  esHoraInvalida() || faltaMinutos() || esMinutosInvalido(),
+                'mb-3': !(
+                  esHoraInvalida() ||
+                  faltaMinutos() ||
+                  esMinutosInvalido()
+                )
+              }"
+            >
+              <input
+                type="number"
+                class="form-control"
+                id="validationTooltip04"
+                formControlName="horas"
+                placeholder="Horas"
+                [ngClass]="{
+                  'is-invalid': esHoraInvalida(),
+                  'is-valid':
+                    (esHoraValida() || esMinutosValido()) && !esHoraInvalida()
+                }"
+                required
+              />
+              <span class="input-group-text">:</span>
+              <input
+                type="number"
+                placeholder="Minutos"
+                class="form-control"
+                id="validationTooltip05"
+                formControlName="minutos"
+                [ngClass]="{
+                  'is-invalid': faltaMinutos() || esMinutosInvalido(),
+                  'is-valid': esMinutosValido()
+                }"
+                required
+              />
+              <div class="invalid-tooltip">
+                @if(esHoraInvalida()) { Ingrese una hora en el rango de 1 a 4
+                horas } @else if(faltaMinutos()) { Ingrese la duracion del
+                servicio } @else{ Ingrese una duracion valida }
+              </div>
+            </div>
 
-        <div
-          class="position-relative"
-          [ngClass]="{
-            'mb-5': esHoraInvalida(),
-            'mb-3': !(esHoraInvalida())
-          }"
-        >
-          <label for="validationTooltip04" class="form-label"
-            >Horas</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            id="validationTooltip04"
-            formControlName="horas"
-            [ngClass]="{
-              'is-invalid': esHoraInvalida(),
-              'is-valid': esHoraValida()
-            }"
-            required
-          />
-          <div class="invalid-tooltip">
-            @if(esHoraInvalida()) { Ingrese una hora en el rango de 1 a 4 horas }
-          </div>
-        </div>
+            <div
+              class="position-relative"
+              [ngClass]="{ 'mb-5': faltaFoto(), 'mb-3': !faltaFoto() }"
+            >
+              <label for="validationTooltip05" class="form-label"
+                >Fotografia del servicio</label
+              >
+              <input
+                type="file"
+                accept="image/*"
+                class="form-control"
+                id="validationTooltip05"
+                [ngClass]="{
+                  'is-invalid': faltaFoto(),
+                  'is-valid': esFotoValida()
+                }"
+                (change)="fotoSeleccionada($event)"
+                (click)="fotoTocada()"
+                required
+              />
+              <div class="invalid-tooltip">
+                @if(faltaFoto()) { Ingrese la foto del servicio } @else { foto
+                demasiado grande, escoja una menor a 64kb }
+              </div>
+            </div>
 
-        <div
-          class="position-relative"
-          [ngClass]="{
-            'mb-5': faltaMinutos() || esMinutosInvalido(),
-            'mb-3': !(faltaMinutos() || esMinutosInvalido())
-          }"
-        >
-          <label for="validationTooltip05" class="form-label"
-            >Minutos</label
-          >
-          <input
-            type="number"
-            class="form-control"
-            id="validationTooltip05"
-            formControlName="minutos"
-            [ngClass]="{
-              'is-invalid': faltaMinutos() || esMinutosInvalido(),
-              'is-valid': esMinutosValido()
-            }"
-            required
-          />
-          <div class="invalid-tooltip">
-            @if(faltaMinutos()) { Ingrese el tiempo del servicio }
-            @else{ Ingrese minutos validos }
-          </div>
-        </div>
+            <div
+              class="position-relative"
+              [ngClass]="{ 'mb-5': faltaCatalogo(), 'mb-3': !faltaCatalogo() }"
+            >
+              <label for="validationTooltip05" class="form-label"
+                >Catalogo del servicio</label
+              >
+              <input
+                type="file"
+                accept="application/pdf"
+                class="form-control"
+                id="validationTooltip05"
+                [ngClass]="{
+                  'is-invalid': faltaCatalogo(),
+                  'is-valid': esCatalogoValido()
+                }"
+                (change)="catalogoSeleccionado($event)"
+                (click)="catalogoTocado()"
+                required
+              />
+              <div class="invalid-tooltip">
+                @if(faltaCatalogo()) { Ingrese el catalogo del servicio } @else
+                { foto demasiado grande, escoja una menor a 64kb }
+              </div>
+            </div>
 
-        <div
-          class="position-relative"
-          [ngClass]="{ 'mb-5': faltaFoto(), 'mb-3': !faltaFoto() }"
-        >
-          <label for="validationTooltip05" class="form-label">Fotografia del servicio</label>
-          <input
-            type="file"
-            accept="image/*"
-            class="form-control"
-            id="validationTooltip05"
-            [ngClass]="{
-              'is-invalid': faltaFoto(),
-              'is-valid': esFotoValida()
-            }"
-            (change)="fotoSeleccionada($event)"
-            (click)="fotoTocada()"
-            required
-          />
-          <div class="invalid-tooltip">
-            @if(faltaFoto()) { Ingrese la foto del servicio } @else { foto
-            demasiado grande, escoja una menor a 64kb }
-          </div>
+            <div class="mb-3 d-flex justify-content-center">
+              <button class="custom-button" type="submit">
+                Crear servicio
+              </button>
+            </div>
+          </form>
         </div>
-
-        <div
-          class="position-relative"
-          [ngClass]="{ 'mb-5': faltaCatalogo(), 'mb-3': !faltaCatalogo() }"
-        >
-          <label for="validationTooltip05" class="form-label">Catalogo del servicio</label>
-          <input
-            type="file"
-            accept="application/pdf"
-            class="form-control"
-            id="validationTooltip05"
-            [ngClass]="{
-              'is-invalid': faltaCatalogo(),
-              'is-valid': esCatalogoValido()
-            }"
-            (change)="catalogoSeleccionado($event)"
-            (click)="catalogoTocado()"
-            required
-          />
-          <div class="invalid-tooltip">
-            @if(faltaCatalogo()) { Ingrese el catalogo del servicio } @else { foto
-            demasiado grande, escoja una menor a 64kb }
-          </div>
+        <div class="col-md-7">
+          <app-form-empleados [empleados]="empleados" [informacion]="informacion"></app-form-empleados>
         </div>
-
-        <div class="mb-3 d-flex justify-content-center">
-          <button class="custom-button" type="submit">Crear servicio</button>
-        </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
