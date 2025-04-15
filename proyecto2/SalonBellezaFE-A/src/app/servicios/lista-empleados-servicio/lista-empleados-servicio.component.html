@@ -1,0 +1,8 @@
+<ul class="list-group">
+  @for(empleado of empleadosDelServicio; track empleado.dpi){
+  <li class="list-group-item d-flex justify-content-between align-items-center">
+    {{ empleado.nombre }} ({{ empleado.dpi }})
+    <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="borrarEmpleado(empleado.dpi)"></button>
+  </li>
+  }
+</ul>

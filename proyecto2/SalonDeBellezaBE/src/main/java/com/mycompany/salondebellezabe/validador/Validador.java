@@ -15,8 +15,7 @@ public abstract class Validador<T> {
     public abstract void validarDatos(T entidad);
     
     /**
-     * metodo para evaluar si una cadena tiene el minimo aceptado, usa trim() y
-     * replaceAll()
+     * metodo para evaluar si una cadena tiene el minimo aceptado
      * @param cadena la cadena a analizar
      * @param minimo el minimo
      * @return true si cumple el minimo false cualquier otra cosa

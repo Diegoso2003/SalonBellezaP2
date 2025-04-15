@@ -14,10 +14,19 @@ public class ArchivosServicio {
     private Integer idArchivos;
     private InputStream catalogo;
     private byte[] catalogoBytes;
+    private String extensionCatalogo;
     private Fotografia foto;
 
     public Fotografia getFoto() {
         return foto;
+    }
+
+    public String getExtensionCatalogo() {
+        return extensionCatalogo;
+    }
+
+    public void setExtensionCatalogo(String extensionCatalogo) {
+        this.extensionCatalogo = extensionCatalogo;
     }
 
     public void setFoto(Fotografia foto) {

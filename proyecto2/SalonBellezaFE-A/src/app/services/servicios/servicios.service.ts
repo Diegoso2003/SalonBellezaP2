@@ -20,4 +20,8 @@ export class ServiciosService {
   obtenerInformacionEmpleado(dpi: string): Observable<Usuario> {
     return this._http.get<Usuario>(`${this.url}/empleado/${dpi}`);
   }
+
+  crearServicio(servicio: FormData): Observable<any> {
+    return this._http.post<any>(`${this.url}/crear`, servicio);
+  }
 }

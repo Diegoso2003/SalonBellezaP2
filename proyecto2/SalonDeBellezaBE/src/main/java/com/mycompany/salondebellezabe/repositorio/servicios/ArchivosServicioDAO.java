@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.servicios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
@@ -37,10 +38,13 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
             stmt.setBlob(3, archivos.getFoto().getFoto());
             stmt.setString(4, archivos.getFoto().getExtension());
             if (stmt.executeUpdate() <= 0) {
-                //error al ingresar el archivo
+                throw new InvalidDataException("error al ingresar el archivo");
             }
         } catch (SQLException e) {
-            //error al insertat la imagen o el pdf
+            if (e.getErrorCode() == 1406) {
+                throw new InvalidDataException("archivos ingresados demasiado pesados");
+            }
+            throw new InvalidDataException("error al ingresar los archivos del servicio");
         } finally {
             cerrar();
         }

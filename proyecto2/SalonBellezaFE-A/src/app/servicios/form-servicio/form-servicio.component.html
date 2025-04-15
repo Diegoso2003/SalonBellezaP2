@@ -1,6 +1,6 @@
 <app-informacion [informacion]="informacion"></app-informacion>
 <div class="d-flex align-items-center justify-content-center">
-  <div class="card m-3 custom-card" style="width: 60%;">
+  <div class="card m-3 custom-card" style="width: 60%">
     <div class="card-body">
       <div class="row">
         <div class="col-md-5">
@@ -120,7 +120,6 @@
                   'is-valid':
                     (esHoraValida() || esMinutosValido()) && !esHoraInvalida()
                 }"
-                required
               />
               <span class="input-group-text">:</span>
               <input
@@ -154,12 +153,12 @@
                 accept="image/*"
                 class="form-control"
                 id="validationTooltip05"
+                formControlName="foto"
                 [ngClass]="{
                   'is-invalid': faltaFoto(),
                   'is-valid': esFotoValida()
                 }"
                 (change)="fotoSeleccionada($event)"
-                (click)="fotoTocada()"
                 required
               />
               <div class="invalid-tooltip">
@@ -185,7 +184,7 @@
                   'is-valid': esCatalogoValido()
                 }"
                 (change)="catalogoSeleccionado($event)"
-                (click)="catalogoTocado()"
+                formControlName="catalogo"
                 required
               />
               <div class="invalid-tooltip">
@@ -202,7 +201,12 @@
           </form>
         </div>
         <div class="col-md-7">
-          <app-form-empleados [empleados]="empleados" [informacion]="informacion"></app-form-empleados>
+          <app-form-empleados
+            [empleados]="empleados"
+            [informacion]="informacion"
+            [empleadosDelServicio]="empleadosDelServicio"
+            [gestionarServicio]="true"
+          ></app-form-empleados>
         </div>
       </div>
     </div>

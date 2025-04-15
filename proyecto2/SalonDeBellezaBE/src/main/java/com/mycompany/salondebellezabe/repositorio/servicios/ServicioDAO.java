@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.servicios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.BusquedaPorAtributo;
@@ -38,7 +39,8 @@ public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements Busqueda
         String query = "INSERT INTO Servicio(nombreServicio, precio, duracion, descripcion) "
                 + "VALUES(?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
-            stmt.setString(1, servicio.getNombreServicio());
+            coneccion.setAutoCommit(false);
+            stmt.setString(1, servicio.getNombreServicio().trim().replaceAll("\\s+", " "));
             stmt.setDouble(2, servicio.getPrecio());
             stmt.setTime(3, Time.valueOf(servicio.getDuracion()));
             stmt.setString(4, servicio.getDescripcion());
@@ -46,15 +48,26 @@ public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements Busqueda
                 try (ResultSet result = stmt.getGeneratedKeys()){
                     if (result.next()) {
                         idGenerado = result.getInt(1);
+                        servicio.setIdServicio(idGenerado);
+                        ArchivosServicioDAO repoArchivos = new ArchivosServicioDAO();
+                        repoArchivos.compartirConeccion();
+                        servicio.getArchivos().setIdArchivos(idGenerado);
+                        repoArchivos.insertar(servicio.getArchivos());
+                        EmpleadosServicioDAO repoEmpleados = new EmpleadosServicioDAO(servicio);
+                        repoEmpleados.compartirConeccion();
+                        for(Usuario empleado : servicio.getEmpleados()){
+                            repoEmpleados.insertar(empleado);
+                        }
+                        coneccion.commit();
                     }
-                } catch (Exception e) {
-                }
+                } 
             }
         } catch (SQLException e) {
+            regresar();
             if (e.getErrorCode() == 1062) {
-                //error el servicio con ese nombre ya esta ingresado
+                throw new InvalidDataException("nombre de servicio: '" + servicio.getNombreServicio() + "' ya registrado en el sistema");
             }
-            //error de insertar valores validos
+            throw new InvalidDataException("datos ingresados invalidos");
         } finally {
             cerrar();
         }

@@ -1,6 +1,6 @@
 export class Informacion {
     private hayError: boolean = false;
-    mensaje: string = '';
+    private mensaje: string = '';
     private exito: boolean = false;
     private mostrarAlertaExito: boolean = false;
 
@@ -35,5 +35,10 @@ export class Informacion {
 
     public getMostrarAlertaExito(): boolean {
         return this.mostrarAlertaExito;
+    }
+
+    public ocultarError(): void {
+        this.hayError = false;
+        this.mensaje = '';
     }
 }

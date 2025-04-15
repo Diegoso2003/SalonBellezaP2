@@ -1,19 +1,20 @@
-@if(informacion.getHayError()){
-    <div class="d-flex justify-content-center mt-5">
-        <div class="alert custom-alert fade show w-25" role="alert">
-            <strong>Error</strong>
-            <p>{{ informacion.getMensaje() }}</p> 
-        </div>
-    </div>
+@if(informacion.getExito() && informacion.getMostrarAlertaExito()){
+<div class="d-flex justify-content-center mt-5">
+  <div class="alert custom-alert alert-dismissible fade show w-25" role="alert">
+    <strong>Informacion</strong>
+    <p>{{ informacion.getMensaje() }}</p>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="informacion.ocultarAlertaExito()"
+    ></button>
+  </div>
+</div>
 }
 
-@if(informacion.getExito() && informacion.getMostrarAlertaExito()){
-    <div class="d-flex justify-content-center mt-5">
-        <div class="alert custom-alert alert-dismissible fade show w-25" role="alert">
-            <strong>Informacion</strong>
-            <p>{{ informacion.mensaje }}</p> 
-            <button type="button" class="btn-close" aria-label="Close" (click)="informacion.ocultarAlertaExito()"></button>
-        </div>
-    </div>
+@if(informacion.getHayError()){
+    <app-informe-error
+      [informacion]="informacion"
+    ></app-informe-error>
 }
-  

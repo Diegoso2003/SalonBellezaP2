@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.servicios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
@@ -45,11 +46,11 @@ public class EmpleadosServicioDAO extends ClaseDAO<Usuario, Long>{
             stmt.executeUpdate();
         } catch (SQLException e) {
             if (e.getErrorCode() == 1062) {
-                //error empleado ya asignado a este servicio
+                throw new InvalidDataException("el empleado con dpi: '" + empleado.getDpi() + "' ya se encuentra asignado al servicio");
             } else if (e.getErrorCode() == 1452) {
-                // empleado o servicio no encontrados
+                throw new InvalidDataException("empleado o servicio no encontrados");
             }
-            // valores ingresados invalidos
+            throw new InvalidDataException("error al asignar al empleado");
         } finally {
             cerrar();
         }

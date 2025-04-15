@@ -7,6 +7,7 @@ import { NgClass } from '@angular/common';
 import { FormEmpleadosComponent } from "../form-empleados/form-empleados.component";
 import { Usuario } from '../../models/usuario';
 import { ServiciosService } from '../../services/servicios/servicios.service';
+import { Servicio } from '../../models/servicio';
 
 @Component({
   selector: 'app-form-servicio',
@@ -21,9 +22,8 @@ export class FormServicioComponent implements OnInit{
   servicioForm: FormGroup;
   private validadorForm: Validador;
   private foto: File | null = null;
-  private inputFotoTocado: boolean = false;
   private catalogo: File | null = null;
-  private inputCatalogoTocado: boolean = false;
+  empleadosDelServicio: Usuario[] = [];
   empleados!: Usuario[];
 
   private _servicioService = inject(ServiciosService);
@@ -35,7 +35,9 @@ export class FormServicioComponent implements OnInit{
         descripcion: ['', [Validators.required, Validators.minLength(20)]],
         precio: ['', [Validators.required, Validators.min(0.01)]],
         horas: ['', [Validators.min(1), Validators.max(4)]],
-        minutos: ['', [Validators.required, Validators.min(1), Validators.max(59)]]
+        minutos: ['', [Validators.required, Validators.min(1), Validators.max(59)]],
+        foto: ['', [Validators.required]],
+        catalogo: ['', [Validators.required]],
       }
     );
     this.informacion = new Informacion();
@@ -58,9 +60,64 @@ export class FormServicioComponent implements OnInit{
 
   enviar() {
     console.log(this.servicioForm.value);
-    if(this.servicioForm.get('horas')?.value === ''){
-
+    if(this.servicioForm.valid && this.foto !== null && this.catalogo !== null){
+      if(this.empleadosDelServicio.length === 0){
+        this.informacion.informarError('Agregar al menos un empleado');
+        return;
+      }
+      let horas: string = this.obtenerHoras();
+      let minutos: string = this.obtenerMinutos();
+      let servicio: Servicio = {
+        idServicio: 0,
+        nombreServicio: this.servicioForm.value.nombreServicio,
+        descripcion: this.servicioForm.value.descripcion,
+        precio: this.servicioForm.value.precio,
+        duracion: `${horas}:${minutos}`,
+        empleados: this.empleadosDelServicio,
+        activo: true
+      }
+      const formData = new FormData();
+      formData.append('servicio', JSON.stringify(servicio));
+      formData.append('foto', this.foto);
+      formData.append('catalogo', this.catalogo);
+      this._servicioService.crearServicio(formData).subscribe(
+        {
+          next: () => {
+            this.servicioForm.reset();
+            this.foto = null;
+            this.catalogo = null;
+            this.empleadosDelServicio.length = 0;
+            this.informacion.informarExito('Servicio creado con éxito');
+          },
+          error: (error) => {
+            console.error('Error al crear el servicio:', error);
+            this.informacion.informarError(error.error.mensaje || 'Error al crear el servicio');
+          }
+        }
+      );
+    } else{
+      this.servicioForm.markAllAsTouched();
+      this.servicioForm.value;
+      this.informacion.informarError('Completar los campos requeridos')
     }
+  }
+
+  private obtenerHoras(): string {
+    let horas: string = this.servicioForm.value.horas.toString();
+    if(horas.length === 0){
+      horas = '00';
+    } else if(horas.length === 1){
+      horas = '0' + horas;
+    }
+    return horas;
+  }
+
+  private obtenerMinutos(): string {
+    let minutos: string = this.servicioForm.value.minutos.toString();
+    if(minutos.length === 1){
+      minutos = '0' + minutos;
+    }
+    return minutos;
   }
 
   fotoSeleccionada(event: Event) {
@@ -81,28 +138,20 @@ export class FormServicioComponent implements OnInit{
     }
   }
 
-  fotoTocada() {
-    this.inputFotoTocado = true;
-  }
-
-  catalogoTocado() {
-    this.inputCatalogoTocado = true;
-  }
-
   faltaFoto() {
-    return this.inputFotoTocado && this.foto === null;
+    return this.validadorForm.hasErrors('foto', 'required') && this.foto === null;
   }
 
   esFotoValida() {
-    return this.inputFotoTocado && this.foto !== null;
+    return this.validadorForm.esValido('foto') && this.foto !== null;
   }
 
   faltaCatalogo() {
-    return this.inputCatalogoTocado && this.catalogo === null;
+    return this.validadorForm.hasErrors('catalogo', 'required') && this.catalogo === null;
   }
 
   esCatalogoValido() {
-    return this.inputCatalogoTocado && this.catalogo !== null;
+    return this.validadorForm.esValido('catalogo') && this.catalogo !== null;
   }
 
   faltaNombreServicio(){

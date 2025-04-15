@@ -4,6 +4,11 @@
  */
 package com.mycompany.salondebellezabe.modelos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import java.time.LocalTime;
 import java.util.Set;
 
@@ -15,6 +20,9 @@ public class Servicio {
     private Integer idServicio;
     private String nombreServicio;
     private double precio;
+    @JsonFormat(pattern = "HH:mm")
+    @JsonSerialize(using = LocalTimeSerializer.class)
+    @JsonDeserialize(using = LocalTimeDeserializer.class)
     private LocalTime duracion;
     private String descripcion;
     private ArchivosServicio archivos;

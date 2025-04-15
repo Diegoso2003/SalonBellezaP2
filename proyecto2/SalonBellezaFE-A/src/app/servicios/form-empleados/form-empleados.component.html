@@ -33,7 +33,7 @@
         <br />
         dpi: {{ empleadoSeleccionado.dpi }}
       </small>
-      <button class="custom-button ms-5">Agregar</button>
+      <button class="custom-button ms-5" (click)="agregrarEmpleado(empleadoSeleccionado.dpi)">Agregar</button>
     </p>
     </div>
   </div>
@@ -63,3 +63,5 @@
   </div>
 </div>
 } }
+<br>
+<app-lista-empleados-servicio [empleadosDelServicio]="empleadosDelServicio" [informacion]="informacion"></app-lista-empleados-servicio>

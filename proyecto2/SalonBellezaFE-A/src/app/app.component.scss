@@ -32,3 +32,51 @@ $cocoa-brown: #da7422;
         background-color: darken($cocoa-brown, 10%);
     }
 }
+
+.custom-alert {
+    background-color: $field-drab;
+    color: $light-yellow;
+    padding: 1rem;
+    border: 2px solid $satin-sheen-gold;
+    border-radius: 4px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .modal-header {
+        background-color: darken($field-drab, 10%);
+        color: $light-yellow;
+        padding: 0.5rem 1rem;
+        border-bottom: 1px solid $satin-sheen-gold;
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .btn-close {
+            background: none;
+            border: none;
+            color: $light-yellow;
+            font-size: 1.25rem;
+            cursor: pointer;
+
+            &:hover {
+                color: lighten($light-yellow, 10%);
+            }
+        }
+    }
+
+    .modal-body {
+        padding: 1rem;
+        font-size: 1rem;
+    }
+
+    .modal-footer {
+        background-color: lighten($field-drab, 5%);
+        padding: 0.5rem 1rem;
+        text-align: right;
+
+        .custom-button {
+            margin-left: 0.5rem;
+        }
+    }
+}

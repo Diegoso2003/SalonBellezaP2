@@ -5,12 +5,16 @@
 package com.mycompany.salondebellezabe.controllers;
 
 import com.mycompany.salondebellezabe.service.servicio.ServicioService;
+import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 
 /**
  *
@@ -34,6 +38,20 @@ public class ServicioController {
     public Response obtenerInformacionEmpleado(@PathParam("dpi") Long dpi){
         ServicioService servicio = new ServicioService();
         return Response.ok(servicio.obtenerInformacionEmpleado(dpi))
+                .build();
+    }
+    
+    @Path("crear")
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response crearServicio(
+            @FormDataParam("foto") FormDataBodyPart fotoServicio,
+            @FormDataParam("catalogo") FormDataBodyPart catalogo,
+            @FormDataParam("servicio") String detallesServicio
+    ){
+        ServicioService servicio = new ServicioService();
+        servicio.crearServicio(fotoServicio, catalogo, detallesServicio);
+        return Response.ok()
                 .build();
     }
 }
