@@ -25,6 +25,10 @@ export const routes: Routes = [
         loadChildren: () => import('./servicios/servicios.routes').then(m => m.SERVICIOS_ROUTES)
     },
     {
+        path: 'marketing',
+        loadChildren: () => import('./marketing/marketing.routes').then(m => m.MARKETING_ROUTES)
+    },
+    {
         path: 'cliente',
         title: 'Cliente',
         loadComponent: () => import('./cliente/navbar-cliente/navbar-cliente.component').then(m => m.NavbarClienteComponent)

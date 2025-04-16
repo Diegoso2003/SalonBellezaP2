@@ -41,4 +41,9 @@ export class Informacion {
         this.hayError = false;
         this.mensaje = '';
     }
+
+    public ocultarExito(): void {
+        this.exito = false;
+        this.mensaje = '';
+    }
 }
