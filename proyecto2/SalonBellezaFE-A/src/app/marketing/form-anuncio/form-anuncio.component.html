@@ -1,1 +1,179 @@
-<p>form-anuncio works!</p>
+<app-informacion [informacion]="informacion"></app-informacion>
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card w-25 m-3">
+    <div class="card-body custom-card">
+      <h5 class="card-title text-center mb-3">Publicar anuncio</h5>
+      <form
+        class="needs-validation"
+        novalidate
+        [formGroup]="formAnuncio"
+        (submit)="enviar()"
+      >
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaTipo(),
+            'mb-3': !faltaTipo()
+          }"
+        >
+          <label for="rol" class="form-label">Tipo de anuncio</label>
+          <select
+            class="form-select is-valid"
+            [ngClass]="{
+              'is-invalid': faltaTipo(),
+              'is-valid': esTipoValido()
+            }"
+            aria-label="Default select example"
+            required
+            formControlName="tipo"
+            (change)="tipoSeleccionado($event)"
+          >
+            <option value="TEXTO">Anuncio de texto</option>
+            <option value="VIDEO">Anuncio de texto y video</option>
+            <option value="IMAGEN">Anuncio de texto e imagen</option>
+          </select>
+          <div class="invalid-tooltip">seleccione un tipo de anuncio</div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaTexto() || esTextoInvalido(),
+            'mb-3': !(faltaTexto() || esTextoInvalido())
+          }"
+        >
+          <label for="validationTooltip01" class="form-label"
+            >Texto del anuncio</label
+          >
+          <textarea
+            rows="3"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="texto"
+            [ngClass]="{
+              'is-invalid': faltaTexto() || esTextoInvalido(),
+              'is-valid': esTextoValido()
+            }"
+            required
+          ></textarea>
+          <div class="invalid-tooltip">
+            @if(faltaTexto()) { Ingrese un texto } @else { ingrese un texto
+            valido }
+          </div>
+        </div>
+
+        @if(pedirUrlVideo){
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaUrlVideo() || esUrlVideoInvalido(),
+            'mb-3': !(faltaUrlVideo() || esUrlVideoInvalido())
+          }"
+        >
+          <label for="validationTooltip01" class="form-label"
+            >Url del video</label
+          >
+          <input
+            type="url"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="urlVideo"
+            [ngClass]="{
+              'is-invalid': faltaUrlVideo() || esUrlVideoInvalido(),
+              'is-valid': esUrlVideoValido()
+            }"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaUrlVideo()) { Ingrese el url del video }
+            @if(esUrlVideoInvalido()) { el url es demasiado largo }
+          </div>
+        </div>
+        } @if(pedirFoto){
+        <div
+          class="position-relative"
+          [ngClass]="{ 'mb-5': faltaFoto(), 'mb-3': !faltaFoto() }"
+        >
+          <label for="validationTooltip05" class="form-label"
+            >Imagen del anuncio</label
+          >
+          <input
+            type="file"
+            accept="image/*"
+            class="form-control"
+            id="validationTooltip05"
+            [ngClass]="{
+              'is-invalid': faltaFoto(),
+              'is-valid': esFotoValida()
+            }"
+            (change)="archivoSeleccionado($event)"
+            (click)="inputFoto()"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaFoto()) { Ingrese la imagen del anuncio } @else { foto
+            demasiado grande, escoja una menor a 64kb }
+          </div>
+        </div>
+        }
+
+        <div
+          class="position-relative"
+          [ngClass]="{ 'mb-5': faltaFecha(), 'mb-3': !faltaFecha() }"
+        >
+          <label for="validationTooltip02" class="form-label"
+            >Fecha de publicacion</label
+          >
+          <input
+            type="date"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': faltaFecha(),
+              'is-valid': esFechaValida()
+            }"
+            id="validationTooltip02"
+            formControlName="fechaPublicacion"
+            required
+          />
+          <div class="invalid-tooltip">Ingrese la fecha</div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{
+            'mb-5': faltaDias() || sonDiasInvalidos(),
+            'mb-3': !(faltaDias() || sonDiasInvalidos())
+          }"
+        >
+          <label for="validationTooltip01" class="form-label"
+            >Dias que estara activo el anuncio</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="dias"
+            [ngClass]="{
+              'is-invalid': faltaDias() || sonDiasInvalidos(),
+              'is-valid': sonDiasValidos()
+            }"
+            (change)="diasSeleccionados($event)"
+            required
+          />
+          <div class="invalid-tooltip">
+            @if(faltaDias()) { Ingrese los dias que estara activo el anuncio }
+            @if(sonDiasInvalidos()) { Ingrese una cantidad valida }
+          </div>
+        </div>
+
+        <label for="validationTooltip03" class="form-label"
+          >Precio del anuncio: {{ precioFinal | currency:'Q':'symbol':'1.2-2' }}</label
+        >
+
+        <div class="mb-3 d-flex justify-content-center">
+          <button class="custom-button" type="submit">Publicar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

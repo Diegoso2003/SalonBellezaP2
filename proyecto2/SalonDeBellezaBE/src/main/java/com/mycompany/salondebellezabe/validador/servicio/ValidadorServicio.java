@@ -73,4 +73,9 @@ public class ValidadorServicio extends Validador<Servicio>{
         double precio = entidad.getPrecio();
         return precio > 0;
     }
+
+    @Override
+    public void validarActualizacion(Servicio entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

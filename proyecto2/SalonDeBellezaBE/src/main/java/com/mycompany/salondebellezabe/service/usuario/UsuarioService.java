@@ -12,7 +12,7 @@ import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NoAutorizadoException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
-import com.mycompany.salondebellezabe.modelos.LoginDTO;
+import com.mycompany.salondebellezabe.dtos.LoginDTO;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.Rol;
 import com.mycompany.salondebellezabe.repositorio.usuarios.FotografiaUsuarioDAO;

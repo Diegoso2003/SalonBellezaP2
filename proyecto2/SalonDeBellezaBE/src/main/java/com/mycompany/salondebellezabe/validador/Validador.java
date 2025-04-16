@@ -13,6 +13,7 @@ public abstract class Validador<T> {
     
     protected abstract boolean esValido();
     public abstract void validarDatos(T entidad);
+    public abstract void validarActualizacion(T entidad);
     
     /**
      * metodo para evaluar si una cadena tiene el minimo aceptado

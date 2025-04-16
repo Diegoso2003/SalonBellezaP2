@@ -4,6 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Vigencia;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.Date;
@@ -32,14 +34,16 @@ public class VigenciaDAO extends ClaseDAO<Vigencia, Integer>{
             stmt.setDouble(4, vigencia.getPrecio());
             if (stmt.executeUpdate() > 0) {
                 try(ResultSet result = stmt.getGeneratedKeys()){
-                    idGenerado = result.getInt(1);
+                    if (result.next()) {
+                        idGenerado = result.getInt(1);
+                    }
                 }
             }
         } catch (SQLException e) {
             if (e.getErrorCode() == 1452) {
-               // anuncio no encontrado 
+               throw new NotFoundException("no se encontro el anuncio con id: '" + vigencia.getIdAnuncio() + "'");
             }
-            //valores ingresados no son validos
+            throw new InvalidDataException("ingresar correctamente los datos solicitados");
         } finally {
             cerrar();
         }

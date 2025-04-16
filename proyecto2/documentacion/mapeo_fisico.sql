@@ -60,7 +60,7 @@ CREATE TABLE EmpleadosServicio(
 CREATE TABLE Anuncio(
 	idAnuncio INT AUTO_INCREMENT,
 	tipo ENUM('TEXTO','IMAGEN','VIDEO') NOT NULL,
-	texto TEXT NOT NULL,
+	texto VARCHAR(150) NOT NULL,
 	urlVideo VARCHAR(250),
 	estado BOOL NOT NULL DEFAULT TRUE,
 	CONSTRAINT pk_anuncio PRIMARY KEY(idAnuncio)

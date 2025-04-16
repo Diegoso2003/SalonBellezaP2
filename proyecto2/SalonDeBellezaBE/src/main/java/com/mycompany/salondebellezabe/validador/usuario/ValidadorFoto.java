@@ -43,5 +43,10 @@ public class ValidadorFoto extends Validador<Fotografia>{
         }
         return false;
     }
+
+    @Override
+    public void validarActualizacion(Fotografia entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

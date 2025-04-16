@@ -143,5 +143,10 @@ public class ValidadorUsuario extends Validador<Usuario>{
         return esDescripcionValida() && sonHobbiesValidos() && sonGustosValidos() 
                 && esDireccionValida() && esDpiValido();
     }
+
+    @Override
+    public void validarActualizacion(Usuario entidad) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }

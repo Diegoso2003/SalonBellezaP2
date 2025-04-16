@@ -10,7 +10,7 @@ import { Observable } from 'rxjs';
 export class ServiciosService {
 
   private _http = inject(HttpClient);
-    private url = `${API_URL}/servicios`;
+  private url = `${API_URL}/servicios`;
   constructor() { }
 
   obtenerEmpleados(): Observable<Usuario[]> {

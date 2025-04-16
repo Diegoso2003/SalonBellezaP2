@@ -1,18 +1,14 @@
 @if(mostrar){
 <div
-  class="toast-container position-fixed top-0 start-50 translate-middle-x p-3"
+  class="toast-container position-fixed top-0 start-75 translate-middle-x p-3"
 >
   <ngb-toast
     [autohide]="autohide"
     [delay]="delay"
     [animation]="true"
-    [header]="'Éxito'"
+    [header]="'Informacion'"
     (hidden)="ocultarToast()"
-    [class]="'bg-success text-white'"
   >
-    <div class="toast-header bg-success text-white border-0">
-      <strong class="me-auto">Informacion</strong>
-    </div>
     <div class="toast-body">
       {{ informacion.getMensaje() }}
     </div>

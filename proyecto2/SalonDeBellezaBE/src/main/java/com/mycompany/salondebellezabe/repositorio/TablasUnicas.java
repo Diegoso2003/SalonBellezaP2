@@ -33,7 +33,7 @@ public abstract class TablasUnicas<T> extends Repositorio{
                 entidad = obtenerDatos(result);
             }
         } catch (SQLException e) {
-            //algo salio mal
+            System.out.println(e);
         } finally {
             cerrar();
         }

@@ -4,7 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
-import com.mycompany.salondebellezabe.modelos.ImagenAnuncio;
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.JDBCType;
 import java.sql.PreparedStatement;
@@ -17,25 +18,33 @@ import java.util.Optional;
  *
  * @author rafael-cayax
  */
-public class ImagenAnuncioDAO extends ClaseDAO<ImagenAnuncio, Integer>{
+public class ImagenAnuncioDAO extends ClaseDAO<Fotografia, Integer>{
 
+    private final Integer idAnuncio;
 
+    public ImagenAnuncioDAO(Integer idAnuncio) {
+        this.idAnuncio = idAnuncio;
+    }
+    
     /**
      * metodo para insertar la imagen de un anuncio a la base de datos
      * @param imagen los datos de la imagen del anuncio
      */
     @Override
-    public void insertar(ImagenAnuncio imagen) {
+    public void insertar(Fotografia imagen) {
         obtenerConeccion();
         String query = "INSERT INTO ImagenAnuncio(idAnuncio, imagen, extension)"
                 + " VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setInt(1, imagen.getIdAnuncio());
-            stmt.setBlob(2, imagen.getImagen());
+            stmt.setInt(1, idAnuncio);
+            stmt.setBlob(2, imagen.getFoto());
             stmt.setString(3, imagen.getExtension());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            //imagen ingresada invalida
+            if (e.getErrorCode() == 1406) {
+                throw new InvalidDataException("imagen ingresada muy pesada ingrese otra");
+            }
+            throw new InvalidDataException("imagen ingresada no valida, ingrese otra");
         } finally {
             cerrar();
         }
@@ -52,8 +61,8 @@ public class ImagenAnuncioDAO extends ClaseDAO<ImagenAnuncio, Integer>{
      * @return un optional con los datos de la imagen
      */
     @Override
-    public Optional<ImagenAnuncio> obtenerPorID(Integer id) {
-        String query = "SELECT * FROM ImagenAnuncio WHERE idAnuncio = ?";
+    public Optional<Fotografia> obtenerPorID(Integer id) {
+        String query = "SELECT * FROM Fotografia WHERE idAnuncio = ?";
         return buscar(query, id, JDBCType.INTEGER);
     }
 
@@ -62,13 +71,13 @@ public class ImagenAnuncioDAO extends ClaseDAO<ImagenAnuncio, Integer>{
      * @param imagen los datos de la imagen
      */
     @Override
-    public void actualizar(ImagenAnuncio imagen) {
+    public void actualizar(Fotografia imagen) {
         obtenerConeccion();
-        String query = "UPDATE ImagenAnuncio SET extension = ?, imagen = ? WHERE idAnuncio = ?";
+        String query = "UPDATE Fotografia SET extension = ?, imagen = ? WHERE idAnuncio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, imagen.getExtension());
-            stmt.setBlob(2, imagen.getImagen());
-            stmt.setInt(3, imagen.getIdAnuncio());
+            stmt.setBlob(2, imagen.getFoto());
+            stmt.setInt(3, idAnuncio);
             if (stmt.executeUpdate() <= 0) {
                 //anuncio no encontrado
             }
@@ -80,7 +89,7 @@ public class ImagenAnuncioDAO extends ClaseDAO<ImagenAnuncio, Integer>{
     }
 
     @Override
-    public List<ImagenAnuncio> obtenerTodo() {
+    public List<Fotografia> obtenerTodo() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
@@ -91,11 +100,10 @@ public class ImagenAnuncioDAO extends ClaseDAO<ImagenAnuncio, Integer>{
      * @throws SQLException 
      */
     @Override
-    protected ImagenAnuncio obtenerDatos(ResultSet result) throws SQLException {
-        ImagenAnuncio imagen = new ImagenAnuncio();
+    protected Fotografia obtenerDatos(ResultSet result) throws SQLException {
+        Fotografia imagen = new Fotografia();
         imagen.setExtension(result.getString("extension"));
-        imagen.setFoto(result.getBytes("imagen"));
-        imagen.setIdAnuncio(result.getInt("idAnuncio"));
+        imagen.setFotografia(result.getBytes("imagen"));
         return imagen;
     }
     

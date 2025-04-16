@@ -5,7 +5,7 @@
 package com.mycompany.salondebellezabe.controllers;
 
 import com.mycompany.salondebellezabe.modelos.Fotografia;
-import com.mycompany.salondebellezabe.modelos.LoginDTO;
+import com.mycompany.salondebellezabe.dtos.LoginDTO;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.service.usuario.UsuarioService;
 import jakarta.ws.rs.Consumes;

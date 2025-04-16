@@ -19,6 +19,7 @@ public class Anuncio {
     private boolean estado;
     private List<HistorialAnuncio> historial;
     private Vigencia vigencia;
+    private Fotografia foto;
 
     public Vigencia getVigencia() {
         return vigencia;
@@ -74,6 +75,14 @@ public class Anuncio {
 
     public void setEstado(boolean estado) {
         this.estado = estado;
+    }
+
+    public Fotografia getFoto() {
+        return foto;
+    }
+
+    public void setFoto(Fotografia foto) {
+        this.foto = foto;
     }
     
 }

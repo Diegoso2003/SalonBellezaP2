@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Anuncio;
 import com.mycompany.salondebellezabe.modelos.enums.TipoAnuncio;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
@@ -29,18 +30,38 @@ public class AnuncioDAO extends ClaseDAO<Anuncio, Integer>{
     @Override
     public void insertar(Anuncio anuncio) {
         obtenerConeccion();
-        String query = "INSERT INTO Anuncio(tipo, texto, urlVideo) VALUES(?, ?, ?)";
+        boolean urlVideo = anuncio.getTipo() == TipoAnuncio.VIDEO;
+        String query = "INSERT INTO Anuncio(tipo, texto";
+        query += urlVideo ? ", urlVideo)": ")";
+        query += " VALUES(?, ?";
+        query += urlVideo ? ", ?)": ")";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            coneccion.setAutoCommit(false);
             stmt.setString(1, anuncio.getTipo().toString());
             stmt.setString(2, anuncio.getTexto());
-            stmt.setString(3, anuncio.getUrlVideo());
+            if (urlVideo) {
+                stmt.setString(3, anuncio.getUrlVideo().trim());
+            }
             if (stmt.executeUpdate() > 0) {
                 try (ResultSet result = stmt.getGeneratedKeys()) {
-                    idGenerado = result.getInt(1);
+                    if (result.next()) {
+                        idGenerado = result.getInt(1);
+                        anuncio.getVigencia().setIdAnuncio(idGenerado);
+                        VigenciaDAO repoVigencia = new VigenciaDAO();
+                        repoVigencia.compartirConeccion();
+                        repoVigencia.insertar(anuncio.getVigencia());
+                        if (anuncio.getTipo() == TipoAnuncio.IMAGEN) {
+                            ImagenAnuncioDAO repoImagen = new ImagenAnuncioDAO(idGenerado);
+                            repoImagen.compartirConeccion();
+                            repoImagen.insertar(anuncio.getFoto());
+                        }
+                        coneccion.commit();
+                    }
                 }
             }
         } catch (SQLException e) {
-            //datos ingresados no validos
+            regresar();
+            throw new InvalidDataException("ingrese correctamente los datos solicitados");
         } finally {
             cerrar();
         }
