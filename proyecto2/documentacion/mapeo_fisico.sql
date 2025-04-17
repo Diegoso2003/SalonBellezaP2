@@ -75,11 +75,13 @@ CREATE TABLE ImagenAnuncio(
 );
 
 CREATE TABLE HistorialAnuncio(
-	url VARCHAR(250),
+	idHistorial INT AUTO_INCREMENT,
+	url VARCHAR(250) NOT NULL,
 	fechaPublicacion DATE NOT NULL,
 	contador INT NOT NULL DEFAULT 1,
 	idAnuncio INT NOT NULL,
-	CONSTRAINT pk_historial PRIMARY KEY(url, fechaPublicacion, idAnuncio),
+	CONSTRAINT un_historial UNIQUE(url, fechaPublicacion, idAnuncio),
+	CONSTRAINT pk_historial PRIMARY KEY(idHistorial),
 	CONSTRAINT fk_anuncio1 FOREIGN KEY(idAnuncio) REFERENCES Anuncio(idAnuncio)
 );
 

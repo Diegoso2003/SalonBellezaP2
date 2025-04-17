@@ -44,6 +44,7 @@ public class FotografiaUsuarioDAO extends ClaseDAO<Fotografia, Long>{
             stmt.setString(3, foto.getExtension());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            regresar();
             switch (e.getErrorCode()) {
                 case 1062:
                     throw new InvalidDataException("usuario con dpi: '" + dpi + "' ya tiene una foto, para cambiarla vaya al perfil");

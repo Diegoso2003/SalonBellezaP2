@@ -4,7 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
-import com.mycompany.salondebellezabe.Coneccion;
+import com.mycompany.salondebellezabe.PoolConnections;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;

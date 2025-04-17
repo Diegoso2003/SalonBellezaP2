@@ -20,12 +20,13 @@ import java.util.Optional;
  */
 public class ImagenAnuncioDAO extends ClaseDAO<Fotografia, Integer>{
 
-    private final Integer idAnuncio;
+    private Integer idAnuncio;
 
     public ImagenAnuncioDAO(Integer idAnuncio) {
         this.idAnuncio = idAnuncio;
     }
     
+    public ImagenAnuncioDAO(){}
     /**
      * metodo para insertar la imagen de un anuncio a la base de datos
      * @param imagen los datos de la imagen del anuncio
@@ -41,8 +42,9 @@ public class ImagenAnuncioDAO extends ClaseDAO<Fotografia, Integer>{
             stmt.setString(3, imagen.getExtension());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            regresar();
             if (e.getErrorCode() == 1406) {
-                throw new InvalidDataException("imagen ingresada muy pesada ingrese otra");
+                throw new InvalidDataException("imagen ingresada muy pesada ingrese otra que pese menos de 64kb");
             }
             throw new InvalidDataException("imagen ingresada no valida, ingrese otra");
         } finally {

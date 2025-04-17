@@ -9,6 +9,7 @@ import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Vigencia;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.Date;
+import java.sql.JDBCType;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,6 +41,7 @@ public class VigenciaDAO extends ClaseDAO<Vigencia, Integer>{
                 }
             }
         } catch (SQLException e) {
+            regresar();
             if (e.getErrorCode() == 1452) {
                throw new NotFoundException("no se encontro el anuncio con id: '" + vigencia.getIdAnuncio() + "'");
             }
@@ -71,7 +73,23 @@ public class VigenciaDAO extends ClaseDAO<Vigencia, Integer>{
 
     @Override
     protected Vigencia obtenerDatos(ResultSet result) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Vigencia vigencia = new Vigencia();
+        vigencia.setIdAnuncio(result.getInt("idAnuncio"));
+        vigencia.setIdVigencia(result.getInt("idVigencia"));
+        vigencia.setFechaPublicacion(result.getDate("fechaPublicacion").toLocalDate());
+        vigencia.setDias(result.getInt("dias"));
+        vigencia.setPrecio(result.getDouble("precio"));
+        return vigencia;
     }
     
+    /**
+     * metodo usado para obtener la vigencia mas actual de un anuncio
+     * @param idAnuncio el id del anuncio
+     * @return la vigencia del anuncio actual
+     */
+    public Vigencia obtenerVigenciaActualAnuncio(Integer idAnuncio) {
+        Optional<Vigencia> posibleVigencia = this.buscar("SELECT * FROM Vigencia WHERE idAnuncio = ? ORDER BY(fechaPublicacion) DESC LIMIT 1", 
+                idAnuncio, JDBCType.INTEGER);
+        return posibleVigencia.orElseThrow(() -> new NotFoundException("error al encontrar la vigencia del anuncio"));
+    }
 }

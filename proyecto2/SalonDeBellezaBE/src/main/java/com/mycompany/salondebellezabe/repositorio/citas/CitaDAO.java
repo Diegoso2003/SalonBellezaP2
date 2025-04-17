@@ -88,7 +88,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
         cita.setHora(result.getTime("hora").toLocalTime());
         cita.setEstado(EstadoCita.valueOf(result.getString("estado")));
         UsuarioDAO repositorioUsuario = new UsuarioDAO();
-        repositorioUsuario.compartirConeccion();
+        repositorioUsuario.setConeccion(coneccion);
         Optional<Usuario> cliente = repositorioUsuario.obtenerPorID(result.getLong("cliente"));
         cita.setCliente(cliente.get());
         Optional<Usuario> empleado = repositorioUsuario.obtenerPorID(result.getLong("empleado"));

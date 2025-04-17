@@ -41,6 +41,7 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
                 throw new InvalidDataException("error al ingresar el archivo");
             }
         } catch (SQLException e) {
+            regresar();
             if (e.getErrorCode() == 1406) {
                 throw new InvalidDataException("archivos ingresados demasiado pesados");
             }
@@ -75,8 +76,8 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
 
     /**
      * metodo usado para actualizar los archivos del servicio, por defecto solo
-     * actualizara la imagen, para actualizar el catalogo use el setter de la 
-     * variable catalogo para ponerlo como true
+     * actualizara la imagen, para actualizar el catalogo use el metodo 
+     * {@link }
      * @param archivos los datos del archivo del servicio
      */
     @Override
@@ -139,10 +140,17 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
     /**
      * ingresar true para actualizar el catalogo del servicio, false para la imagen
      * por defecto al usar el metodo actualizar se actualizara la imagen
-     * @param catalogo 
+     * @param idArchivos el id del archivo
+     * @return un posible archivo
      */
-    public void setCatalogo(boolean catalogo) {
-        this.catalogo = catalogo;
+    public Optional<ArchivosServicio> obtenerCatalgo(Integer idArchivos) {
+        this.catalogo = true;
+        return this.obtenerPorID(idArchivos);
+    }
+    
+    public void actualizarCatalogo(ArchivosServicio archivos){
+        this.catalogo = true;
+        this.actualizar(archivos);
     }
 
 }

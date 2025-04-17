@@ -4,7 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
-import com.mycompany.salondebellezabe.Coneccion;
+import com.mycompany.salondebellezabe.PoolConnections;
 import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -22,10 +22,12 @@ public class Repositorio {
      * @throws ConeccionException si al conseguir la coneccion falla algo
      */
     protected void obtenerConeccion(){
-        try {
-            this.coneccion = Coneccion.getConeccion();
-        } catch (SQLException e) {
-            throw new ConeccionException();
+        if (!compartirConeccion) {
+            try {
+                this.coneccion = PoolConnections.getInstance().getDatasource().getConnection();
+            } catch (SQLException ex) {
+                throw new ConeccionException("Error intentar mas tarde");
+            }
         }
     }
     
@@ -53,8 +55,10 @@ public class Repositorio {
     /**
      * metodo usado por otras clases que hereden de {@link #Repositorio() }
      * para compartir la misma coneccion
+     * @param coneccion
      */
-    public void compartirConeccion() {
-        this.compartirConeccion = true;
+    public void setConeccion(Connection coneccion) {
+        this.compartirConeccion = coneccion != null;
+        this.coneccion = coneccion;
     }
 }

@@ -69,7 +69,7 @@ public class UsuarioService extends Service<Usuario>{
     private void obtenerUsuario(String correo) {
         repositorioUsuario.setObtenerContraseña(true);
         Optional<Usuario> posibleUsuario = repositorioUsuario.buscarPorAtributo(correo);
-        this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo  incorrectos"));
+        this.usuario = posibleUsuario.orElseThrow(() -> new InvalidDataException("correo o contraseña incorrectos"));
     }
 
     /**
@@ -123,6 +123,9 @@ public class UsuarioService extends Service<Usuario>{
      * @return la foto de perfil
      */
     public Fotografia obtenerFotoPerfil(Long dpi){
+        if (dpi == null) {
+            throw new InvalidDataException("ingresar un dpi valido para obtener la imagen de perfil");
+        }
         FotografiaUsuarioDAO foto = new FotografiaUsuarioDAO();
         Optional<Fotografia> posibleFoto = foto.obtenerPorID(dpi);
         return posibleFoto.orElseThrow(() -> new NotFoundException("imagen no encotrada"));

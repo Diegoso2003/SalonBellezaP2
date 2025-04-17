@@ -9,14 +9,24 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.salondebellezabe.dtos.AnuncioDTO;
 import com.mycompany.salondebellezabe.dtos.MensajeDTO;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Anuncio;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.PreciosAnuncio;
 import com.mycompany.salondebellezabe.modelos.Vigencia;
 import com.mycompany.salondebellezabe.modelos.enums.TipoAnuncio;
 import com.mycompany.salondebellezabe.repositorio.anuncios.AnuncioDAO;
+import com.mycompany.salondebellezabe.repositorio.anuncios.ImagenAnuncioDAO;
 import com.mycompany.salondebellezabe.service.Service;
 import com.mycompany.salondebellezabe.validador.anuncio.ValidadorAnuncio;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
+import java.util.Set;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 /**
@@ -122,4 +132,61 @@ public class AnuncioService extends Service<Anuncio>{
         return mensaje;
     }
     
+    /**
+     * metodo para obtener los anuncios que se mostraran al inicio de la pantalla
+     * @return 
+     */
+    public List<Anuncio> obtenerAnunciosParaMostrar(){
+        List<Anuncio> anunciosActivos = anuncioDAO.obtenerAnunciosActivos();
+        validarVigenciaAnuncios(anunciosActivos);
+        anunciosActivos = anuncioDAO.obtenerAnunciosActivos();
+        if (anunciosActivos.size() <= 2) {
+            return anunciosActivos;
+        }
+        return seleccionarAnunciosAlAzar(anunciosActivos);
+    }
+
+    /**
+     * metodo para validar que los anuncios sigan siendo vigentes
+     * @param anunciosActivos los anuncios activos
+     */
+    private void validarVigenciaAnuncios(List<Anuncio> anunciosActivos) {
+        LocalDate hoy = LocalDate.now();
+        for(Anuncio anuncio: anunciosActivos){
+            Vigencia vigencia = anuncio.getVigencia();
+            long dias = ChronoUnit.DAYS.between(hoy, vigencia.getFechaPublicacion());
+            if (dias > vigencia.getDias()) {
+                anuncioDAO.eliminar(anuncio.getIdAnuncio());
+            }
+        }
+    }
+
+    /**
+     * metodo para seleccionar aleatoriamente los anuncios que se mostran en la pantalla
+     * @param anunciosActivos los anuncios que esten activos
+     * @return los anuncios que se mostraran
+     */
+    private List<Anuncio> seleccionarAnunciosAlAzar(List<Anuncio> anunciosActivos) {
+        Set<Anuncio> anunciosQueSeMostraran = new HashSet<>();
+        Random r = new Random();
+        do {            
+            Integer indice = r.nextInt(0, anunciosActivos.size());
+            anunciosQueSeMostraran.add(anunciosActivos.get(indice));
+        } while (anunciosQueSeMostraran.size() != 2);
+        return new ArrayList<>(anunciosQueSeMostraran);
+    }
+
+    /**
+     * 
+     * @param idAnuncio
+     * @return 
+     */
+    public Fotografia obtenerImagenFoto(Integer idAnuncio) {
+        if (idAnuncio == null) {
+            throw new InvalidDataException("ingresar un id valido para recuperar la imagen");
+        }
+        ImagenAnuncioDAO imagen = new ImagenAnuncioDAO();
+        Optional<Fotografia> posibleFoto = imagen.obtenerPorID(idAnuncio);
+        return posibleFoto.orElseThrow(() -> new NotFoundException("no se encontro la imagen del anuncio"));
+    }
 }

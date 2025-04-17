@@ -50,11 +50,11 @@ public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements Busqueda
                         idGenerado = result.getInt(1);
                         servicio.setIdServicio(idGenerado);
                         ArchivosServicioDAO repoArchivos = new ArchivosServicioDAO();
-                        repoArchivos.compartirConeccion();
+                        repoArchivos.setConeccion(coneccion);
                         servicio.getArchivos().setIdArchivos(idGenerado);
                         repoArchivos.insertar(servicio.getArchivos());
                         EmpleadosServicioDAO repoEmpleados = new EmpleadosServicioDAO(servicio);
-                        repoEmpleados.compartirConeccion();
+                        repoEmpleados.setConeccion(coneccion);
                         for(Usuario empleado : servicio.getEmpleados()){
                             repoEmpleados.insertar(empleado);
                         }
@@ -155,7 +155,7 @@ public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements Busqueda
         servicio.setPrecio(result.getDouble("precio"));
         if (obtenerEmpleados) {
             EmpleadosServicioDAO repositorio = new EmpleadosServicioDAO(servicio);
-            List<Usuario> empleados = repositorio.obtenerTodo();
+            List<Usuario> empleados = repositorio.obtenerEmpleadosActivos();
             servicio.setEmpleados(new HashSet<>(empleados));
         }
         return servicio;

@@ -23,6 +23,7 @@ import java.util.Optional;
 public class EmpleadosServicioDAO extends ClaseDAO<Usuario, Long>{
 
     private final Servicio servicio;
+    private boolean obtenerEmpleadosInactivos = true;
     
     /**
      * clase para insertar obtener y eliminar los empleados asignados a un servicio
@@ -45,6 +46,7 @@ public class EmpleadosServicioDAO extends ClaseDAO<Usuario, Long>{
             stmt.setInt(2, servicio.getIdServicio());
             stmt.executeUpdate();
         } catch (SQLException e) {
+            regresar();
             if (e.getErrorCode() == 1062) {
                 throw new InvalidDataException("el empleado con dpi: '" + empleado.getDpi() + "' ya se encuentra asignado al servicio");
             } else if (e.getErrorCode() == 1452) {
@@ -124,7 +126,9 @@ public class EmpleadosServicioDAO extends ClaseDAO<Usuario, Long>{
             try(ResultSet result = stmt.executeQuery()){
                 while(result.next()){
                     Usuario usuario = obtenerDatos(result);
-                    empleados.add(usuario);
+                    if (usuario.isActivo() || this.obtenerEmpleadosInactivos) {
+                        empleados.add(usuario);
+                    }
                 }
             }
         } catch (SQLException e) {
@@ -150,4 +154,9 @@ public class EmpleadosServicioDAO extends ClaseDAO<Usuario, Long>{
         return usuario.get();
     }
     
+    
+    public List<Usuario> obtenerEmpleadosActivos(){
+        this.obtenerEmpleadosInactivos = false;
+        return this.obtenerTodo();
+    }
 }

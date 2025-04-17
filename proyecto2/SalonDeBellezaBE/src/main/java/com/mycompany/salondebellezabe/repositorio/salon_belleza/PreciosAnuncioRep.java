@@ -4,10 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio.salon_belleza;
 
-import com.mycompany.salondebellezabe.Coneccion;
 import com.mycompany.salondebellezabe.modelos.PreciosAnuncio;
 import com.mycompany.salondebellezabe.repositorio.TablasUnicas;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

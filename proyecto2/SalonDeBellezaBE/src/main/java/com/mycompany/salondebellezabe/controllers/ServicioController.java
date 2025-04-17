@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
+import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.service.servicio.ServicioService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -52,6 +53,35 @@ public class ServicioController {
         ServicioService servicio = new ServicioService();
         servicio.crearServicio(fotoServicio, catalogo, detallesServicio);
         return Response.ok()
+                .build();
+    }
+    
+    @Path("servicios_disponibles")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerServiciosDisponibles(){
+        ServicioService servicio = new ServicioService();
+        return Response.ok(servicio.obtenerServiciosDisponibles())
+                .build();
+    }
+    
+    @Path("{idServicio}")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerServicio(@PathParam("idServicio") Integer idServicio){
+        ServicioService servicio = new ServicioService();
+        return Response.ok(servicio.obtenerServicio(idServicio))
+                .build();
+    }
+    
+    @Path("imagen_servicio/{idServicio}")
+    @GET
+    public Response obtenerImagenServicio(@PathParam("idServicio") Integer idServicio){
+        ServicioService servicio = new ServicioService();
+        Fotografia foto = servicio.encontrarFotoServicio(idServicio);
+        return  Response.ok(foto.getFotografia())
+                .header("Content-Type", foto.getExtension())
+                .header("Content-Disposition", "inline; filename=\"imagen_servicio_"+ idServicio + "\"")
                 .build();
     }
 }

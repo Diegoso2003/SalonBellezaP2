@@ -4,6 +4,8 @@
  */
 package com.mycompany.salondebellezabe.service.servicio;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
@@ -11,6 +13,7 @@ import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
+import com.mycompany.salondebellezabe.repositorio.servicios.ArchivosServicioDAO;
 import com.mycompany.salondebellezabe.repositorio.servicios.ServicioDAO;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.service.Service;
@@ -107,11 +110,39 @@ public class ServicioService extends Service<Servicio>{
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue(detallesServicio, Servicio.class);
-        } catch (Exception e) {
-            System.out.println("error atrapado");
-            System.out.println(e);
+        } catch (JsonProcessingException e) {
             throw new InvalidDataException("ingrese correctamente los datos solicitados");
         }
+    }
+
+    /**
+     * metodo para obtener los servicios disponibles para un servicio
+     * @return lista de servicios
+     */
+    public List<Servicio> obtenerServiciosDisponibles() {
+        return this.repositorioServicio.obtenerServiciosActivos();
+    }
+
+    /**
+     * metodo para obtener los datos de un servicio
+     * @param idServicio el id del servicio
+     * @return el servicio
+     */
+    public Servicio obtenerServicio(Integer idServicio) {
+        Optional<Servicio> posibleServicio = this.repositorioServicio.obtenerPorID(idServicio);
+        return posibleServicio.orElseThrow(() -> new NotFoundException("no se encontro el servicio"));
+    }
+
+    /**
+     * metodo usado para poder obtener la imagen del servicio
+     * @param idServicio el id del servicio
+     * @return la foto del servicio
+     */
+    public Fotografia encontrarFotoServicio(Integer idServicio) {
+        ArchivosServicioDAO archivos = new ArchivosServicioDAO();
+        Optional<ArchivosServicio> posibleArchivo = archivos.obtenerPorID(idServicio);
+        ArchivosServicio archivosServicio = posibleArchivo.orElseThrow(() -> new NotFoundException("no se encontro la imagen del archivo"));
+        return archivosServicio.getFoto();
     }
     
 }

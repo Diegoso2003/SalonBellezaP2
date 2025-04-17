@@ -4,7 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.salon_belleza;
 
-import com.mycompany.salondebellezabe.Coneccion;
+import com.mycompany.salondebellezabe.PoolConnections;
 import com.mycompany.salondebellezabe.modelos.HorarioSalon;
 import com.mycompany.salondebellezabe.repositorio.TablasUnicas;
 import java.sql.Connection;

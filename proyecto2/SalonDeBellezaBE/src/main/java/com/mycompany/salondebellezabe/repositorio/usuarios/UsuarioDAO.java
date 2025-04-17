@@ -54,7 +54,7 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
             stmt.executeUpdate();
             if (usuario.getRol() == Rol.EMPLEADO) {
                 FotografiaUsuarioDAO repFoto = new FotografiaUsuarioDAO(usuario.getDpi());
-                repFoto.compartirConeccion();
+                repFoto.setConeccion(coneccion);
                 repFoto.insertar(usuario.getFoto());
             }
             coneccion.commit();
@@ -222,9 +222,9 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
                 throw new NotFoundException("cliente no encontrado intente de nuevo");
             }
             FotografiaUsuarioDAO foto = new FotografiaUsuarioDAO(usuario.getDpi());
-            foto.compartirConeccion();
+            foto.setConeccion(coneccion);
             foto.insertar(usuario.getFoto());
-            this.compartirConeccion();
+            this.setConeccion(coneccion);
             reactivarUsuario(usuario.getDpi());
             this.reiniciarEstado();
             coneccion.commit();
@@ -291,6 +291,7 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
                 throw new NotFoundException("no se encontro al usuario con pdi: '" + dpi + "'");
             }
         } catch (SQLException e) {
+            regresar();
             throw new InvalidDataException("ingresar un dpi valido");
         } finally {
             cerrar();

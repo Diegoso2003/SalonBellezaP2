@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Anuncio;
 import com.mycompany.salondebellezabe.modelos.enums.TipoAnuncio;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
@@ -13,7 +14,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ import java.util.Optional;
  * @author rafael-cayax
  */
 public class AnuncioDAO extends ClaseDAO<Anuncio, Integer>{
-
+    
     /**
      * metodo usado para insertar publicar un nuevo anuncio
      * @param anuncio los datos del anuncio
@@ -48,11 +48,11 @@ public class AnuncioDAO extends ClaseDAO<Anuncio, Integer>{
                         idGenerado = result.getInt(1);
                         anuncio.getVigencia().setIdAnuncio(idGenerado);
                         VigenciaDAO repoVigencia = new VigenciaDAO();
-                        repoVigencia.compartirConeccion();
+                        repoVigencia.setConeccion(coneccion);
                         repoVigencia.insertar(anuncio.getVigencia());
                         if (anuncio.getTipo() == TipoAnuncio.IMAGEN) {
                             ImagenAnuncioDAO repoImagen = new ImagenAnuncioDAO(idGenerado);
-                            repoImagen.compartirConeccion();
+                            repoImagen.setConeccion(coneccion);
                             repoImagen.insertar(anuncio.getFoto());
                         }
                         coneccion.commit();
@@ -78,10 +78,10 @@ public class AnuncioDAO extends ClaseDAO<Anuncio, Integer>{
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setInt(1, id);
             if (stmt.executeUpdate() <= 0) {
-                //no se encontro el anuncio
+                throw new NotFoundException("no se encontro el anuncio con id: '" + id + "'");
             }
         } catch (SQLException e) {
-            //hubo un error
+            throw new InvalidDataException("Error al desactivar el anuncio");
         } finally {
             cerrar();
         }
@@ -139,35 +139,18 @@ public class AnuncioDAO extends ClaseDAO<Anuncio, Integer>{
         anuncio.setUrlVideo(result.getString("urlVideo"));
         anuncio.setEstado(result.getBoolean("estado"));
         anuncio.setTipo(TipoAnuncio.valueOf(result.getString("tipo")));
+        VigenciaDAO repoVigencia = new VigenciaDAO();
+        repoVigencia.setConeccion(coneccion);
+        anuncio.setVigencia(repoVigencia.obtenerVigenciaActualAnuncio(anuncio.getIdAnuncio()));
         return anuncio;
     }
     
     /**
-     * metodo que sirve para obtener los ids de los anuncios que todavia tengan
-     * vigencia
-     * @return lista con los id de anuncios vigentes
+     * metodo para obtener todos los anuncios activos
+     * @return lista de anuncios activos
      */
-    public List<Integer> obtenerIDactivos(){
-        obtenerConeccion();
-        List<Integer> idsActivos = new ArrayList<>();
-        String actu = "UPDATE Anuncio SET estado = FALSE WHERE idAnuncio IN "
-                + "(SELECT DISTINCT a.idAnuncio FROM Anuncio a "
-                + "INNER JOIN Vigencia v ON a.idAnuncio = v.idAnuncio "
-                + "WHERE (DATEDIFF(CURDATE(), v.fechaPublicacion)) > v.dias";
-        String query = "SELECT idAnuncio FROM Anuncio WHERE estado = TRUE";
-        try (Statement stmt = coneccion.createStatement();
-                Statement stmt2 = coneccion.createStatement()){
-            stmt.executeUpdate(actu);
-            try(ResultSet result = stmt2.executeQuery(query)){
-                while(result.next()){
-                    idsActivos.add(result.getInt("idAnuncio"));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();//algo salio mal
-        } finally {
-            cerrar();
-        }
-        return idsActivos;
+    public List<Anuncio> obtenerAnunciosActivos(){
+        return listarPorAtributos("SELECT * FROM Anuncio WHERE estado = TRUE");
     }
+    
 }
