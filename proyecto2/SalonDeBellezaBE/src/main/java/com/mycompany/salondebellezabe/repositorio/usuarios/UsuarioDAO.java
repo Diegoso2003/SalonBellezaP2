@@ -226,12 +226,12 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
             foto.insertar(usuario.getFoto());
             this.setConeccion(coneccion);
             reactivarUsuario(usuario.getDpi());
-            this.reiniciarEstado();
             coneccion.commit();
         } catch (SQLException e) {
             regresar();
             throw new InvalidDataException("datos ingresados no validos");
         } finally {
+            this.reiniciarEstado();
             cerrar();
         }
     }

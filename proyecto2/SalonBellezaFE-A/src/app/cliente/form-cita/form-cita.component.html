@@ -1,1 +1,10 @@
-<p>form-cita works!</p>
+<app-informacion></app-informacion>
+@if(servicioObtenido){
+<app-vista-anuncio [derecho]="false"></app-vista-anuncio>
+<app-vista-anuncio [derecho]="true"></app-vista-anuncio>
+<app-vista-servicio
+  [vista_cliente]="true"
+  [vista_individual]="true"
+  [servicio]="servicio"
+></app-vista-servicio>
+}

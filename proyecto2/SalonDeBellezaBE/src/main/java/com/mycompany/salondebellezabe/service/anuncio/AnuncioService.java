@@ -21,12 +21,9 @@ import com.mycompany.salondebellezabe.service.Service;
 import com.mycompany.salondebellezabe.validador.anuncio.ValidadorAnuncio;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 /**
@@ -38,7 +35,7 @@ public class AnuncioService extends Service<Anuncio>{
     private final AnuncioDAO anuncioDAO;
     
     public AnuncioService() {
-        super(new AnuncioDAO(), new ValidadorAnuncio());
+        super(new AnuncioDAO(), new ValidadorAnuncio(), "anuncio no encontrado");
         this.validadorAnuncio = (ValidadorAnuncio) validador;
         this.anuncioDAO = (AnuncioDAO) repositorio; 
     }
@@ -176,13 +173,11 @@ public class AnuncioService extends Service<Anuncio>{
 
     /**
      * 
-     * @param idAnuncio
+     * @param idEnviado
      * @return 
      */
-    public Fotografia obtenerImagenFoto(Integer idAnuncio) {
-        if (idAnuncio == null) {
-            throw new InvalidDataException("ingresar un id valido para recuperar la imagen");
-        }
+    public Fotografia obtenerImagenFoto(String idEnviado) {
+        Integer idAnuncio = validador.validarId(idEnviado);
         ImagenAnuncioDAO imagen = new ImagenAnuncioDAO();
         Optional<Fotografia> posibleFoto = imagen.obtenerPorID(idAnuncio);
         return posibleFoto.orElseThrow(() -> new NotFoundException("no se encontro la imagen del anuncio"));

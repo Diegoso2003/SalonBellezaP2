@@ -62,7 +62,7 @@ public class UsuarioController {
     
     @Path("/imagen_perfil/{dpi}")
     @GET
-    public Response conseguirFotoPerfil(@PathParam("dpi") Long dpi){
+    public Response conseguirFotoPerfil(@PathParam("dpi") String dpi){
         UsuarioService servicio = new UsuarioService();
         Fotografia foto = servicio.obtenerFotoPerfil(dpi);
         return Response.ok(foto.getFotografia())

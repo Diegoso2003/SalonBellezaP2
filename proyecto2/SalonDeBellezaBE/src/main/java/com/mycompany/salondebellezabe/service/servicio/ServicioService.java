@@ -32,7 +32,7 @@ public class ServicioService extends Service<Servicio>{
     private Servicio servicio;
     
     public ServicioService() {
-        super(new ServicioDAO(), new ValidadorServicio());
+        super(new ServicioDAO(), new ValidadorServicio(), "servicio no encontrado");
         this.repositorioServicio = (ServicioDAO)repositorio;
         this.validadorServicio = (ValidadorServicio) validador;
     }
@@ -48,10 +48,11 @@ public class ServicioService extends Service<Servicio>{
     
     /**
      * metodo usado para obtener la descripcion de un empleado
-     * @param dpi el dpi del empleado
+     * @param dpiEnviado el dpi del empleado
      * @return el usuario con su descripcion y detalles
      */
-    public Usuario obtenerInformacionEmpleado(Long dpi){
+    public Usuario obtenerInformacionEmpleado(String dpiEnviado){
+        Long dpi = validador.validarDPI(dpiEnviado);
         UsuarioDAO repositorioUsuario = new UsuarioDAO();
         repositorioUsuario.setObtenerDatos(true);
         Optional<Usuario> posibleUsuario = repositorioUsuario.obtenerPorID(dpi);
@@ -124,21 +125,12 @@ public class ServicioService extends Service<Servicio>{
     }
 
     /**
-     * metodo para obtener los datos de un servicio
-     * @param idServicio el id del servicio
-     * @return el servicio
-     */
-    public Servicio obtenerServicio(Integer idServicio) {
-        Optional<Servicio> posibleServicio = this.repositorioServicio.obtenerPorID(idServicio);
-        return posibleServicio.orElseThrow(() -> new NotFoundException("no se encontro el servicio"));
-    }
-
-    /**
      * metodo usado para poder obtener la imagen del servicio
-     * @param idServicio el id del servicio
+     * @param idEnviado el id del servicio
      * @return la foto del servicio
      */
-    public Fotografia encontrarFotoServicio(Integer idServicio) {
+    public Fotografia encontrarFotoServicio(String idEnviado) {
+        Integer idServicio = validador.validarId(idEnviado);
         ArchivosServicioDAO archivos = new ArchivosServicioDAO();
         Optional<ArchivosServicio> posibleArchivo = archivos.obtenerPorID(idServicio);
         ArchivosServicio archivosServicio = posibleArchivo.orElseThrow(() -> new NotFoundException("no se encontro la imagen del archivo"));

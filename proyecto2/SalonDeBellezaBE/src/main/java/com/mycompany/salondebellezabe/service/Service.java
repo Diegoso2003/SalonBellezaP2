@@ -4,8 +4,10 @@
  */
 package com.mycompany.salondebellezabe.service;
 
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.validador.Validador;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
+import java.util.Optional;
 
 
 /**
@@ -15,10 +17,12 @@ import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 public abstract class Service<T> {
     protected ClaseDAO repositorio;
     protected Validador validador;
+    private final String mensajeDeNoEncontrado;
 
-    public Service(ClaseDAO repositorio, Validador validador) {
+    public Service(ClaseDAO repositorio, Validador validador, String mensaje) {
         this.repositorio = repositorio;
         this.validador = validador;
+        this.mensajeDeNoEncontrado = mensaje;
     }
     
     public void crearEntidad(T entidad){
@@ -27,8 +31,14 @@ public abstract class Service<T> {
     }
     
     public void actualizar(T entidad){
-        validador.validarDatos(entidad);
+        validador.validarActualizacion(entidad);
         repositorio.actualizar(entidad);
+    }
+    
+    public T obtenerEntidad(String idEnviado){
+        Integer id = this.validador.validarId(idEnviado);
+        Optional<T> posibleEntidad = repositorio.obtenerPorID(id);
+        return posibleEntidad.orElseThrow(() -> new NotFoundException(mensajeDeNoEncontrado));
     }
 
     public ClaseDAO getRepositorio() {

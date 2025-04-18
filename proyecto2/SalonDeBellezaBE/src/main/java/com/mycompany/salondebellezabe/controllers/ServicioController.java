@@ -36,7 +36,7 @@ public class ServicioController {
     @Path("empleado/{dpi}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerInformacionEmpleado(@PathParam("dpi") Long dpi){
+    public Response obtenerInformacionEmpleado(@PathParam("dpi") String dpi){
         ServicioService servicio = new ServicioService();
         return Response.ok(servicio.obtenerInformacionEmpleado(dpi))
                 .build();
@@ -68,15 +68,15 @@ public class ServicioController {
     @Path("{idServicio}")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response obtenerServicio(@PathParam("idServicio") Integer idServicio){
+    public Response obtenerServicio(@PathParam("idServicio") String idServicio){
         ServicioService servicio = new ServicioService();
-        return Response.ok(servicio.obtenerServicio(idServicio))
+        return Response.ok(servicio.obtenerEntidad(idServicio))
                 .build();
     }
     
     @Path("imagen_servicio/{idServicio}")
     @GET
-    public Response obtenerImagenServicio(@PathParam("idServicio") Integer idServicio){
+    public Response obtenerImagenServicio(@PathParam("idServicio") String idServicio){
         ServicioService servicio = new ServicioService();
         Fotografia foto = servicio.encontrarFotoServicio(idServicio);
         return  Response.ok(foto.getFotografia())

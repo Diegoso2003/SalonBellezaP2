@@ -4,6 +4,8 @@
  */
 package com.mycompany.salondebellezabe.validador;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+
 /**
  *
  * @author rafael-cayax
@@ -68,5 +70,21 @@ public abstract class Validador<T> {
      */
     protected boolean cumpleRangoNormal(String cadena, Integer minimo, Integer maximo){
         return cadena != null && cadena.length() >= minimo && cadena.length() <= maximo && !cadena.isBlank();
+    }
+
+    public Integer validarId(String idEnviado) {
+        try {
+            return Integer.valueOf(idEnviado);
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new InvalidDataException("ingresar un id valido");
+        }
+    }
+
+    public Long validarDPI(String dpiEnviado) {
+        try {
+            return Long.valueOf(dpiEnviado);
+        } catch (NumberFormatException | NullPointerException e) {
+            throw new InvalidDataException("ingresar un dpi valido");
+        }
     }
 }

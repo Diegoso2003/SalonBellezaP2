@@ -32,7 +32,7 @@ public class UsuarioService extends Service<Usuario>{
     private final ValidadorUsuario validadorUsuario;
     
     public UsuarioService(){
-        super(new UsuarioDAO(), new ValidadorUsuario());
+        super(new UsuarioDAO(), new ValidadorUsuario(), "usuario no encontrado");
         this.repositorioUsuario = (UsuarioDAO) repositorio;
         this.validadorUsuario = (ValidadorUsuario) validador;
     }
@@ -119,13 +119,11 @@ public class UsuarioService extends Service<Usuario>{
     
     /**
      * metodo para recuperar la foto de perfil del usuario
-     * @param dpi el pdi del usuario
+     * @param dpiIngresado el pdi del usuario
      * @return la foto de perfil
      */
-    public Fotografia obtenerFotoPerfil(Long dpi){
-        if (dpi == null) {
-            throw new InvalidDataException("ingresar un dpi valido para obtener la imagen de perfil");
-        }
+    public Fotografia obtenerFotoPerfil(String dpiIngresado){
+        Long dpi = validador.validarDPI(dpiIngresado);
         FotografiaUsuarioDAO foto = new FotografiaUsuarioDAO();
         Optional<Fotografia> posibleFoto = foto.obtenerPorID(dpi);
         return posibleFoto.orElseThrow(() -> new NotFoundException("imagen no encotrada"));

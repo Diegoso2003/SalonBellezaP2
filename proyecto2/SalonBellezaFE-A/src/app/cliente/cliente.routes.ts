@@ -11,6 +11,11 @@ export const CLIENTE_ROUTES: Routes = [
                 loadComponent: () => import('./servicios-disponibles/servicios-disponibles.component').then(m => m.ServiciosDisponiblesComponent)
             },
             {
+                path: 'agendar_cita/:idServicio',
+                title: 'Agendar_cita',
+                loadComponent: () => import('./form-cita/form-cita.component').then(m => m.FormCitaComponent)
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'servicios_disponibles'

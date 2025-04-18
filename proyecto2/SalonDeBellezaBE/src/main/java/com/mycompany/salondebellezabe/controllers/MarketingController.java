@@ -64,7 +64,7 @@ public class MarketingController {
     @Path("anuncio_imagen/{idAnuncio}")
     @GET
     public Response obtenerImagenAnuncio(
-            @PathParam("idAnuncio") Integer idAnuncio){
+            @PathParam("idAnuncio") String idAnuncio){
         AnuncioService servicio = new AnuncioService();
         Fotografia foto = servicio.obtenerImagenFoto(idAnuncio);
         return Response.ok(foto.getFotografia())

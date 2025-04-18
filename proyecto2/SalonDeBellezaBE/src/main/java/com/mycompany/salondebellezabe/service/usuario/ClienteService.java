@@ -23,7 +23,7 @@ public class ClienteService extends Service<Usuario>{
     private final UsuarioDAO usuarioDAO;
     
     public ClienteService() {
-        super(new UsuarioDAO(), new ValidadorUsuario());
+        super(new UsuarioDAO(), new ValidadorUsuario(), "cliente no encontrado");
         validadorUsuario = (ValidadorUsuario) validador;
         usuarioDAO = (UsuarioDAO) repositorio;
     }

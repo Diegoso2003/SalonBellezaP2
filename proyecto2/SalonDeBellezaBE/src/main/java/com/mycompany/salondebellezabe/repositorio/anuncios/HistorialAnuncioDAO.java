@@ -60,14 +60,14 @@ public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnu
             stmt.setString(1, historial.getUrl().trim());
             stmt.setDate(2, Date.valueOf(historial.getFechaPublicacion()));
             stmt.setInt(3, historial.getIdAnuncio());
-            if (stmt.executeUpdate() <= 1) {
+            if (stmt.executeUpdate() <= 0) {
                 this.setConeccion(coneccion);
                 this.insertar(historial);
-                this.reiniciarEstado();
             }
         } catch (SQLException e) {
             throw new InvalidDataException("datos enviados para el historial del anuncio invalidos");
         } finally {
+            reiniciarEstado();
             cerrar();
         }
     }

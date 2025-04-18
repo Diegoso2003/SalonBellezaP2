@@ -16,7 +16,7 @@ import com.mycompany.salondebellezabe.validador.anuncio.ValidadorHistorial;
 public class HistorialAnuncioService extends Service<HistorialAnuncio>{
     
     public HistorialAnuncioService() {
-        super(new HistorialAnuncioDAO(), new ValidadorHistorial());
+        super(new HistorialAnuncioDAO(), new ValidadorHistorial(), "historial no encontrado");
     }
     
     @Override
