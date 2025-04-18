@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { Usuario } from '../../models/usuario';
-import { Informacion } from '../../models/informacion';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-lista-empleados-servicio',
@@ -13,8 +13,7 @@ export class ListaEmpleadosServicioComponent {
 
   @Input({required: true})
   empleadosDelServicio!: Usuario[];
-  @Input({required: true})
-  informacion!: Informacion;
+  private informacion = inject(InformacionService);
 
   borrarEmpleado(dpi: string): void {
     const index = this.empleadosDelServicio.findIndex(empleado => empleado.dpi === dpi);

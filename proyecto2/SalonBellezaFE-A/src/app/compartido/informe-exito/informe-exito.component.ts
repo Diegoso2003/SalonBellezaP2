@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, Input, OnDestroy } from '@angular/core';
-import { Informacion } from '../../models/informacion';
+import { AfterViewInit, Component, inject, OnDestroy } from '@angular/core';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { CommonModule } from '@angular/common';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-informe-exito',
@@ -11,12 +11,11 @@ import { CommonModule } from '@angular/common';
   styleUrl: './informe-exito.component.scss'
 })
 export class InformeExitoComponent implements AfterViewInit, OnDestroy{
-  @Input({ required: true })
-  informacion!: Informacion;
-
   mostrar:boolean = true;
   autohide = true;
   delay = 5000;
+
+  informacion = inject(InformacionService);
 
   constructor() { }
 

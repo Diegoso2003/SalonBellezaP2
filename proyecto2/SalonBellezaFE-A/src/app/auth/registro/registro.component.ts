@@ -2,12 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgClass } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Informacion } from '../../models/informacion';
 import { InformacionComponent } from '../../informacion/informacion.component';
 import { Validador } from '../../class/validador-form';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario';
 import { Rol } from '../../models/enums/Rol';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-registro',
@@ -32,7 +32,7 @@ export class RegistroComponent implements OnInit{
     this.cliente = this.route.snapshot.data['cliente'] ?? true;
   }
 
-  informacion: Informacion;
+  private informacion = inject(InformacionService);
 
   constructor(private formBuilder: FormBuilder) {
     this.registroForm = this.formBuilder.group({
@@ -47,7 +47,6 @@ export class RegistroComponent implements OnInit{
       this.registroForm.addControl('rol', this.formBuilder.control('', [Validators.required]));
     }
     this._validadorForm = new Validador(this.registroForm);
-    this.informacion = new Informacion();
   }
 
   enviar() {

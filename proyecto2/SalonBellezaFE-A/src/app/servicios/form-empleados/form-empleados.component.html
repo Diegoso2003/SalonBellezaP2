@@ -27,14 +27,19 @@
       <p class="card-text">
         {{ empleadoSeleccionado.descripcion }}
       </p>
-    <p class="card-text d-flex align-items-center">
-      <small class="text-body-secondary">
-        Numero de telefono: {{ empleadoSeleccionado.telefono }}
-        <br />
-        dpi: {{ empleadoSeleccionado.dpi }}
-      </small>
-      <button class="custom-button ms-5" (click)="agregrarEmpleado(empleadoSeleccionado.dpi)">Agregar</button>
-    </p>
+      <p class="card-text d-flex align-items-center">
+        <small class="text-body-secondary">
+          Numero de telefono: {{ empleadoSeleccionado.telefono }}
+          <br />
+          dpi: {{ empleadoSeleccionado.dpi }}
+        </small>
+        <button
+          class="custom-button ms-5"
+          (click)="agregrarEmpleado(empleadoSeleccionado.dpi)"
+        >
+          Agregar
+        </button>
+      </p>
     </div>
   </div>
 </div>
@@ -63,5 +68,7 @@
   </div>
 </div>
 } }
-<br>
-<app-lista-empleados-servicio [empleadosDelServicio]="empleadosDelServicio" [informacion]="informacion"></app-lista-empleados-servicio>
+<br />
+<app-lista-empleados-servicio
+  [empleadosDelServicio]="empleadosDelServicio"
+></app-lista-empleados-servicio>

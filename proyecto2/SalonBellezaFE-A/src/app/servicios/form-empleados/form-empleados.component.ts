@@ -1,9 +1,9 @@
 import { Component, inject, Input } from '@angular/core';
 import { Usuario } from '../../models/usuario';
 import { ServiciosService } from '../../services/servicios/servicios.service';
-import { Informacion } from '../../models/informacion';
 import { ImagenPerfilComponent } from "../../compartido/imagen-perfil/imagen-perfil.component";
 import { ListaEmpleadosServicioComponent } from "../lista-empleados-servicio/lista-empleados-servicio.component";
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-form-empleados',
@@ -16,8 +16,6 @@ export class FormEmpleadosComponent{
 
   @Input({required: true})
   empleados!: Usuario[];
-  @Input({required: true})
-  informacion!: Informacion;
   @Input()
   empleadosDelServicio!: Usuario[];
   @Input({required: true})
@@ -27,6 +25,7 @@ export class FormEmpleadosComponent{
   informacionObtenida: boolean = false;
   inputSelectTocado: boolean = false;
   private _servicioService = inject(ServiciosService);  
+  private informacion = inject(InformacionService);
 
   usuarioSeleccionado(event: Event): void{
     this.inputSelectTocado = true;

@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { Informacion } from '../../models/informacion';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InformacionComponent } from "../../informacion/informacion.component";
 import { Validador } from '../../class/validador-form';
@@ -8,6 +7,7 @@ import { FormEmpleadosComponent } from "../form-empleados/form-empleados.compone
 import { Usuario } from '../../models/usuario';
 import { ServiciosService } from '../../services/servicios/servicios.service';
 import { Servicio } from '../../models/servicio';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-form-servicio',
@@ -18,7 +18,7 @@ import { Servicio } from '../../models/servicio';
 })
 export class FormServicioComponent implements OnInit{
 
-  informacion: Informacion;
+  private informacion = inject(InformacionService);
   servicioForm: FormGroup;
   private validadorForm: Validador;
   private foto: File | null = null;
@@ -40,7 +40,6 @@ export class FormServicioComponent implements OnInit{
         catalogo: ['', [Validators.required]],
       }
     );
-    this.informacion = new Informacion();
     this.validadorForm = new Validador(this.servicioForm);
   }
 

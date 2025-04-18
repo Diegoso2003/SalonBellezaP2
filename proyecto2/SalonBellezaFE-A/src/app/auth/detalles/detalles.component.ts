@@ -2,12 +2,12 @@ import { NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InformacionComponent } from '../../informacion/informacion.component';
-import { Informacion } from '../../models/informacion';
 import { Validador } from '../../class/validador-form';
 import { ClienteService } from '../../services/cliente/cliente.service';
 import { Usuario } from '../../models/usuario';
 import { UsuarioService } from '../../services/usuario.service';
 import { Router } from '@angular/router';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-detalles',
@@ -19,7 +19,7 @@ import { Router } from '@angular/router';
 export class DetallesComponent {
 
   detallesForm: FormGroup;
-  informacion: Informacion;
+  private informacion = inject(InformacionService);
 
   private validadorform!: Validador
   private _clienteService = inject(ClienteService);
@@ -39,7 +39,6 @@ export class DetallesComponent {
       }
     );
     this.validadorform = new Validador(this.detallesForm);
-    this.informacion = new Informacion();
   }
 
   enviar() {

@@ -1,11 +1,5 @@
 @if(informacion.getExito()){
-    <app-informe-exito
-      [informacion]="informacion"
-    ></app-informe-exito>
-}
-
-@if(informacion.getHayError()){
-    <app-informe-error
-      [informacion]="informacion"
-    ></app-informe-error>
+<app-informe-exito></app-informe-exito>
+} @if(informacion.getHayError()){
+<app-informe-error></app-informe-error>
 }

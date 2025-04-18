@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, Input, TemplateRef, ViewChild } from '@angular/core';
-import { Informacion } from '../../models/informacion';
+import { AfterViewInit, Component, inject, Input, TemplateRef, ViewChild } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-informe-error',
@@ -12,9 +12,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 export class InformeErrorComponent implements AfterViewInit{
   @ViewChild('modalError') modalError!: TemplateRef<any>;
 
-  @Input({ required: true })
-  informacion!: Informacion;
-
+  informacion = inject(InformacionService);
   constructor(private modalService: NgbModal) { }
 
   ngAfterViewInit(): void {

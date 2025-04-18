@@ -1,12 +1,12 @@
-import { Component, inject, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { InformacionComponent } from "../../informacion/informacion.component";
-import { Informacion } from '../../models/informacion';
 import { Validador } from '../../class/validador-form';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +18,7 @@ import { Usuario } from '../../models/usuario';
 export class LoginComponent {
 
   loginForm: FormGroup;
-  informacion: Informacion;
+  private _informacion = inject(InformacionService);
 
   private _validadorForm!: Validador;
   private _usuarioServicio = inject(UsuarioService);
@@ -30,7 +30,6 @@ export class LoginComponent {
       contraseña: ['', [Validators.required]]
     });
     this._validadorForm = new Validador(this.loginForm);
-    this.informacion = new Informacion();
   }
 
   enviar() {
@@ -45,14 +44,14 @@ export class LoginComponent {
           },
           error: (error) => {
             console.log(error);
-            this.informacion.informarError(error.error.mensaje || 'Error al iniciar sesión');
+            this._informacion.informarError(error.error.mensaje || 'Error al iniciar sesión');
             this.loginForm.markAllAsTouched();
           }
         }
       );
     } else {
       console.log('Formulario inválido');
-      this.informacion.informarError('Formulario inválido');
+      this._informacion.informarError('Formulario inválido');
       this.loginForm.markAllAsTouched();
     }
   }

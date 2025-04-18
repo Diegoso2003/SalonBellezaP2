@@ -1,7 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InformacionComponent } from "../../informacion/informacion.component";
-import { Informacion } from '../../models/informacion';
 import { Validador } from '../../class/validador-form';
 import { CurrencyPipe, NgClass } from '@angular/common';
 import { TipoAnuncio } from '../../models/enums/tipoAnuncio';
@@ -9,6 +8,7 @@ import { MarketingService } from '../../services/marketing/marketing.service';
 import { PreciosAnuncio } from '../../models/preciosAnuncio';
 import { AnuncioDTO } from '../../DTO/anuncioDTO';
 import { MensajeDTO } from '../../DTO/mensajeDTO';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-form-anuncio',
@@ -23,7 +23,7 @@ export class FormAnuncioComponent implements OnInit{
   private imagen: File | null = null;
   private validadorForm: Validador;
   private inputFotoTocado: boolean = false;
-  informacion: Informacion;
+  private informacion = inject(InformacionService);
   pedirFoto: boolean = false;
   pedirUrlVideo: boolean = false;
   private precios!: PreciosAnuncio;
@@ -59,7 +59,6 @@ export class FormAnuncioComponent implements OnInit{
         dias: ['', [Validators.required, Validators.min(1)]]
       }
     );
-    this.informacion = new Informacion();
     this.validadorForm = new Validador(this.formAnuncio);
   }
 
