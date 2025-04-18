@@ -1,0 +1,8 @@
+<div
+class="position-fixed top-0 h-100 "
+[ngClass]="{ 'start-0': derecho, 'end-0': !derecho }"
+>
+@if(anuncioRecuperado){
+<app-anuncio [anuncio]="anuncio"></app-anuncio>
+}
+</div>

@@ -30,8 +30,7 @@ export const routes: Routes = [
     },
     {
         path: 'cliente',
-        title: 'Cliente',
-        loadComponent: () => import('./cliente/navbar-cliente/navbar-cliente.component').then(m => m.NavbarClienteComponent)
+        loadChildren: () => import('./cliente/cliente.routes').then(m => m.CLIENTE_ROUTES)
     },
     {
         path: '',

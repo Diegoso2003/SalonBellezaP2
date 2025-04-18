@@ -1,0 +1,32 @@
+<div class="card custom-card m-3 w-25 shadow">
+  <svg
+    class="bd-placeholder-img card-img-top"
+    width="100%"
+    height="225"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label="Placeholder: Thumbnail"
+    preserveAspectRatio="xMidYMid slice"
+  ></svg>
+  <div class="card-body">
+    <h5 class="card-title text-center">{{ servicio.nombreServicio }}</h5>
+    <p class="card-text overflow-auto" style="max-height: 500px">
+      {{ servicio.descripcion }}
+    </p>
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-2">
+        @if(vista_cliente && vista_individual){
+            <app-boton-agendar [idServicio]="servicio.idServicio"></app-boton-agendar>
+        }
+        <app-boton-catalogo [idServicio]="servicio.idServicio"></app-boton-catalogo>
+      </div>
+      <small class="text-body-secondary"
+        >Duracion: {{ servicio.duracion | duracionPipe }}</small
+      >
+      <small class="text-body-secondary"
+        >Precio
+        {{ servicio.precio | currency : "Q" : "symbol" : "1.2-2" }}</small
+      >
+    </div>
+  </div>
+</div>

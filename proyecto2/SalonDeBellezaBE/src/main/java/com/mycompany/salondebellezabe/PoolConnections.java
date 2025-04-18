@@ -20,7 +20,7 @@ public class PoolConnections {
     private static final String USER = "root";
     private static final String PASSWORD = "Programacion";
 
-    private static PoolConnections UNICA_INSTANCIA_DE_DATASOURCE;
+    private static volatile PoolConnections UNICA_INSTANCIA_DE_DATASOURCE;
 
     private DataSource datasource;
 

@@ -1,0 +1,17 @@
+<div class="card w-25 m-3 shadow">
+  <div class="card-body custom-card">
+    @if(anuncio.tipo === 'IMAGEN'){
+    <app-anuncio-imagen [anuncioId]="anuncio.idAnuncio"></app-anuncio-imagen>
+    } @else if(anuncio.tipo === 'VIDEO'){
+    <app-anuncio-video [urlYoutube]="anuncio.urlVideo"></app-anuncio-video>
+    } @if(anuncio.tipo === 'TEXTO'){
+    <div class="text-center fs-4 fw-bold text-wrap">
+      {{ anuncio.texto }}
+    </div>
+    } @else {
+    <div class="text-center fs-6 fw-bold text-wrap">
+      {{ anuncio.texto }}
+    </div>
+    }
+  </div>
+</div>

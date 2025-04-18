@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
 import java.sql.Date;
@@ -35,7 +36,7 @@ public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnu
             stmt.setInt(3, historial.getIdAnuncio());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            //error al ingresar los datos
+            throw new InvalidDataException("datos enviados para el historial del anuncio invalidos");
         } finally {
             cerrar();
         }

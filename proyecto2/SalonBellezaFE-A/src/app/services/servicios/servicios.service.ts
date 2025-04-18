@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { API_URL } from '../../models/api_url';
 import { Usuario } from '../../models/usuario';
 import { Observable } from 'rxjs';
+import { Servicio } from '../../models/servicio';
 
 @Injectable({
   providedIn: 'root'
@@ -23,5 +24,9 @@ export class ServiciosService {
 
   crearServicio(servicio: FormData): Observable<any> {
     return this._http.post<any>(`${this.url}/crear`, servicio);
+  }
+
+  obtenerServiciosDisponibles(): Observable<Servicio[]> {
+    return this._http.get<Servicio[]>(`${this.url}/servicios_disponibles`);
   }
 }

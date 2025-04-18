@@ -136,12 +136,14 @@ public class AnuncioService extends Service<Anuncio>{
      * metodo para obtener los anuncios que se mostraran al inicio de la pantalla
      * @return 
      */
-    public List<Anuncio> obtenerAnunciosParaMostrar(){
+    public Anuncio obtenerAnuncioParaMostrar(){
         List<Anuncio> anunciosActivos = anuncioDAO.obtenerAnunciosActivos();
         validarVigenciaAnuncios(anunciosActivos);
         anunciosActivos = anuncioDAO.obtenerAnunciosActivos();
-        if (anunciosActivos.size() <= 2) {
-            return anunciosActivos;
+        if (anunciosActivos.size() == 1) {
+            return anunciosActivos.getFirst();
+        } else if(anunciosActivos.isEmpty()){
+            throw new NotFoundException("no hay anuncios vigentes");
         }
         return seleccionarAnunciosAlAzar(anunciosActivos);
     }
@@ -166,14 +168,10 @@ public class AnuncioService extends Service<Anuncio>{
      * @param anunciosActivos los anuncios que esten activos
      * @return los anuncios que se mostraran
      */
-    private List<Anuncio> seleccionarAnunciosAlAzar(List<Anuncio> anunciosActivos) {
-        Set<Anuncio> anunciosQueSeMostraran = new HashSet<>();
+    private Anuncio seleccionarAnunciosAlAzar(List<Anuncio> anunciosActivos) {
         Random r = new Random();
-        do {            
-            Integer indice = r.nextInt(0, anunciosActivos.size());
-            anunciosQueSeMostraran.add(anunciosActivos.get(indice));
-        } while (anunciosQueSeMostraran.size() != 2);
-        return new ArrayList<>(anunciosQueSeMostraran);
+        Integer indice = r.nextInt(0, anunciosActivos.size());
+        return anunciosActivos.get(indice);
     }
 
     /**

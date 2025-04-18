@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { PreciosAnuncio } from '../../models/preciosAnuncio';
 import { AnuncioDTO } from '../../DTO/anuncioDTO';
 import { MensajeDTO } from '../../DTO/mensajeDTO';
+import { HistorialAnuncio } from '../../models/historialAnuncio';
+import { Anuncio } from '../../models/anuncio';
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +26,17 @@ export class MarketingService {
 
   obtenerDatosAnuncio(): Observable<PreciosAnuncio>{
     return this._http.get<PreciosAnuncio>(`${this.url}/precios_anuncios`);
+  }
+
+  obtenerImagenAnuncio(id: number): Observable<Blob> {
+    return this._http.get(`${this.url}/anuncio_imagen/${id}`, { responseType: 'blob' });
+  }
+
+  reporteAnuncio(historial: HistorialAnuncio): Observable<void> {
+    return this._http.post<void>(`${this.url}/registro_anuncio`, historial);
+  }
+
+  obtenerAnuncioQueSeMostrara(): Observable<Anuncio>{
+    return this._http.get<Anuncio>(`${this.url}/anuncios_vigentes`);
   }
 }

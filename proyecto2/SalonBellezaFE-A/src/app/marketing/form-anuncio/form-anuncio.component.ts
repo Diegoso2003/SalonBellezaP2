@@ -71,6 +71,7 @@ export class FormAnuncioComponent implements OnInit{
       } else {
         this.cargarAnuncio(anuncio);
       }
+      this.obtenerPrecios();
     } else {
       this.informacion.informarError('Ingresar los campos requeridos');
       this.formAnuncio.markAllAsTouched();
@@ -88,10 +89,8 @@ export class FormAnuncioComponent implements OnInit{
           next: (mensaje: MensajeDTO) => {
             this.informacion.informarExito(mensaje.mensaje);
             this.limpiar();
-            this.obtenerPrecios();
           },
           error: (error) => {
-            this.obtenerPrecios();
             this.informacion.informarError(error.error.mensaje || 'Error al crear el anuncio');
           }
         }
@@ -109,11 +108,9 @@ export class FormAnuncioComponent implements OnInit{
         next: (mensaje : MensajeDTO) => {
           this.informacion.informarExito(mensaje.mensaje);
           this.limpiar();
-          this.obtenerPrecios();
         },
         error: (error) => {
           this.informacion.informarError(error.error.mensaje || 'Error al crear el anuncio');
-          this.obtenerPrecios();
         }
       }
     )

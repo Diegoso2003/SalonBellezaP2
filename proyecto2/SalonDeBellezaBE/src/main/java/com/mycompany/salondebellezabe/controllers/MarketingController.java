@@ -72,12 +72,12 @@ public class MarketingController {
                 .build();
     }
     
-    @Path("anuncio_vigentes")
+    @Path("anuncios_vigentes")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerAnunciosVigentes(){
         AnuncioService servicio = new AnuncioService();
-        return Response.ok(servicio.obtenerAnunciosParaMostrar())
+        return Response.ok(servicio.obtenerAnuncioParaMostrar())
                 .build();
     }
     
