@@ -64,7 +64,7 @@ public class ImagenAnuncioDAO extends ClaseDAO<Fotografia, Integer>{
      */
     @Override
     public Optional<Fotografia> obtenerPorID(Integer id) {
-        String query = "SELECT * FROM Fotografia WHERE idAnuncio = ?";
+        String query = "SELECT * FROM ImagenAnuncio WHERE idAnuncio = ?";
         return buscar(query, id, JDBCType.INTEGER);
     }
 
@@ -75,7 +75,7 @@ public class ImagenAnuncioDAO extends ClaseDAO<Fotografia, Integer>{
     @Override
     public void actualizar(Fotografia imagen) {
         obtenerConeccion();
-        String query = "UPDATE Fotografia SET extension = ?, imagen = ? WHERE idAnuncio = ?";
+        String query = "UPDATE ImagenAnuncio SET extension = ?, imagen = ? WHERE idAnuncio = ?";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, imagen.getExtension());
             stmt.setBlob(2, imagen.getFoto());

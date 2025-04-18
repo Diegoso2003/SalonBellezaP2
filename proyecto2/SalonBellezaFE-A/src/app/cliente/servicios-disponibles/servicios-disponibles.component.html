@@ -1,3 +1,10 @@
-@if(anunciosDisponibles){
-    
+<app-informacion></app-informacion>
+<app-vista-anuncio [derecho]="true"></app-vista-anuncio>
+<app-vista-anuncio [derecho]="false"></app-vista-anuncio>
+@for(servicio of serviciosDisponibles; track servicio.idServicio){
+<app-vista-servicio
+  [servicio]="servicio"
+  [vista_cliente]="true"
+  [vista_individual]="false"
+></app-vista-servicio>
 }

@@ -29,4 +29,8 @@ export class ServiciosService {
   obtenerServiciosDisponibles(): Observable<Servicio[]> {
     return this._http.get<Servicio[]>(`${this.url}/servicios_disponibles`);
   }
+
+  obtenerImagenServicio(idServicio: number): Observable<Blob> {
+    return this._http.get(`${this.url}/imagen_servicio/${idServicio}`, { responseType: 'blob'})
+  }
 }

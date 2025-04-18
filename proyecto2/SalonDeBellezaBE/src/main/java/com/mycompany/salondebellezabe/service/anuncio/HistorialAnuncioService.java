@@ -19,4 +19,9 @@ public class HistorialAnuncioService extends Service<HistorialAnuncio>{
         super(new HistorialAnuncioDAO(), new ValidadorHistorial());
     }
     
+    @Override
+    public void crearEntidad(HistorialAnuncio historial){
+        validador.validarDatos(historial);
+        repositorio.actualizar(historial);
+    }
 }

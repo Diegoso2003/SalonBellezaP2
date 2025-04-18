@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
@@ -9,7 +9,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
   templateUrl: './imagen-perfil.component.html',
   styleUrl: './imagen-perfil.component.scss'
 })
-export class ImagenPerfilComponent implements OnInit{
+export class ImagenPerfilComponent implements OnInit, OnDestroy{
 
   @Input({required: true})
   dpi!: string;

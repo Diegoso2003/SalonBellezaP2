@@ -1,6 +1,12 @@
 <div
-class="position-fixed top-0 h-100 "
-[ngClass]="{ 'start-0': derecho, 'end-0': !derecho }"
+class="position-fixed d-flex align-items-center"
+[ngStyle]="{
+    'top': '50%',
+    'transform': 'translateY(-50%)',
+    'right': derecho ? '20px' : 'auto',
+    'left': !derecho ? '20px' : 'auto',
+    'width': '25%'
+  }"
 >
 @if(anuncioRecuperado){
 <app-anuncio [anuncio]="anuncio"></app-anuncio>

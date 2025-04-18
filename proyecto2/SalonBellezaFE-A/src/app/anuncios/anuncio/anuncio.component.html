@@ -1,4 +1,4 @@
-<div class="card w-25 m-3 shadow">
+<div class="card w-100 shadow">
   <div class="card-body custom-card">
     @if(anuncio.tipo === 'IMAGEN'){
     <app-anuncio-imagen [anuncioId]="anuncio.idAnuncio"></app-anuncio-imagen>
@@ -9,7 +9,7 @@
       {{ anuncio.texto }}
     </div>
     } @else {
-    <div class="text-center fs-6 fw-bold text-wrap">
+    <div class="text-center fs-6 fw-bold text-wrap" style="max-height: 400px;">
       {{ anuncio.texto }}
     </div>
     }

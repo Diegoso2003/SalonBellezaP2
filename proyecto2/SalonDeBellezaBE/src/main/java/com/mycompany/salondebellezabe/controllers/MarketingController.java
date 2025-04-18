@@ -9,6 +9,7 @@ import com.mycompany.salondebellezabe.dtos.MensajeDTO;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
 import com.mycompany.salondebellezabe.service.anuncio.AnuncioService;
+import com.mycompany.salondebellezabe.service.anuncio.HistorialAnuncioService;
 import com.mycompany.salondebellezabe.service.anuncio.PreciosAnuncioService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -85,6 +86,8 @@ public class MarketingController {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrarUsoAnuncio(HistorialAnuncio historial){
+        HistorialAnuncioService servicio = new HistorialAnuncioService();
+        servicio.crearEntidad(historial);
         return Response.ok()
                 .build();
     }

@@ -20,7 +20,7 @@ export class AnuncioVideoComponent implements OnInit{
 
   ngOnInit(){
     this.extraerIdVideo();
-    const embedUrl = `https://www.youtube.com/embed/${this.videoId}?autoplay=1&loop=1&playlist=${this.videoId}`;
+    const embedUrl = `https://www.youtube.com/embed/${this.videoId}?autoplay=1&mute=1&loop=1&playlist=${this.videoId}`;
     this.safeYoutubeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl);
   }
 

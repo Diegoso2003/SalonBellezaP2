@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -136,7 +137,8 @@ public abstract class ClaseDAO<T, ID> extends Repositorio{
                 }
             }
         } catch (SQLException e) {
-            //informar sobre un error con el parametro enviado
+            System.out.println(e);
+            throw new InvalidDataException("error al conseguir la informacion");
         } finally {
             cerrar();
         }

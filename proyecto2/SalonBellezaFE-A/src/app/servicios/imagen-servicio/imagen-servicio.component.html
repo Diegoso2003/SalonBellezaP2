@@ -1,1 +1,5 @@
-<p>vista servicio funcions</p>
+  @if(imagenUrl) {
+    <img [src]="imagenUrl" alt="Imagen del servicio" class="card-img-top w-100" />
+} @else {
+    <img src="..." alt="Imagen del servicio" class="card-img-top w-100" />
+}

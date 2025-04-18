@@ -29,9 +29,9 @@ public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnu
     public void insertar(HistorialAnuncio historial) {
         obtenerConeccion();
         String query = "INSERT INTO HistorialAnuncio(url, fechaPublicacion, idAnuncio)"
-                + " VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE contador = contador + 1";
+                + " VALUES(?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
-            stmt.setString(1, historial.getUrl());
+            stmt.setString(1, historial.getUrl().trim());
             stmt.setDate(2, Date.valueOf(historial.getFechaPublicacion()));
             stmt.setInt(3, historial.getIdAnuncio());
             stmt.executeUpdate();
@@ -53,8 +53,23 @@ public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnu
     }
 
     @Override
-    public void actualizar(HistorialAnuncio entidad) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void actualizar(HistorialAnuncio historial) {
+        obtenerConeccion();
+        String query = "UPDATE HistorialAnuncio SET contador = contador + 1 WHERE url = ? AND fechaPublicacion = ? AND idAnuncio = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setString(1, historial.getUrl().trim());
+            stmt.setDate(2, Date.valueOf(historial.getFechaPublicacion()));
+            stmt.setInt(3, historial.getIdAnuncio());
+            if (stmt.executeUpdate() <= 1) {
+                this.setConeccion(coneccion);
+                this.insertar(historial);
+                this.reiniciarEstado();
+            }
+        } catch (SQLException e) {
+            throw new InvalidDataException("datos enviados para el historial del anuncio invalidos");
+        } finally {
+            cerrar();
+        }
     }
 
     @Override

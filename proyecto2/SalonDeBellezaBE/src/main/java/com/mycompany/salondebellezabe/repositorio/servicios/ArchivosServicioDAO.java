@@ -68,9 +68,10 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
         if (catalogo) {
             consulta.append("catalago ");
         } else {
-            consulta.append("fotografia , extension");
+            consulta.append("fotografia, extension ");
         }
-        consulta.append("FROM ArchivosServicio WHERE idArchivo = ?");
+        consulta.append("FROM ArchivosServicio WHERE idArchivos = ?");
+        System.out.println(consulta);
         return buscar(consulta.toString(), id, JDBCType.INTEGER);
     }
 
@@ -85,9 +86,9 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
         String query;
         obtenerConeccion();
         if (catalogo) {
-            query = "UPDATE ArchivosServicio SET catalogo = ? WHERE idArchivo = ?";
+            query = "UPDATE ArchivosServicio SET catalogo = ? WHERE idArchivos = ?";
         } else {
-            query = "UPDATE ArchivosServicio SET fotografia = ?, extension = ? WHERE idArchivo = ?";
+            query = "UPDATE ArchivosServicio SET fotografia = ?, extension = ? WHERE idArchivos = ?";
         }
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             int posicion;
@@ -133,7 +134,6 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
             foto.setExtension(result.getString("extension"));
             archivo.setFoto(foto);
         }
-        archivo.setIdArchivos(result.getInt("idArchivo"));
         return archivo;
     }
 

@@ -1,1 +1,5 @@
-<p>anuncio-imagen works!</p>
+@if(imagenUrl) {
+    <img [src]="imagenUrl" alt="Imagen de perfil" class="w-100 mx-auto d-block m-3" style="max-height: 400px;" />
+} @else {
+    <img src="..." alt="Imagen de perfil" class="w-100 mx-auto d-block m-3" style="max-height: 400px;" />
+}

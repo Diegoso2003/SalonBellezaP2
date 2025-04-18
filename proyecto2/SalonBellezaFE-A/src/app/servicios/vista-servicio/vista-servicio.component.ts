@@ -4,11 +4,12 @@ import { CurrencyPipe } from '@angular/common';
 import { BotonAgendarComponent } from "../boton-agendar/boton-agendar.component";
 import { BotonCatalogoComponent } from "../boton-catalogo/boton-catalogo.component";
 import { DuracionPipePipe } from '../../duracion-pipe.pipe';
+import { ImagenServicioComponent } from "../imagen-servicio/imagen-servicio.component";
 
 @Component({
   selector: 'app-vista-servicio',
   standalone: true,
-  imports: [CurrencyPipe, BotonAgendarComponent, BotonCatalogoComponent, DuracionPipePipe],
+  imports: [CurrencyPipe, BotonAgendarComponent, BotonCatalogoComponent, DuracionPipePipe, ImagenServicioComponent],
   templateUrl: './vista-servicio.component.html',
   styleUrl: './vista-servicio.component.scss'
 })

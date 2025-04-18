@@ -3,13 +3,13 @@ import { HistorialAnuncio } from '../../models/historialAnuncio';
 import { Anuncio } from '../../models/anuncio';
 import { MarketingService } from '../../services/marketing/marketing.service';
 import { Router } from '@angular/router';
-import { NgClass } from '@angular/common';
 import { AnuncioComponent } from "../../anuncios/anuncio/anuncio.component";
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-vista-anuncio',
   standalone: true,
-  imports: [NgClass, AnuncioComponent],
+  imports: [ AnuncioComponent, NgStyle ],
   templateUrl: './vista-anuncio.component.html',
   styleUrl: './vista-anuncio.component.scss'
 })
