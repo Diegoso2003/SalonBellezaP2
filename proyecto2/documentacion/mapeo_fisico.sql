@@ -97,6 +97,7 @@ CREATE TABLE Vigencia(
 
 CREATE TABLE Cita(
 	idCita INT AUTO_INCREMENT,
+	idServicio INT NOT NULL,
 	cliente BIGINT NOT NULL,
 	empleado BIGINT NOT NULL,
 	fecha DATE NOT NULL,
@@ -104,6 +105,7 @@ CREATE TABLE Cita(
 	hora TIME NOT NULL,
 	estado ENUM('PENDIENTE','PROGRAMADA','RECHAZADA','AUSENTE','ATENDIDA') NOT NULL,
 	CONSTRAINT fk_cliente1 FOREIGN KEY(cliente) REFERENCES Usuario(dpi),
+	CONSTRAINT fk_servicio3 FOREIGN KEY(idServicio) REFERENCES Servicio(idServicio),
 	CONSTRAINT fk_empleado2 FOREIGN KEY(empleado) REFERENCES Usuario(dpi),
 	CONSTRAINT pk_cita PRIMARY KEY(idCita)
 );

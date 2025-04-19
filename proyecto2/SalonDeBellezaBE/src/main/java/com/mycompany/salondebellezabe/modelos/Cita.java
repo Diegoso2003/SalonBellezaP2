@@ -20,6 +20,7 @@ public class Cita {
     private LocalTime hora;
     private double costoTotal;
     private EstadoCita estado;
+    private Servicio servicio;
 
     public Integer getIdCita() {
         return idCita;
@@ -29,6 +30,14 @@ public class Cita {
         this.idCita = idCita;
     }
 
+    public Servicio getServicio() {
+        return servicio;
+    }
+
+    public void setServicio(Servicio servicio) {
+        this.servicio = servicio;
+    }
+    
     public Usuario getCliente() {
         return cliente;
     }

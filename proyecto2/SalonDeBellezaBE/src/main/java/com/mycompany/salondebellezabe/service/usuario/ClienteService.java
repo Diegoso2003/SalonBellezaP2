@@ -6,12 +6,17 @@ package com.mycompany.salondebellezabe.service.usuario;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mycompany.salondebellezabe.dtos.CitasEmpleadoDiaDTO;
+import com.mycompany.salondebellezabe.dtos.HorarioEmpleadoDTO;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.Usuario;
+import com.mycompany.salondebellezabe.repositorio.citas.EmpleadoDAO;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.service.Service;
 import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
+import java.time.LocalDate;
+import java.util.List;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 
 /**
@@ -44,6 +49,16 @@ public class ClienteService extends Service<Usuario>{
         } catch (JsonProcessingException ex) {
             throw new InvalidDataException("ingrese correctamente los datos solicitados");
         }
+    }
+
+    public List<HorarioEmpleadoDTO> obtenerHorario(String dpiEnviado, String fechaEnvida) {
+        EmpleadoDAO repositorioEmpleado = new EmpleadoDAO();
+        Long dpi = validador.validarDPI(dpiEnviado);
+        LocalDate fecha = validador.validarFecha(fechaEnvida);
+        CitasEmpleadoDiaDTO consulta = new CitasEmpleadoDiaDTO();
+        consulta.setDpi(dpi);
+        consulta.setFecha(fecha);
+        return repositorioEmpleado.obtenerCitasDelEmpleado(consulta);
     }
     
     

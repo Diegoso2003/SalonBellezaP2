@@ -4,7 +4,9 @@
  */
 package com.mycompany.salondebellezabe.repositorio.citas;
 
+import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Cita;
+import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
@@ -25,17 +27,19 @@ import java.util.Optional;
  */
 public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
+    private boolean lista = false;
     @Override
     public void insertar(Cita cita) {
         obtenerConeccion();
-        String query = "INSERT INTO Cita(cliente, empleado, fecha, hora, estado)"
-                + " VALUES(?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Cita(cliente, empleado, fecha, hora, estado, idServicio)"
+                + " VALUES(?, ?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = coneccion.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)){
             stmt.setLong(1, cita.getCliente().getDpi());
             stmt.setLong(2, cita.getEmpleado().getDpi());
             stmt.setDate(3, Date.valueOf(cita.getFecha()));
             stmt.setTime(4, Time.valueOf(cita.getHora()));
             stmt.setString(5, cita.getEstado().toString());
+            stmt.setInt(6, cita.getServicio().getIdServicio());
             if (stmt.executeUpdate() > 0) {
                 try(ResultSet result = stmt.getGeneratedKeys()){
                     idGenerado = result.getInt(1);
@@ -56,7 +60,8 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
     @Override
     public Optional<Cita> obtenerPorID(Integer id) {
-        String query = "SELECT * FROM Cita WHERE idCita = ?";
+        String query = "SELECT s.idServicio as servicio, nombreServicio, c.* From Cita c "
+                + "INNER JOIN Servicio s ON s.idServicio = c.idServicio WHERE idCita = ?";
         return buscar(query, id, JDBCType.INTEGER);
     }
 
@@ -71,7 +76,9 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
      */
     @Override
     public List<Cita> obtenerTodo() {
-        return listarPorAtributos("SELECT * FROM Cita");
+        lista = true;
+        return listarPorAtributos("SELECT s.idServicio as servicio, nombreServicio, c.* From Cita c "
+                + "INNER JOIN Servicio s ON s.idServicio = c.idServicio");
     }
 
     /**
@@ -90,9 +97,12 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
         UsuarioDAO repositorioUsuario = new UsuarioDAO();
         repositorioUsuario.setConeccion(coneccion);
         Optional<Usuario> cliente = repositorioUsuario.obtenerPorID(result.getLong("cliente"));
-        cita.setCliente(cliente.get());
+        cita.setCliente(cliente.orElseThrow(() -> new NotFoundException("Error al conseguir la informacion del cliente")));
         Optional<Usuario> empleado = repositorioUsuario.obtenerPorID(result.getLong("empleado"));
-        cita.setEmpleado(empleado.get());
+        cita.setEmpleado(empleado.orElseThrow(() -> new NotFoundException("Error al conseguir la informacion del empleado")));
+        Servicio servicio = new Servicio();
+        servicio.setNombreServicio(result.getString("nombreServicio"));
+        servicio.setIdServicio(result.getInt("idServicio"));
         return cita;
     }
 

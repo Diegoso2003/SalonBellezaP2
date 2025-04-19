@@ -6,11 +6,12 @@ import { InformacionService } from '../../services/informacion.service';
 import { Validador } from '../../class/validador-form';
 import { FormEmpleadosComponent } from "../../servicios/form-empleados/form-empleados.component";
 import { UsuarioSeleccionado } from '../../class/usuarioSeleccionado';
+import { HorarioEmpleadoComponent } from "../horario-empleado/horario-empleado.component";
 
 @Component({
   selector: 'app-form-cita-hijo',
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, FormEmpleadosComponent],
+  imports: [ReactiveFormsModule, NgClass, FormEmpleadosComponent, HorarioEmpleadoComponent],
   templateUrl: './form-cita-hijo.component.html',
   styleUrl: './form-cita-hijo.component.scss'
 })
@@ -35,6 +36,17 @@ export class FormCitaHijoComponent {
 
   enviar(){
 
+  }
+
+  fechaSeleccionada(event: Event): void{
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedValue: string = selectElement.value;
+    let fechaSeleccionada: Date = new Date(selectedValue);
+    if (selectedValue.length > 0){
+      this.usuarioSeleccionado.setFechaSeleccionada(fechaSeleccionada);
+    } else {
+      this.usuarioSeleccionado.setFechaSeleccionada(null);
+    }
   }
 
   faltaFecha(){

@@ -16,12 +16,9 @@ export class FormEmpleadosComponent{
 
   @Input({required: true})
   empleadosDisponibles!: Usuario[];
-  @Input()
-  empleadosDelServicio!: Usuario[];
   @Input({required: true})
   seleccionado!: UsuarioSeleccionado;
   mostrarInformacion: boolean = false;
-  informacionObtenida: boolean = false;
   empleadoSeleccionado!: Usuario;
   inputSelectTocado: boolean = false;
   private _servicioService = inject(ServiciosService);  
@@ -31,16 +28,16 @@ export class FormEmpleadosComponent{
     this.mostrarInformacion = true;
     const selectElement = event.target as HTMLSelectElement;
     const selectedValue: string = selectElement.value;
-    this.informacionObtenida = false;
+    this.seleccionado.setUsuarioEncontrado(false);
     this._servicioService.obtenerInformacionEmpleado(selectedValue).subscribe(
       {
         next: (empleado: Usuario) => {
           this.seleccionado.setUsuarioSeleccionado(empleado);
           this.empleadoSeleccionado = empleado;
-          this.informacionObtenida = true;
+          this.seleccionado.setUsuarioEncontrado(true);
         },
         error: (error) => {
-          this.informacionObtenida = false;
+          this.seleccionado.setUsuarioEncontrado(false);
           console.error('Error al obtener la información del empleado:', error);
           this.informacion.informarError('Error al obtener la información del empleado');
         }

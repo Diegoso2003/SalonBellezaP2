@@ -16,7 +16,7 @@
   </select>
 </div>
 
-@if(mostrarInformacion){ @if(informacionObtenida){
+@if(mostrarInformacion){ @if(this.seleccionado.getUsuarioEncontrado()){
 <div class="row g-0">
   <div class="col-auto d-none d-lg-block">
     <app-imagen-perfil [dpi]="empleadoSeleccionado.dpi"></app-imagen-perfil>

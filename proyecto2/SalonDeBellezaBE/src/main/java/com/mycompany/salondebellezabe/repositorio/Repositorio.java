@@ -19,6 +19,8 @@ public class Repositorio {
     /**
      * metodo usado para obtener la coneccion a la base de datos si no ha sido 
      * setteada de lo contrario no la consigue
+     * @apiNote si se va a usar este metodo no olvidar poner en el finally el metodo
+     * {@link #cerrar() }
      * @throws ConeccionException si al conseguir la coneccion falla algo
      */
     protected void obtenerConeccion(){

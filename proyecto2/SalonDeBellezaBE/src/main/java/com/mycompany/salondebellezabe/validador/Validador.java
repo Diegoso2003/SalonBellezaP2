@@ -5,6 +5,8 @@
 package com.mycompany.salondebellezabe.validador;
 
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 
 /**
  *
@@ -85,6 +87,14 @@ public abstract class Validador<T> {
             return Long.valueOf(dpiEnviado);
         } catch (NumberFormatException | NullPointerException e) {
             throw new InvalidDataException("ingresar un dpi valido");
+        }
+    }
+    
+    public LocalDate validarFecha(String fecha){
+        try {
+            return LocalDate.parse(fecha);
+        } catch (DateTimeParseException | NullPointerException e) {
+            throw new InvalidDataException("ingresar una fecha valida");
         }
     }
 }
