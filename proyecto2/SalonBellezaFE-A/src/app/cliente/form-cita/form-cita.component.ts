@@ -7,11 +7,12 @@ import { InformacionComponent } from "../../informacion/informacion.component";
 import { InformacionService } from '../../services/informacion.service';
 import { ActivatedRoute } from '@angular/router';
 import { ServiciosService } from '../../services/servicios/servicios.service';
+import { FormCitaHijoComponent } from "../form-cita-hijo/form-cita-hijo.component";
 
 @Component({
   selector: 'app-form-cita',
   standalone: true,
-  imports: [VistaAnuncioComponent, ReactiveFormsModule, VistaServicioComponent, InformacionComponent],
+  imports: [VistaAnuncioComponent, ReactiveFormsModule, VistaServicioComponent, InformacionComponent, FormCitaHijoComponent],
   templateUrl: './form-cita.component.html',
   styleUrl: './form-cita.component.scss'
 })

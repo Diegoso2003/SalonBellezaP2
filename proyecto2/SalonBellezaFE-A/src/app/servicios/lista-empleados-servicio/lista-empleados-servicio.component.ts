@@ -13,9 +13,19 @@ export class ListaEmpleadosServicioComponent {
 
   @Input({required: true})
   empleadosDelServicio!: Usuario[];
+  @Input({required: true})
+  actualizarServicio!: boolean;
+  @Input()
+  idServicio!: number;
   private informacion = inject(InformacionService);
 
   borrarEmpleado(dpi: string): void {
+    if (!this.actualizarServicio){
+      this.borrarDelaLista(dpi);
+    }
+  }
+
+  borrarDelaLista(dpi: string): void {
     const index = this.empleadosDelServicio.findIndex(empleado => empleado.dpi === dpi);
     if (index !== -1) {
       this.empleadosDelServicio.splice(index, 1);

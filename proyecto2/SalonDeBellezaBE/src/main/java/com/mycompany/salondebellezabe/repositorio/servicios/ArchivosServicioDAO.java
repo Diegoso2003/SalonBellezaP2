@@ -66,11 +66,12 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
         StringBuilder consulta = new StringBuilder();
         consulta.append("SELECT ");
         if (catalogo) {
-            consulta.append("catalago ");
+            consulta.append("catalogo ");
         } else {
             consulta.append("fotografia, extension ");
         }
         consulta.append("FROM ArchivosServicio WHERE idArchivos = ?");
+        System.out.println(consulta.toString());
         return buscar(consulta.toString(), id, JDBCType.INTEGER);
     }
 
@@ -126,7 +127,7 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
     protected ArchivosServicio obtenerDatos(ResultSet result) throws SQLException {
         ArchivosServicio archivo = new ArchivosServicio();
         if (catalogo) {
-            archivo.setCatalogoBytes(result.getBytes("catalogo"));
+            archivo.setCatalogo(result.getBinaryStream("catalogo"));
         } else {
             Fotografia foto = new Fotografia();
             foto.setFotografia(result.getBytes("fotografia"));

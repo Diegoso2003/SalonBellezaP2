@@ -7,6 +7,9 @@ package com.mycompany.salondebellezabe.service;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.validador.Validador;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
+import jakarta.ws.rs.core.StreamingOutput;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Optional;
 
 
@@ -43,6 +46,19 @@ public abstract class Service<T> {
 
     public ClaseDAO getRepositorio() {
         return repositorio;
+    }
+    
+    public StreamingOutput escribirArchivo(InputStream archivo){
+        return (OutputStream outputStream) -> {
+            try (archivo) {
+                byte[] buffer = new byte[8192];
+                int bytesRead;
+                while ((bytesRead = archivo.read(buffer)) != -1) {
+                    outputStream.write(buffer, 0, bytesRead);
+                }
+                outputStream.flush();
+            }
+        };
     }
     
 }

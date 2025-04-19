@@ -4,7 +4,9 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
+import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
+import com.mycompany.salondebellezabe.service.servicio.ArchivosServicioService;
 import com.mycompany.salondebellezabe.service.servicio.ServicioService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -82,6 +84,17 @@ public class ServicioController {
         return  Response.ok(foto.getFotografia())
                 .header("Content-Type", foto.getExtension())
                 .header("Content-Disposition", "inline; filename=\"imagen_servicio_"+ idServicio + "\"")
+                .build();
+    }
+    
+    @Path("catalogo_servicio/{idServicio}")
+    @GET
+    public Response obtenerCatalogoServicio(@PathParam("idServicio") String idServicio){
+        ArchivosServicioService archivos = new ArchivosServicioService();
+        ArchivosServicio catalogo = archivos.encontrarCatalogo(idServicio);
+        return Response.ok(archivos.escribirArchivo(catalogo.getCatalogo()))
+                .header("Content-Type", "application/pdf")
+                .header("Content-Disposition", "inline; filename=\"catalogo_servicio_" + idServicio + "\"")
                 .build();
     }
 }

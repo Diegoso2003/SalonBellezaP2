@@ -8,11 +8,14 @@ import { Usuario } from '../../models/usuario';
 import { ServiciosService } from '../../services/servicios/servicios.service';
 import { Servicio } from '../../models/servicio';
 import { InformacionService } from '../../services/informacion.service';
+import { UsuarioSeleccionado } from '../../class/usuarioSeleccionado';
+import { BotonAgregarEmpleadoComponent } from "../boton-agregar-empleado/boton-agregar-empleado.component";
+import { ListaEmpleadosServicioComponent } from "../lista-empleados-servicio/lista-empleados-servicio.component";
 
 @Component({
   selector: 'app-form-servicio',
   standalone: true,
-  imports: [InformacionComponent, ReactiveFormsModule, NgClass, FormEmpleadosComponent],
+  imports: [InformacionComponent, ReactiveFormsModule, NgClass, FormEmpleadosComponent, BotonAgregarEmpleadoComponent, ListaEmpleadosServicioComponent],
   templateUrl: './form-servicio.component.html',
   styleUrl: './form-servicio.component.scss'
 })
@@ -25,6 +28,8 @@ export class FormServicioComponent implements OnInit{
   private catalogo: File | null = null;
   empleadosDelServicio: Usuario[] = [];
   empleados!: Usuario[];
+
+  empleadoSeleccionado: UsuarioSeleccionado = new UsuarioSeleccionado();
 
   private _servicioService = inject(ServiciosService);
 

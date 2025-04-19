@@ -125,6 +125,7 @@ public abstract class ClaseDAO<T, ID> extends Repositorio{
      * @param columna el valor de la columna
      * @param tipo tipo de dato como JDBCType.Integer, JSDBCType.VARCHAR, etc
      * @return un optional con la entidad si es encontrada
+     * @apiNote no es necesario obtener una coneccion pues este metodo ya la consigue
      */
     protected Optional<T> buscar(String query, Object columna, SQLType tipo){
         obtenerConeccion();

@@ -2,9 +2,13 @@
 <app-vista-anuncio [derecho]="true"></app-vista-anuncio>
 <app-vista-anuncio [derecho]="false"></app-vista-anuncio>
 @for(servicio of serviciosDisponibles; track servicio.idServicio){
-<app-vista-servicio
-  [servicio]="servicio"
-  [vista_cliente]="true"
-  [vista_individual]="false"
-></app-vista-servicio>
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card m-3 shadow" style="width: 40%">
+    <app-vista-servicio
+      [servicio]="servicio"
+      [vista_cliente]="true"
+      [vista_individual]="false"
+    ></app-vista-servicio>
+  </div>
+</div>
 }

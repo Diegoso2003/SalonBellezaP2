@@ -202,10 +202,23 @@
         </div>
         <div class="col-md-7">
           <app-form-empleados
-            [empleados]="empleados"
+            [empleadosDisponibles]="empleados"
             [empleadosDelServicio]="empleadosDelServicio"
-            [gestionarServicio]="true"
+            [seleccionado]="empleadoSeleccionado"
           ></app-form-empleados>
+          @if(!empleadoSeleccionado.usuarioNulo()){
+          <app-boton-agregar-empleado
+            [empleadosDisponibles]="empleados"
+            [empleadosDelServicio]="empleadosDelServicio"
+            [usuarioSeleccionado]="empleadoSeleccionado"
+            [actualizarServicio]="false"
+          ></app-boton-agregar-empleado>
+          }
+          <br />
+          <app-lista-empleados-servicio
+            [empleadosDelServicio]="empleadosDelServicio"
+            [actualizarServicio]="false"
+          ></app-lista-empleados-servicio>
         </div>
       </div>
     </div>

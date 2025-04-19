@@ -29,7 +29,7 @@ public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnu
     public void insertar(HistorialAnuncio historial) {
         obtenerConeccion();
         String query = "INSERT INTO HistorialAnuncio(url, fechaPublicacion, idAnuncio)"
-                + " VALUES(?, ?, ?)";
+                + " VALUES(?, ?, ?) ON DUPLICATE KEY UPDATE contador = contador + 1";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setString(1, historial.getUrl().trim());
             stmt.setDate(2, Date.valueOf(historial.getFechaPublicacion()));

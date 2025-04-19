@@ -73,7 +73,6 @@ public class FotografiaUsuarioDAO extends ClaseDAO<Fotografia, Long>{
      */
     @Override
     public Optional<Fotografia> obtenerPorID(Long dpi) {
-        obtenerConeccion();
         String query = "SELECT * FROM FotoUsuario WHERE dpi = ?";
         return buscar(query, dpi, JDBCType.BIGINT);
     }

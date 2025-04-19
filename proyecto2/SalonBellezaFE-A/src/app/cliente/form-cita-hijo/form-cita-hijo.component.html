@@ -1,0 +1,61 @@
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card m-3 shadow" style="width: 40%;">
+    <div class="card-body custom-card">
+      <h5 class="card-title text-center mb-3">Agendar cita</h5>
+      <form
+        class="needs-validation"
+        novalidate
+        [formGroup]="citaform"
+        (submit)="enviar()"
+      >
+        <div
+          class="position-relative"
+          [ngClass]="{ 'mb-5': faltaFecha(), 'mb-3': !faltaFecha() }"
+        >
+          <label for="validationTooltip01" class="form-label"
+            >Fecha de la cita</label
+          >
+          <input
+            type="date"
+            class="form-control"
+            id="validationTooltip01"
+            formControlName="fecha"
+            [ngClass]="{
+              'is-invalid': faltaFecha(),
+              'is-valid': esFechaValida()
+            }"
+            required
+          />
+          <div class="invalid-tooltip">Ingrese una fecha</div>
+        </div>
+
+        <div
+          class="position-relative"
+          [ngClass]="{ 'mb-5': faltaHora(), 'mb-3': !faltaHora() }"
+        >
+          <label for="validationTooltip02" class="form-label">Hora de la cita</label>
+          <input
+            type="time"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': faltaHora(),
+              'is-valid': esHoraValida()
+            }"
+            id="validationTooltip02"
+            formControlName="hora"
+            required
+          />
+          <div class="invalid-tooltip">Ingrese una hora</div>
+        </div>
+        <app-form-empleados
+            [empleadosDisponibles]="servicio.empleados"
+            [seleccionado]="usuarioSeleccionado"
+        ></app-form-empleados>
+        <br/>
+        <div class="mb-3 d-flex justify-content-center">
+          <button class="custom-button" type="submit">Agendar cita</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

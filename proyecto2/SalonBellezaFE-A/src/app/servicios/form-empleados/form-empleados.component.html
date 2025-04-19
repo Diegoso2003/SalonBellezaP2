@@ -1,4 +1,4 @@
-<h5 class="card-title text-center mb-3">Empleados</h5>
+<h5 class="card-title text-center mb-3">Empleados disponibles</h5>
 <div class="input-group mb-3">
   <label class="input-group-text" for="inputGroupSelect01"
     >Seleccione un empleado</label
@@ -7,10 +7,10 @@
     (change)="usuarioSeleccionado($event)"
     class="form-select"
     id="inputGroupSelect01"
+    (click)="inputSelectTocado = true"
   >
-    @if(!inputSelectTocado){
-    <option [value]="''" disabled selected>Seleccione un empleado</option>
-    } @for(empleado of empleados; track empleado.dpi){
+    <option value="" disabled [selected]="!inputSelectTocado" hidden></option>
+    @for(empleado of empleadosDisponibles; track empleado.dpi){
     <option value="{{ empleado.dpi }}">{{ empleado.nombre }}</option>
     }
   </select>
@@ -33,12 +33,6 @@
           <br />
           dpi: {{ empleadoSeleccionado.dpi }}
         </small>
-        <button
-          class="custom-button ms-5"
-          (click)="agregrarEmpleado(empleadoSeleccionado.dpi)"
-        >
-          Agregar
-        </button>
       </p>
     </div>
   </div>
@@ -68,7 +62,3 @@
   </div>
 </div>
 } }
-<br />
-<app-lista-empleados-servicio
-  [empleadosDelServicio]="empleadosDelServicio"
-></app-lista-empleados-servicio>

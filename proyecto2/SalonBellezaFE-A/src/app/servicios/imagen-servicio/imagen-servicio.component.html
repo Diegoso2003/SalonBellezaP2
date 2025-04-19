@@ -1,5 +1,7 @@
+<div class="imagen-wrapper">
   @if(imagenUrl) {
-    <img [src]="imagenUrl" alt="Imagen del servicio" class="card-img-top w-100" />
-} @else {
-    <img src="..." alt="Imagen del servicio" class="card-img-top w-100" />
-}
+    <img [src]="imagenUrl" alt="Imagen del servicio" class="servicio-img rounded-end" />
+  } @else {
+    <img src="..." alt="Imagen del servicio" class="servicio-img rounded-end" />
+  }
+</div>
