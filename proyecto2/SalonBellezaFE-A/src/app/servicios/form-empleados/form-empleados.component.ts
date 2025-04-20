@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, Input, OnDestroy } from '@angular/core';
 import { Usuario } from '../../models/usuario';
 import { ServiciosService } from '../../services/servicios/servicios.service';
 import { ImagenPerfilComponent } from "../../compartido/imagen-perfil/imagen-perfil.component";
@@ -12,7 +12,11 @@ import { UsuarioSeleccionado } from '../../class/usuarioSeleccionado';
   templateUrl: './form-empleados.component.html',
   styleUrl: './form-empleados.component.scss'
 })
-export class FormEmpleadosComponent{
+export class FormEmpleadosComponent implements OnDestroy{
+
+  ngOnDestroy(): void {
+    console.log('Destruyendo el componente FormEmpleadosComponent');    
+  }
 
   @Input({required: true})
   empleadosDisponibles!: Usuario[];

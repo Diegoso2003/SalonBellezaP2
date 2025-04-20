@@ -4,10 +4,8 @@
  */
 package com.mycompany.salondebellezabe.repositorio.salon_belleza;
 
-import com.mycompany.salondebellezabe.PoolConnections;
 import com.mycompany.salondebellezabe.modelos.HorarioSalon;
 import com.mycompany.salondebellezabe.repositorio.TablasUnicas;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -54,7 +52,7 @@ public class HorarioSalonRep extends TablasUnicas<HorarioSalon> {
     protected HorarioSalon obtenerDatos(ResultSet resultadoConsulta) throws SQLException {
         HorarioSalon horario = new HorarioSalon();
         horario.setHoraInicio(resultadoConsulta.getTime("horaInicio").toLocalTime());
-        horario.setHoraFin(resultadoConsulta.getTime("horaFint").toLocalTime());
+        horario.setHoraFin(resultadoConsulta.getTime("horaFin").toLocalTime());
         return horario;
     }
 

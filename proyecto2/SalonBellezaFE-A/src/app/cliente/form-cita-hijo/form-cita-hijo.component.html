@@ -1,5 +1,5 @@
 <div class="d-flex align-items-center justify-content-center">
-  <div class="card m-3 shadow" style="width: 40%;">
+  <div class="card m-3 shadow" style="width: 40%">
     <div class="card-body custom-card">
       <h5 class="card-title text-center mb-3">Agendar cita</h5>
       <form
@@ -8,6 +8,10 @@
         [formGroup]="citaform"
         (submit)="enviar()"
       >
+        <label class="form-label"
+          >Horario de atencion: {{ horarioSalon.horaInicio | horaPipe }} -
+          {{ horarioSalon.horaFin | horaPipe }}</label
+        >
         <div
           class="position-relative"
           [ngClass]="{ 'mb-5': faltaFecha(), 'mb-3': !faltaFecha() }"
@@ -20,6 +24,7 @@
             class="form-control"
             id="validationTooltip01"
             formControlName="fecha"
+            (change)="fechaSeleccionada($event)"
             [ngClass]="{
               'is-invalid': faltaFecha(),
               'is-valid': esFechaValida()
@@ -33,7 +38,9 @@
           class="position-relative"
           [ngClass]="{ 'mb-5': faltaHora(), 'mb-3': !faltaHora() }"
         >
-          <label for="validationTooltip02" class="form-label">Hora de la cita</label>
+          <label for="validationTooltip02" class="form-label"
+            >Hora de la cita</label
+          >
           <input
             type="time"
             class="form-control"
@@ -47,16 +54,18 @@
           />
           <div class="invalid-tooltip">Ingrese una hora</div>
         </div>
+        @if(mostrarListaEmpleados){
         <app-form-empleados
-            [empleadosDisponibles]="servicio.empleados"
-            [seleccionado]="usuarioSeleccionado"
+          [empleadosDisponibles]="servicio.empleados"
+          [seleccionado]="usuarioSeleccionado"
         ></app-form-empleados>
-        @if(usuarioSeleccionado.sonAmbosValidos() && usuarioSeleccionado.getUsuarioEncontrado()){
-            <app-horario-empleado
-            [usuarioSeleccionado]="usuarioSeleccionado"
-            ></app-horario-empleado>
+        } @if(usuarioSeleccionado.sonAmbosValidos() &&
+        usuarioSeleccionado.getUsuarioEncontrado()){
+        <app-horario-empleado
+          [usuarioSeleccionado]="usuarioSeleccionado"
+        ></app-horario-empleado>
         }
-        <br/>
+        <br />
         <div class="mb-3 d-flex justify-content-center">
           <button class="custom-button" type="submit">Agendar cita</button>
         </div>

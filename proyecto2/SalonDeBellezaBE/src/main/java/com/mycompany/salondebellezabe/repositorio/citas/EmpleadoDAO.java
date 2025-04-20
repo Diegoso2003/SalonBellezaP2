@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.citas;
 
+import com.mycompany.salondebellezabe.SumadorDeHoras;
 import com.mycompany.salondebellezabe.dtos.CitasEmpleadoDiaDTO;
 import com.mycompany.salondebellezabe.dtos.HorarioEmpleadoDTO;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
@@ -27,7 +28,7 @@ public class EmpleadoDAO extends Repositorio{
         List<HorarioEmpleadoDTO> horario = new ArrayList<>();
         obtenerConeccion();
         String query = "SELECT duracion, hora FROM Cita c INNER JOIN Servicio s ON s.idServicio = c.idServicio"
-                + " WHERE empleado = ? AND fecha = ? AND estado = 'PROGRAMADA'";
+                + " WHERE empleado = ? AND fecha = ? AND estado = 'PROGRAMADA' ORDER BY(hora) ASC";
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             stmt.setLong(1, consulta.getDpi());
             stmt.setDate(2, Date.valueOf(consulta.getFecha()));
@@ -49,14 +50,9 @@ public class EmpleadoDAO extends Repositorio{
 
     private HorarioEmpleadoDTO obtenerDuracion(LocalTime duracion, LocalTime hora) {
         HorarioEmpleadoDTO horario = new HorarioEmpleadoDTO();
-        int horaDuracion = duracion.getHour();
-        int minutosDuracion = duracion.getMinute();
-        int horaProgramada = hora.getHour();
-        int minutoProgramado = hora.getMinute();
-        int horaFinal = horaDuracion + horaProgramada;
-        int minutoFinal = minutosDuracion + minutoProgramado;
+        SumadorDeHoras sumador = new SumadorDeHoras(hora, duracion);
         horario.setHoraInicio(hora);
-        horario.setHoraFin(LocalTime.of(horaFinal, minutoFinal));
+        horario.setHoraFin(sumador.obtenerSuma());
         return horario;
     }
 

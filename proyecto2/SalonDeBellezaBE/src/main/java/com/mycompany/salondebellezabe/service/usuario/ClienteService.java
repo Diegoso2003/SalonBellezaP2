@@ -10,8 +10,10 @@ import com.mycompany.salondebellezabe.dtos.CitasEmpleadoDiaDTO;
 import com.mycompany.salondebellezabe.dtos.HorarioEmpleadoDTO;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
+import com.mycompany.salondebellezabe.modelos.HorarioSalon;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.repositorio.citas.EmpleadoDAO;
+import com.mycompany.salondebellezabe.repositorio.salon_belleza.HorarioSalonRep;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import com.mycompany.salondebellezabe.service.Service;
 import com.mycompany.salondebellezabe.validador.usuario.ValidadorUsuario;
@@ -59,6 +61,11 @@ public class ClienteService extends Service<Usuario>{
         consulta.setDpi(dpi);
         consulta.setFecha(fecha);
         return repositorioEmpleado.obtenerCitasDelEmpleado(consulta);
+    }
+
+    public HorarioSalon obtenerHorarioSalon() {
+        HorarioSalonRep horario = new HorarioSalonRep();
+        return horario.obtenerDatos();
     }
     
     

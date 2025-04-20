@@ -9,7 +9,7 @@
     id="inputGroupSelect01"
     (click)="inputSelectTocado = true"
   >
-    <option value="" disabled [selected]="!inputSelectTocado" hidden></option>
+    <option value="" hidden></option>
     @for(empleado of empleadosDisponibles; track empleado.dpi){
     <option value="{{ empleado.dpi }}">{{ empleado.nombre }}</option>
     }
@@ -51,13 +51,11 @@
         <span class="placeholder col-7"></span>
         <span class="placeholder col-4"></span>
         <span class="placeholder col-4"></span>
+        <span class="placeholder col-8"></span>
+        <span class="placeholder col-4"></span>
         <span class="placeholder col-6"></span>
         <span class="placeholder col-8"></span>
       </p>
-      <a
-        class="btn btn-primary disabled placeholder col-6"
-        aria-disabled="true"
-      ></a>
     </div>
   </div>
 </div>

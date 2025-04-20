@@ -4,8 +4,10 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
-import com.mycompany.salondebellezabe.dtos.CitasEmpleadoDiaDTO;
+import com.mycompany.salondebellezabe.dtos.CitaDTO;
 import com.mycompany.salondebellezabe.dtos.HorarioEmpleadoDTO;
+import com.mycompany.salondebellezabe.dtos.MensajeDTO;
+import com.mycompany.salondebellezabe.service.cita.CitaService;
 import com.mycompany.salondebellezabe.service.usuario.ClienteService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -49,6 +51,26 @@ public class ClienteController {
         ClienteService servicio = new ClienteService();
         List<HorarioEmpleadoDTO> horario = servicio.obtenerHorario(dpi, fecha);
         return Response.ok(horario)
+                .build();
+    }
+    
+    @Path("agendar_cita")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response agendarCita(CitaDTO informacionCita){
+        CitaService servicio = new CitaService();
+        MensajeDTO mensaje = servicio.agendarCita(informacionCita);
+        return Response.ok(mensaje)
+                .build();
+    }
+    
+    @Path("horario_salon")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerHorarioSalon(){
+        ClienteService servicio = new ClienteService();
+        return Response.ok(servicio.obtenerHorarioSalon())
                 .build();
     }
 }

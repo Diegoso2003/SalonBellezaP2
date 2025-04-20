@@ -2,10 +2,10 @@ import { Usuario } from "../models/usuario";
 
 export class UsuarioSeleccionado{
     private usuarioSeleccionado?: Usuario;
-    private fechaSeleccionada: Date | null = null;
+    private fechaSeleccionada: string | null = null;
     private usuarioEncontrado: boolean = false;
 
-    public setUsuarioSeleccionado(usuario: Usuario): void{
+    public setUsuarioSeleccionado(usuario: Usuario | undefined): void{
         this.usuarioSeleccionado = usuario;
     }
 
@@ -13,7 +13,7 @@ export class UsuarioSeleccionado{
         return this.usuarioSeleccionado === undefined;
     }
 
-    public setFechaSeleccionada(fecha: Date | null): void{
+    public setFechaSeleccionada(fecha: string | null): void{
         this.fechaSeleccionada = fecha;
     }
 
@@ -25,7 +25,7 @@ export class UsuarioSeleccionado{
         return this.fechaSeleccionada !== null;
     }
 
-    public getFechaSeleccionada(): Date{
+    public getFechaSeleccionada(): string{
         return this.fechaSeleccionada!;
     }
 

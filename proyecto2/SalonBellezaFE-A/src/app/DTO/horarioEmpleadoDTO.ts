@@ -1,4 +1,4 @@
 export interface HorarioEmpleadoDTO {
-    horaInicio: Date;
-    horaFin: Date;
+    horaInicio: string;
+    horaFin: string;
 }

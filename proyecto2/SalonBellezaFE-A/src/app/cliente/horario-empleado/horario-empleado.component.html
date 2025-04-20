@@ -1,6 +1,6 @@
 <h5 class="card-title text-center">Horario del empleado</h5>
 <ul class="list-group">
     @for(horario of horarioEmpleado; track $index){
-        <li class="list-group-item">{{ horario.horaInicio | date:'h:mm a'}} - {{ horario.horaFin | date:'h:mm a' }}</li>
+        <li class="list-group-item">{{ horario.horaInicio | horaPipe}} - {{ horario.horaFin | horaPipe }}</li>
     }
 </ul>

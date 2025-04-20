@@ -3,4 +3,5 @@ export interface CitaDTO {
     hora: string;
     dpiEmpleado: string;
     dpiCliente: string;
+    idServicio: number;
 }

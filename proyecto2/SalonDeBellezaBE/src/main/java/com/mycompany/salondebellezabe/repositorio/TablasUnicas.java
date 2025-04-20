@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio;
 
 import com.mycompany.salondebellezabe.PoolConnections;
+import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ public abstract class TablasUnicas<T> extends Repositorio{
                 entidad = obtenerDatos(result);
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new ConeccionException();
         } finally {
             cerrar();
         }

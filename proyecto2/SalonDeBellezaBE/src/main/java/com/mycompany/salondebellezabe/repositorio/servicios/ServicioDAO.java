@@ -153,6 +153,7 @@ public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements Busqueda
         servicio.setDescripcion(result.getString("descripcion"));
         servicio.setDuracion(result.getTime("duracion").toLocalTime());
         servicio.setPrecio(result.getDouble("precio"));
+        servicio.setActivo(result.getBoolean("activo"));
         if (obtenerEmpleados) {
             EmpleadosServicioDAO repositorio = new EmpleadosServicioDAO(servicio);
             List<Usuario> empleados = repositorio.obtenerEmpleadosActivos();

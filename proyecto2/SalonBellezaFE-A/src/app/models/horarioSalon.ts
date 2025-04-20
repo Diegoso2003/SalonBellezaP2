@@ -1,4 +1,4 @@
 export interface HorarioSalon {
-    horaInicion: string;
+    horaInicio: string;
     horaFin: string;
 }

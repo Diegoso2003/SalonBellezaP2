@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.modelos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalTime;
 
 /**
@@ -11,7 +12,9 @@ import java.time.LocalTime;
  * @author rafael-cayax
  */
 public class HorarioSalon {
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime horaInicio;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime horaFin;
 
     public LocalTime getHoraInicio() {

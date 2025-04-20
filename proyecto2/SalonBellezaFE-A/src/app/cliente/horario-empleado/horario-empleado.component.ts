@@ -4,12 +4,12 @@ import { CitasEmpleadoDiaDTO } from '../../DTO/CitasEmpleadoDiaDTO';
 import { ClienteService } from '../../services/cliente/cliente.service';
 import { InformacionService } from '../../services/informacion.service';
 import { HorarioEmpleadoDTO } from '../../DTO/horarioEmpleadoDTO';
-import { DatePipe } from '@angular/common';
+import { HoraPipePipe } from '../../hora-pipe.pipe';
 
 @Component({
   selector: 'app-horario-empleado',
   standalone: true,
-  imports: [DatePipe],
+  imports: [HoraPipePipe],
   templateUrl: './horario-empleado.component.html',
   styleUrl: './horario-empleado.component.scss'
 })
