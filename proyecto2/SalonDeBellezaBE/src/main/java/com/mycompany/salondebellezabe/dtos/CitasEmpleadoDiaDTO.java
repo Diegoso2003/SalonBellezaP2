@@ -38,4 +38,8 @@ public class CitasEmpleadoDiaDTO {
         this.fecha = fecha;
     }
     
+    public boolean esValido(){
+        return this.dpi != null && this.fecha != null;
+    }
+    
 }

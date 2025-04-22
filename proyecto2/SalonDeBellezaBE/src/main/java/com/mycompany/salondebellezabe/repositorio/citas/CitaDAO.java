@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.citas;
 
+import com.mycompany.salondebellezabe.SumadorDeHoras;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Cita;
 import com.mycompany.salondebellezabe.modelos.Servicio;
@@ -27,7 +28,6 @@ import java.util.Optional;
  */
 public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
-    private boolean lista = false;
     @Override
     public void insertar(Cita cita) {
         obtenerConeccion();
@@ -60,7 +60,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
     @Override
     public Optional<Cita> obtenerPorID(Integer id) {
-        String query = "SELECT s.idServicio as servicio, nombreServicio, c.* From Cita c "
+        String query = "SELECT s.idServicio as servicio, nombreServicio, duracion c.* From Cita c "
                 + "INNER JOIN Servicio s ON s.idServicio = c.idServicio WHERE idCita = ?";
         return buscar(query, id, JDBCType.INTEGER);
     }
@@ -77,7 +77,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
     @Override
     public List<Cita> obtenerTodo() {
         lista = true;
-        return listarPorAtributos("SELECT s.idServicio as servicio, nombreServicio, c.* From Cita c "
+        return listarPorAtributos("SELECT s.idServicio as servicio, nombreServicio, duracion, c.* From Cita c "
                 + "INNER JOIN Servicio s ON s.idServicio = c.idServicio");
     }
 
@@ -103,6 +103,9 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
         Servicio servicio = new Servicio();
         servicio.setNombreServicio(result.getString("nombreServicio"));
         servicio.setIdServicio(result.getInt("idServicio"));
+        servicio.setDuracion(result.getTime("duracion").toLocalTime());
+        SumadorDeHoras sumador = new SumadorDeHoras(cita.getHora(), cita.getServicio().getDuracion());
+        cita.setHoraFin(sumador.obtenerSuma());
         return cita;
     }
 

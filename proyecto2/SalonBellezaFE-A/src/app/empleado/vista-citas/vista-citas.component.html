@@ -1,0 +1,15 @@
+<app-informacion></app-informacion>
+@if(!informeCambio.getCambio()){
+<app-form-agenda
+  [informeCambio]="informeCambio"
+  [citas]="citas"
+></app-form-agenda>
+} @else { @for(cita of citas; track cita.idCita){
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card w-25 m-3 shadow">
+    <div class="card-body custom-card">
+      <app-vista-cita [cita]="cita"></app-vista-cita>
+    </div>
+  </div>
+</div>
+} @empty { } }

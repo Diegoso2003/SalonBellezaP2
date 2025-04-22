@@ -33,6 +33,10 @@ export const routes: Routes = [
         loadChildren: () => import('./cliente/cliente.routes').then(m => m.CLIENTE_ROUTES)
     },
     {
+        path: 'empleado',
+        loadChildren: () => import('./empleado/empleado.routes').then(m => m.EMPLEADO_ROUTES)
+    },
+    {
         path: '',
         redirectTo: 'inicio',
         pathMatch: 'full'

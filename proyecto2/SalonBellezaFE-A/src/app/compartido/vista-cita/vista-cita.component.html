@@ -1,0 +1,17 @@
+<h6 class="card-subtitle text-center">Detalles de la cita</h6>
+<p class="card-text">Fecha de la cita: {{ cita.fecha }}</p>
+<p class="card-text">Horario de atencio: {{ cita.hora | horaPipe }} - {{ cita.horaFin | horaPipe }}</p>
+<p class="card-text">Nombre del servicio: {{ cita.servicio.nombreServicio }}</p>
+<p class="card-text">Precio del servicio: {{ cita.costoTotal | currency : "Q" : "symbol" : "1.2-2" }}</p>
+@if(vistaCliente || vistaAdmin){
+<h6 class="card-subtitle text-center">Informacion del empleado asignado</h6>
+<p class="card-text">Nombre: {{ cita.cliente.nombre }}</p>
+<p class="card-text">Telefono: {{ cita.cliente.telefono }}</p>
+<p class="card-text">DPI: {{ cita.cliente.dpi }}</p>
+}
+@if(!vistaCliente || vistaAdmin){
+<h6 class="card-subtitle text-center">Informacion del cliente</h6>
+<p class="card-text">Nombre: {{ cita.empleado.nombre }}</p>
+<p class="card-text">Telefono: {{ cita.empleado.telefono }}</p>
+<p class="card-text">DPI: {{ cita.empleado.dpi }}</p>
+}
