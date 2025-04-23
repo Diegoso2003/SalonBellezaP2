@@ -13,6 +13,7 @@ import java.util.List;
  */
 public class Anuncio {
     private Integer idAnuncio;
+    private Integer totalMostrado;
     private TipoAnuncio tipo;
     private String texto;
     private String urlVideo;
@@ -83,6 +84,14 @@ public class Anuncio {
 
     public void setFoto(Fotografia foto) {
         this.foto = foto;
+    }
+
+    public Integer getTotalMostrado() {
+        return totalMostrado;
+    }
+
+    public void setTotalMostrado(Integer totalMostrado) {
+        this.totalMostrado = totalMostrado;
     }
     
 }

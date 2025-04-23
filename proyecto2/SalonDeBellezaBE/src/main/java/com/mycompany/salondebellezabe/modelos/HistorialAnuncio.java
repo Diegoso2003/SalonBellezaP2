@@ -23,6 +23,7 @@ public class HistorialAnuncio {
     @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate fechaPublicacion;
     private Integer idAnuncio;
+    private Integer idHistorial;
 
     public String getUrl() {
         return url;
@@ -54,6 +55,14 @@ public class HistorialAnuncio {
 
     public void setIdAnuncio(Integer idAnuncio) {
         this.idAnuncio = idAnuncio;
+    }
+
+    public Integer getIdHistorial() {
+        return idHistorial;
+    }
+
+    public void setIdHistorial(Integer idHistorial) {
+        this.idHistorial = idHistorial;
     }
     
 }

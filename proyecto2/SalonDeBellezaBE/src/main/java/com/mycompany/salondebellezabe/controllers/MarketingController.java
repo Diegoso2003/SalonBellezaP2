@@ -4,10 +4,12 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
+import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.dtos.AnuncioDTO;
 import com.mycompany.salondebellezabe.dtos.MensajeDTO;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
+import com.mycompany.salondebellezabe.reporte_anuncio.AnuncioReporteService;
 import com.mycompany.salondebellezabe.service.anuncio.AnuncioService;
 import com.mycompany.salondebellezabe.service.anuncio.HistorialAnuncioService;
 import com.mycompany.salondebellezabe.service.anuncio.PreciosAnuncioService;
@@ -89,6 +91,22 @@ public class MarketingController {
         HistorialAnuncioService servicio = new HistorialAnuncioService();
         servicio.crearEntidad(historial);
         return Response.ok()
+                .build();
+    }
+    
+    @Path("reporte_anuncio")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerAnunciosMasVistos(Consulta consulta){
+        AnuncioReporteService servicio = new AnuncioReporteService();
+        return Response.ok(servicio.anunciosMasVistos(consulta))
+                .build();
+    }
+    
+    public Response obtenerAnunciosMenosVistos(Consulta consulta){
+        AnuncioReporteService servicio = new AnuncioReporteService();
+        return Response.ok(servicio.anunciosMenosVistos(consulta))
                 .build();
     }
 }

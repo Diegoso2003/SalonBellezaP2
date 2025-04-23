@@ -5,8 +5,11 @@
 package com.mycompany.salondebellezabe.repositorio;
 
 import com.mycompany.salondebellezabe.PoolConnections;
+import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
@@ -16,6 +19,7 @@ import java.sql.SQLException;
 public class Repositorio {
     protected Connection coneccion;    
     private boolean compartirConeccion = false;
+    protected Integer indice = 1;
     /**
      * metodo usado para obtener la coneccion a la base de datos si no ha sido 
      * setteada de lo contrario no la consigue
@@ -62,5 +66,16 @@ public class Repositorio {
     public void setConeccion(Connection coneccion) {
         this.compartirConeccion = coneccion != null;
         this.coneccion = coneccion;
+    }
+    
+    protected void colocarFechas(Consulta consulta, PreparedStatement stmt) throws SQLException{
+        if (consulta.tieneAmbas()) {
+            stmt.setDate(indice, Date.valueOf(consulta.getFechaInicio()));
+            stmt.setDate((indice++), Date.valueOf(consulta.getFechaFin()));
+        } else if(consulta.tieneFechaInicio()){
+            stmt.setDate(indice, Date.valueOf(consulta.getFechaInicio()));
+        } else if(consulta.tieneFechaFin()){
+            stmt.setDate(indice, Date.valueOf(consulta.getFechaFin()));
+        }
     }
 }

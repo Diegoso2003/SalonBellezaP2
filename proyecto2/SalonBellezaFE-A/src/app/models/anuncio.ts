@@ -10,4 +10,5 @@ export interface Anuncio{
     tipo: TipoAnuncio;
     vigencia: Vigencia;
     historial: HistorialAnuncio[];
+    totalMostrado: number;
 }

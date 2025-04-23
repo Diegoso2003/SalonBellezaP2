@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio.anuncios;
 
+import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.modelos.HistorialAnuncio;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
@@ -11,6 +12,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -79,7 +81,46 @@ public class HistorialAnuncioDAO extends ClaseDAO<HistorialAnuncio, HistorialAnu
 
     @Override
     protected HistorialAnuncio obtenerDatos(ResultSet result) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        HistorialAnuncio historial = new HistorialAnuncio();
+        historial.setCantidad(result.getInt("contador"));
+        historial.setFechaPublicacion(result.getDate("fechaPublicacion").toLocalDate());
+        historial.setUrl(result.getString("url"));
+        historial.setIdAnuncio(result.getInt("idAnuncio"));
+        historial.setIdHistorial(result.getInt("idHistorial"));
+        return historial;
+    }
+    
+    public List<HistorialAnuncio> informacionAnuncio(Consulta consulta, Integer idAnuncio){
+        List<HistorialAnuncio> historial = new ArrayList<>();
+        String query = armarConsulta(consulta);
+        obtenerConeccion();
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setInt(1, idAnuncio);
+            indice++;
+            colocarFechas(consulta, stmt);
+            try(ResultSet result = stmt.executeQuery()){
+                while(result.next()){
+                    HistorialAnuncio historialAnuncio = obtenerDatos(result);
+                    historial.add(historialAnuncio);
+                }
+            }
+        } catch (SQLException e) {
+        } finally {
+            cerrar();
+        }
+        return historial;
+    }
+
+    private String armarConsulta(Consulta consulta) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM HistorialAnuncio WHERE idAnuncio = ? ");
+        if (consulta.tieneFechaInicio()) {
+            query.append("AND fechaPublicacion >= ? ");
+        }
+        if (consulta.tieneFechaFin()) {
+            query.append("AND fechaPublicacion <= ? ");
+        }
+        return query.toString();
     }
     
 }
