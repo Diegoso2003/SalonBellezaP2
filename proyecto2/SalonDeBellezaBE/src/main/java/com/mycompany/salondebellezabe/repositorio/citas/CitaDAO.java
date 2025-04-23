@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.citas;
 
 import com.mycompany.salondebellezabe.SumadorDeHoras;
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Cita;
 import com.mycompany.salondebellezabe.modelos.Servicio;
@@ -60,7 +61,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
     @Override
     public Optional<Cita> obtenerPorID(Integer id) {
-        String query = "SELECT s.idServicio as servicio, nombreServicio, duracion c.* From Cita c "
+        String query = "SELECT s.idServicio as servicio, nombreServicio, duracion, precio, c.* From Cita c "
                 + "INNER JOIN Servicio s ON s.idServicio = c.idServicio WHERE idCita = ?";
         return buscar(query, id, JDBCType.INTEGER);
     }
@@ -76,8 +77,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
      */
     @Override
     public List<Cita> obtenerTodo() {
-        lista = true;
-        return listarPorAtributos("SELECT s.idServicio as servicio, nombreServicio, duracion, c.* From Cita c "
+        return listarPorAtributos("SELECT s.idServicio as servicio, nombreServicio, duracion, precio, c.* From Cita c "
                 + "INNER JOIN Servicio s ON s.idServicio = c.idServicio");
     }
 
@@ -94,6 +94,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
         cita.setFecha(result.getDate("fecha").toLocalDate());
         cita.setHora(result.getTime("hora").toLocalTime());
         cita.setEstado(EstadoCita.valueOf(result.getString("estado")));
+        cita.setIdCita(result.getInt("idCita"));
         UsuarioDAO repositorioUsuario = new UsuarioDAO();
         repositorioUsuario.setConeccion(coneccion);
         Optional<Usuario> cliente = repositorioUsuario.obtenerPorID(result.getLong("cliente"));
@@ -102,8 +103,10 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
         cita.setEmpleado(empleado.orElseThrow(() -> new NotFoundException("Error al conseguir la informacion del empleado")));
         Servicio servicio = new Servicio();
         servicio.setNombreServicio(result.getString("nombreServicio"));
+        servicio.setPrecio(result.getDouble("precio"));
         servicio.setIdServicio(result.getInt("idServicio"));
         servicio.setDuracion(result.getTime("duracion").toLocalTime());
+        cita.setServicio(servicio);
         SumadorDeHoras sumador = new SumadorDeHoras(cita.getHora(), cita.getServicio().getDuracion());
         cita.setHoraFin(sumador.obtenerSuma());
         return cita;
@@ -123,6 +126,45 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
             }
         } catch (SQLException e) {
             //otro error
+        } finally {
+            cerrar();
+        }
+    }
+
+    public void citaAtendida(Cita cita) {
+        obtenerConeccion();
+        String query = "UPDATE Cita SET costoTotal = ?, estado = 'ATENDIDA' WHERE idCita = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setDouble(1, cita.getServicio().getPrecio());
+            stmt.setInt(2, cita.getIdCita());
+            if (stmt.executeUpdate() <= 0) {
+                throw new NotFoundException("cita no encontrada");
+            }
+        } catch (SQLException e) {
+            throw new InvalidDataException("datos enviados no validos");
+        } finally {
+            cerrar();
+        }
+    }
+
+    public void citaAusente(Cita cita) {
+        obtenerConeccion();
+        String query = "UPDATE Cita SET estado = 'AUSENTE' WHERE idCita = ?";
+        String query2 = "UPDATE Usuario SET listaNegra = TRUE WHERE dpi = ?";
+        try (PreparedStatement stmt = coneccion.prepareStatement(query);
+                PreparedStatement stmt2 = coneccion.prepareStatement(query2)){
+            coneccion.setAutoCommit(false);
+            stmt.setInt(1, cita.getIdCita());
+            if(stmt.executeUpdate() <= 0){
+                throw new NotFoundException("cita no encontrada");
+            }
+            stmt2.setLong(1, cita.getCliente().getDpi());
+            if (stmt2.executeUpdate() <= 0) {
+                throw new NotFoundException("cliente no encontrado");
+            }
+        } catch (SQLException e) {
+            regresar();
+            throw new InvalidDataException("datos enviados invalidos");
         } finally {
             cerrar();
         }

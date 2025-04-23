@@ -16,4 +16,12 @@ export class EmpleadoService {
   obtenerAgenda(consulta: CitasEmpleadoDiaDTO): Observable<Cita[]> {
     return this._http.post<Cita[]>(`${this.url}/agenda`, consulta);
   }
+
+  marcarCitaAtendida(idCita: number): Observable<void> {
+    return this._http.patch<void>(`${this.url}/cita_atendida/${idCita}`, {});
+  }
+
+  marcarClienteAusente(idCita: number): Observable<void> {
+    return this._http.patch<void>(`${this.url}/cita_ausente/${idCita}`, {});
+  }
 }

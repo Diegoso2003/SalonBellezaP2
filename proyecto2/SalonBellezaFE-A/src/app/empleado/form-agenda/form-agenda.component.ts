@@ -62,8 +62,10 @@ export class FormAgendaComponent {
     this.empleadoService.obtenerAgenda(consulta).subscribe(
       {
         next: (citas: Cita[]) => {
-          this.citas = citas;
+          this.vaciarLista();
+          this.agregarNuevasCitas(citas);
           this.informeCambio.setCambio(true);
+          this.informeCambio.setFecha(consulta.fecha);
         },
         error: (error) => {
           this.informacion.informarError(error.error.mensaje || 'Error al obtener la agenda');
@@ -71,5 +73,13 @@ export class FormAgendaComponent {
         }
       }
     );
+  }
+
+  private vaciarLista(): void{
+    this.citas.length = 0;
+  }
+
+  private agregarNuevasCitas(citas2: Cita[]): void {
+    this.citas.push(...citas2);
   }
 }

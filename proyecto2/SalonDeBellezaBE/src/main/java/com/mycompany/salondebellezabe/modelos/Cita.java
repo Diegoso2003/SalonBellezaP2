@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.modelos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,8 +17,11 @@ public class Cita {
     private Integer idCita;
     private Usuario cliente;
     private Usuario empleado;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fecha;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime hora;
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime horaFin;
     private double costoTotal;
     private EstadoCita estado;

@@ -174,8 +174,8 @@ public class UsuarioDAO extends ClaseDAO<Usuario, Long> implements BusquedaPorAt
             usuario.setHobbies(result.getString("hobbies"));
             usuario.setDireccion(result.getString("direccion"));
             usuario.setDescripcion(result.getString("descripcion"));
-            usuario.setTelefono(result.getString("telefono"));
         }
+        usuario.setTelefono(result.getString("telefono"));
         usuario.setActivo(result.getBoolean("activo"));
         usuario.setListaNegra(result.getBoolean("listaNegra"));
         return usuario;

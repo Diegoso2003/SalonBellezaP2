@@ -4,12 +4,36 @@
   [informeCambio]="informeCambio"
   [citas]="citas"
 ></app-form-agenda>
-} @else { @for(cita of citas; track cita.idCita){
+} @else {
+<div class="d-flex align-items-center justify-content-center">
+  <app-boton-atras [informe]="informeCambio"></app-boton-atras>
+  <div class="h3 text-center m-3">
+    Citas del dia: {{ informeCambio.getFecha() }}
+  </div>
+</div>
+@for(cita of citas; track cita.idCita){
 <div class="d-flex align-items-center justify-content-center">
   <div class="card w-25 m-3 shadow">
     <div class="card-body custom-card">
-      <app-vista-cita [cita]="cita"></app-vista-cita>
+      <app-vista-cita [cita]="cita" [vistaCliente]="false"></app-vista-cita>
+      <br>
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex gap-2">
+          <app-boton-atendida
+            [citas]="citas"
+            [idCita]="cita.idCita"
+          ></app-boton-atendida>
+          <app-boton-ausente
+            [citas]="citas"
+            [idCita]="cita.idCita"
+          ></app-boton-ausente>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-} @empty { } }
+} @empty {
+<div class="d-flex align-items-center justify-content-center">
+  <div class="alert alert-warning w-25" role="alert">Sin citas asignadas</div>
+</div>
+} }

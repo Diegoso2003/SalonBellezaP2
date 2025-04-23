@@ -30,7 +30,7 @@ export class UsuarioService {
         this.router.navigate(['/cliente']);
         break;
       case 'EMPLEADO':
-        this.router.navigate(['/repartidor']);
+        this.router.navigate(['/empleado']);
         break;
       case 'MARKETING':
         this.router.navigate(['/marketing']);

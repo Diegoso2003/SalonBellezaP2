@@ -78,6 +78,8 @@ public class EmpleadoDAO extends Repositorio{
         } catch (SQLException e) {
             System.out.println("error citas del dia: " + e);
             throw new InvalidDataException("datos enviados para la consulta invalidos");
+        } finally {
+            cerrar();
         }
         return citasDelDia;
     }
