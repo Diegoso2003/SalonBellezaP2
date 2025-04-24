@@ -180,4 +180,9 @@ public class ServicioDAO extends ClaseDAO<Servicio, Integer> implements Busqueda
     public List<Servicio> obtenerServiciosActivos(){
         return listarPorAtributos("SELECT * FROM Servicio WHERE activo = TRUE");
     }
+    
+    public Optional<Servicio> obtenerPorIDSinEmpleados(Integer id) {
+        String query = "SELECT * FROM Servicio WHERE idServicio = ?";
+        return buscar(query, id, JDBCType.INTEGER);
+    }
 }

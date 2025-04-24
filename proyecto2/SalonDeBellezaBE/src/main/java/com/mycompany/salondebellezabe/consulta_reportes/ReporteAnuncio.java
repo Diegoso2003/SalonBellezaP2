@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.consulta_reportes;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Anuncio;
 import com.mycompany.salondebellezabe.repositorio.Repositorio;
@@ -42,6 +43,7 @@ public class ReporteAnuncio extends Repositorio{
                 }
             }
         } catch (SQLException e) {
+            throw new InvalidDataException("Error al conseguir el reporte intentar mas tarde");
         } finally {
             cerrar();
         }

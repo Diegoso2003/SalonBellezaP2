@@ -70,15 +70,11 @@ public class Repositorio {
     
     protected void colocarFechas(Consulta consulta, PreparedStatement stmt) throws SQLException{
         if (consulta.tieneAmbas()) {
-            System.out.println("ambas");
             stmt.setDate(indice, Date.valueOf(consulta.getFechaInicio()));
-            indice++;
-            stmt.setDate(indice, Date.valueOf(consulta.getFechaFin()));
+            stmt.setDate(++indice, Date.valueOf(consulta.getFechaFin()));
         } else if(consulta.tieneFechaInicio()){
-            System.out.println("inicio");
             stmt.setDate(indice, Date.valueOf(consulta.getFechaInicio()));
         } else if(consulta.tieneFechaFin()){
-            System.out.println("fin");
             stmt.setDate(indice, Date.valueOf(consulta.getFechaFin()));
         }
     }
