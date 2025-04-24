@@ -44,7 +44,7 @@ export class InformeCambio {
         return this.fechaFin !== undefined && this.fechaFin !== '';
     }
 
-    public areBothFechasEmpty(): boolean {
+    public sonAmbasValidas(): boolean {
         return this.esFechaInicioValida() && this.esFechaFinValida();
     }
 }

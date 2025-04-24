@@ -7,6 +7,7 @@ import { AnuncioDTO } from '../../DTO/anuncioDTO';
 import { MensajeDTO } from '../../DTO/mensajeDTO';
 import { HistorialAnuncio } from '../../models/historialAnuncio';
 import { Anuncio } from '../../models/anuncio';
+import { Consulta } from '../../DTO/consulta';
 
 @Injectable({
   providedIn: 'root'
@@ -38,5 +39,13 @@ export class MarketingService {
 
   obtenerAnuncioQueSeMostrara(): Observable<Anuncio>{
     return this._http.get<Anuncio>(`${this.url}/anuncios_vigentes`);
+  }
+
+  anunciosMasVistos(consulta: Consulta): Observable<Anuncio[]> {
+    return this._http.post<Anuncio[]>(`${this.url}/anuncios_mas_vistos`, consulta);
+  }
+
+  anunciosMenosVistos(consulta: Consulta): Observable<Anuncio[]> {
+    return this._http.post<Anuncio[]>(`${this.url}/anuncios_menos_vistos`, consulta);
   }
 }

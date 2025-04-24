@@ -3,4 +3,5 @@ export interface HistorialAnuncio {
     url: string;
     fechaPublicacion: Date;
     cantidad: number;
+    idHistorial?: number;
 }

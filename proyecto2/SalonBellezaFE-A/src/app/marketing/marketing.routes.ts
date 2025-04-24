@@ -13,13 +13,13 @@ export const MARKETING_ROUTES: Routes = [
             {
                 path: 'anuncios_mas_vistos',
                 title: 'Anuncios mas vistos',
-                loadComponent: () => import('./form-anuncios-vistos/form-anuncios-vistos.component').then(m => m.FormAnunciosVistosComponent),
+                loadComponent: () => import('./vista-reporte-anuncio-vista/vista-reporte-anuncio-vista.component').then(m => m.VistaReporteAnuncioVistaComponent),
                 data: { anunciosMasVistos: true }
             },
             {
                 path: 'anuncios_menos_vistos',
                 title: 'Anuncios menos vistos',
-                loadComponent: () => import('./form-anuncios-vistos/form-anuncios-vistos.component').then(m => m.FormAnunciosVistosComponent),
+                loadComponent: () => import('./vista-reporte-anuncio-vista/vista-reporte-anuncio-vista.component').then(m => m.VistaReporteAnuncioVistaComponent),
                 data: { anunciosMasVistos: false }
             },
             {

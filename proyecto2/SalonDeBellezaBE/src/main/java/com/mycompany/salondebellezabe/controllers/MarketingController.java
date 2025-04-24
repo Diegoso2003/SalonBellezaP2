@@ -94,7 +94,7 @@ public class MarketingController {
                 .build();
     }
     
-    @Path("reporte_anuncio")
+    @Path("anuncios_mas_vistos")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,6 +104,10 @@ public class MarketingController {
                 .build();
     }
     
+    @Path("anuncios_menos_vistos")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response obtenerAnunciosMenosVistos(Consulta consulta){
         AnuncioReporteService servicio = new AnuncioReporteService();
         return Response.ok(servicio.anunciosMenosVistos(consulta))

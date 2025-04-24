@@ -10,5 +10,5 @@ import { Anuncio } from '../../models/anuncio';
 })
 export class TablaAnunciosComponent {
  @Input({ required: true })
- anuncios!: Anuncio[];
+ anuncio!: Anuncio;
 }

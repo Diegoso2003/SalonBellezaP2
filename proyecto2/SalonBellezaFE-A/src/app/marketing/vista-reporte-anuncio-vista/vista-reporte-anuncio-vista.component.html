@@ -1,6 +1,43 @@
 <app-informacion></app-informacion>
 @if(!informeCambio.getCambio()){
-
+<app-form-anuncios-vistos
+  [anunciosMasVistos]="anunciosMasVistos"
+  [anuncios]="anuncios"
+  [informeCambio]="informeCambio"
+></app-form-anuncios-vistos>
 } @else {
-
+<div class="d-flex align-items-center justify-content-center">
+  <app-boton-atras [informe]="informeCambio"></app-boton-atras>
+  <h2 class="m-3">
+    @if(anunciosMasVistos){ Reporte de los 5 anuncios mas vistos } @else {
+    Reporte de los 5 anuncios menos vistos }
+  </h2>
+  <app-boton-importar [informeCambio]="informeCambio"></app-boton-importar>
+</div>
+<br>
+@if(informeCambio.sonAmbasValidas()){
+<h5 class="text-center">
+  Intervalo de tiempo: {{ informeCambio.getFechaInicio() }} a
+  {{ informeCambio.getFechaFin() }}
+</h5>
+} @else if (informeCambio.esFechaInicioValida()){
+<h5 class="text-center">De la fecha: {{ informeCambio.getFechaInicio() }} en adelante</h5>
+} @else if(informeCambio.esFechaFinValida()){
+<h5 class="text-center">Hasta la fecha: {{ informeCambio.getFechaFin() }}</h5>
+} @else {
+<h5 class="text-center">Se muestran todos los registros</h5>
+}
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card w-50 m-3 shadow">
+    <div class="card-body custom-card">
+      @for(anuncio of anuncios; track anuncio.idAnuncio){
+      <app-tabla-anuncios [anuncio]="anuncio"></app-tabla-anuncios>
+      } @empty {
+      <div class="alert alert-warning w-100" role="alert">
+        Sin anuncios mostrados
+      </div>
+      }
+    </div>
+  </div>
+</div>
 }

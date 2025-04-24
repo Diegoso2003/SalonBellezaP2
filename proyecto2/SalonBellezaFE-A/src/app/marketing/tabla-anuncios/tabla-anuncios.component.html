@@ -1,1 +1,23 @@
-<p>tabla-anuncios works!</p>
+<p class="card-text">Id del anuncio: {{ anuncio.idAnuncio }}</p>
+<p class="card-text">Tipo de anuncio: {{ anuncio.tipo }}</p>
+<p class="card-text">Veces que se mostro: {{ anuncio.totalMostrado }}</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Url donde se mostro</th>
+      <th scope="col">Fecha</th>
+      <th scope="col">Cantidad</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(historialAnuncio of anuncio.historial; track
+    historialAnuncio.idHistorial){
+    <tr>
+      <td>{{ historialAnuncio.url }}</td>
+      <td>{{ historialAnuncio.fechaPublicacion }}</td>
+      <td>{{ historialAnuncio.cantidad }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
+<br>
