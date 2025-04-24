@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.repositorio.citas;
 
 import com.mycompany.salondebellezabe.SumadorDeHoras;
+import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Cita;
@@ -12,6 +13,7 @@ import com.mycompany.salondebellezabe.modelos.Servicio;
 import com.mycompany.salondebellezabe.modelos.Usuario;
 import com.mycompany.salondebellezabe.modelos.enums.EstadoCita;
 import com.mycompany.salondebellezabe.repositorio.ClaseDAO;
+import com.mycompany.salondebellezabe.repositorio.servicios.ServicioDAO;
 import com.mycompany.salondebellezabe.repositorio.usuarios.UsuarioDAO;
 import java.sql.Date;
 import java.sql.JDBCType;
@@ -20,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -168,6 +171,53 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
         } finally {
             cerrar();
         }
+    }
+
+    public List<Cita> obtenerInfoGastosCita(Consulta consulta, Usuario cliente) {
+        List<Cita> citas = new ArrayList<>();
+        String query = armarConsultaClienteCitas(consulta);
+        obtenerConeccion();
+        try (PreparedStatement stmt = coneccion.prepareStatement(query)){
+            stmt.setLong(indice++, cliente.getDpi());
+            colocarFechas(consulta, stmt);
+            try(ResultSet result = stmt.executeQuery()){
+                while(result.next()){
+                    Cita cita = new Cita();
+                    cita.setIdCita(result.getInt("idCita"));
+                    cita.setFecha(result.getDate("fecha").toLocalDate());
+                    cita.setCostoTotal(result.getDouble("costo_total"));
+                    cita.setHora(result.getTime("hora").toLocalTime());
+                    ServicioDAO repoServicio = new ServicioDAO();
+                    repoServicio.setConeccion(coneccion);
+                    Optional<Servicio> posibleServicio = repoServicio.obtenerPorIDSinEmpleados(result.getInt("idServicio"));
+                    Servicio servicio = posibleServicio.orElseThrow(() -> new NotFoundException("error al conseguir datos de servicios"));
+                    cita.setServicio(servicio);
+                    UsuarioDAO repoUsuario = new UsuarioDAO();
+                    repoUsuario.setConeccion(coneccion);
+                    Optional<Usuario> posibleEmpleado = repoUsuario.obtenerPorID(result.getLong("empleado"));
+                    Usuario empleado = posibleEmpleado.orElseThrow(() -> new NotFoundException("error al conseguir datos de empleado"));
+                    cita.setEmpleado(empleado);
+                    citas.add(cita);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            cerrar();
+        }
+        return citas;
+    }
+
+    private String armarConsultaClienteCitas(Consulta consulta) {
+        StringBuilder query = new StringBuilder();
+        query.append("SELECT * FROM Cita WHERE cliente = ? ");
+        if (consulta.tieneFechaInicio()) {
+            query.append("AND fecha >= ? ");
+        }
+        if (consulta.tieneFechaFin()) {
+            query.append("AND fecha <= ? ");
+        }
+        return query.toString();
     }
     
 }
