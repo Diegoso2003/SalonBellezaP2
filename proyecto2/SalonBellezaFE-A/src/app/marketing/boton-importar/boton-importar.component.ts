@@ -11,4 +11,7 @@ import { InformeCambio } from '../../class/informeCambio';
 export class BotonImportarComponent {
 @Input({ required: true })
 informeCambio!: InformeCambio;
+
+@Input({ required: true })
+anunciosMasVistos!: boolean;
 }

@@ -45,6 +45,7 @@ public class ReporteServicio extends Repositorio{
                     reporte.setServicio(servicio);
                     String query2 = armarConsultaCitas(consulta);
                     try(PreparedStatement stmt2 = coneccion.prepareStatement(query2)){
+                        indice = 1;
                         stmt2.setInt(indice++, reporte.getServicio().getIdServicio());
                         colocarFechas(consulta, stmt2);
                         try(ResultSet result2 = stmt2.executeQuery()){
@@ -52,7 +53,7 @@ public class ReporteServicio extends Repositorio{
                             while(result2.next()){
                                 CitaDAO repoCita = new CitaDAO();
                                 repoCita.setConeccion(coneccion);
-                                Optional<Cita> posibleCita = repoCita.obtenerPorID(result.getInt("idCita"));
+                                Optional<Cita> posibleCita = repoCita.obtenerPorID(result2.getInt("idCita"));
                                 Cita cita = posibleCita.orElseThrow(
                                         () -> new NotFoundException("error al conseguir la informacion de las citas"));
                                 citas.add(cita);
@@ -64,6 +65,7 @@ public class ReporteServicio extends Repositorio{
                 }
             }
         } catch (SQLException e) {
+            System.out.println(e);
             throw new InvalidDataException("Error al conseguir el reporte intentar mas tarde");
         } finally {
             cerrar();
@@ -99,7 +101,7 @@ public class ReporteServicio extends Repositorio{
 
     private String armarConsultaCitas(Consulta consulta) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT idCita WHERE idServicio = ? ");
+        query.append("SELECT idCita FROM Cita WHERE idServicio = ? ");
         if (consulta.tieneFechaInicio()) {
             query.append("AND fecha >= ? ");
         }

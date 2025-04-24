@@ -4,6 +4,8 @@ import { API_URL } from '../../models/api_url';
 import { Usuario } from '../../models/usuario';
 import { Observable } from 'rxjs';
 import { Servicio } from '../../models/servicio';
+import { Consulta } from '../../DTO/consulta';
+import { ReporteServicioCitas } from '../../models/reporteServicioCitas';
 
 @Injectable({
   providedIn: 'root'
@@ -40,5 +42,13 @@ export class ServiciosService {
 
   obtenerCatalogoServicio(idServicio: number): Observable<Blob> {
     return this._http.get(`${this.url}/catalogo_servicio/${idServicio}`, { responseType: 'blob'});
+  }
+
+  serviciosMasReservados(consulta: Consulta): Observable<ReporteServicioCitas[]> {
+    return this._http.post<ReporteServicioCitas[]>(`${this.url}/servicios_mas_reservados`, consulta);
+  }
+
+  serviciosMenosReservados(consulta: Consulta): Observable<ReporteServicioCitas[]> {
+    return this._http.post<ReporteServicioCitas[]>(`${this.url}/servicios_menos_reservados`, consulta);
   }
 }

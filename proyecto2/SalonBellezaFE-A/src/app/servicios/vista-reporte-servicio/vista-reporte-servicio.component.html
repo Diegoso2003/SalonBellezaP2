@@ -1,32 +1,32 @@
 <app-informacion></app-informacion>
 @if(!informeCambio.getCambio()){
-<app-form-anuncios-vistos
-  [anunciosMasVistos]="anunciosMasVistos"
-  [anuncios]="anuncios"
+<app-form-servicios-reservados
+  [serviciosMasReservados]="serviciosMasReservados"
+  [datos]="reporte"
   [informeCambio]="informeCambio"
-></app-form-anuncios-vistos>
+></app-form-servicios-reservados>
 } @else {
 <div class="d-flex align-items-center justify-content-center">
   <app-boton-atras [informe]="informeCambio"></app-boton-atras>
   <h2 class="m-3">
-    @if(anunciosMasVistos){ Reporte de los 5 anuncios mas vistos } @else {
-    Reporte de los 5 anuncios menos vistos }
+    @if(serviciosMasReservados){ Reporte de los 5 servicios mas reservados }
+    @else { Reporte de los 5 servicios menos reservados }
   </h2>
-  <app-boton-importar
+  <app-boton-importar-reservaciones
     [informeCambio]="informeCambio"
-    [anunciosMasVistos]="anunciosMasVistos"
-  ></app-boton-importar>
+    [serviciosMasReservados]="serviciosMasReservados"
+  ></app-boton-importar-reservaciones>
 </div>
 <br />
 <app-intervalo-vista [informeCambio]="informeCambio"></app-intervalo-vista>
 <div class="d-flex align-items-center justify-content-center">
-  <div class="card w-50 m-3 shadow">
+  <div class="card w-75 m-3 shadow">
     <div class="card-body custom-card">
-      @for(anuncio of anuncios; track anuncio.idAnuncio){
-      <app-tabla-anuncios [anuncio]="anuncio"></app-tabla-anuncios>
+      @for(dato of reporte; track $index){
+      <app-tabla-servicios [reporte]="dato"></app-tabla-servicios>
       } @empty {
       <div class="alert alert-warning w-100" role="alert">
-        Sin anuncios mostrados
+        Sin reservaciones registradas
       </div>
       }
     </div>

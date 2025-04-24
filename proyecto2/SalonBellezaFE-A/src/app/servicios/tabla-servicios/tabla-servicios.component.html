@@ -1,0 +1,27 @@
+<p class="card-text">Id del servicio: {{ reporte.servicio.idServicio }}</p>
+<p class="card-text">Nombre del servicio: {{ reporte.servicio.nombreServicio }}</p>
+<p class="card-text">Veces que se reservo: {{ reporte.totalCitas }}</p>
+<p class="card-text">Precio actual del servicio: {{ reporte.servicio.precio }}</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Fecha</th>
+      <th scope="col">Empleado</th>
+      <th scope="col">Cliente</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Hora</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(cita of reporte.citas; track cita.idCita){
+    <tr>
+      <td>{{ cita.fecha }}</td>
+      <td>{{ cita.empleado.nombre }}({{ cita.empleado.dpi }})</td>
+      <td>{{ cita.cliente.nombre }}({{ cita.cliente.dpi }})</td>
+      <td>{{ cita.estado }}</td>
+      <td>{{ cita.hora | horaPipe }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
+<br>

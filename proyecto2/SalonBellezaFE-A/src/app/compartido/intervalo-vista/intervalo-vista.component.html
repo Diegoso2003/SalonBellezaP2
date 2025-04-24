@@ -1,0 +1,14 @@
+@if(informeCambio.sonAmbasValidas()){
+<h5 class="text-center">
+  Intervalo de tiempo: {{ informeCambio.getFechaInicio() }} a
+  {{ informeCambio.getFechaFin() }}
+</h5>
+} @else if (informeCambio.esFechaInicioValida()){
+<h5 class="text-center">
+  De la fecha: {{ informeCambio.getFechaInicio() }} en adelante
+</h5>
+} @else if(informeCambio.esFechaFinValida()){
+<h5 class="text-center">Hasta la fecha: {{ informeCambio.getFechaFin() }}</h5>
+} @else {
+<h5 class="text-center">Se muestran todos los registros</h5>
+}

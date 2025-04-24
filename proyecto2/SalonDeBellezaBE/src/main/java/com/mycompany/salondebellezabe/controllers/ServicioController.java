@@ -4,8 +4,10 @@
  */
 package com.mycompany.salondebellezabe.controllers;
 
+import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.modelos.ArchivosServicio;
 import com.mycompany.salondebellezabe.modelos.Fotografia;
+import com.mycompany.salondebellezabe.reporte_servicio.ServicioReporteService;
 import com.mycompany.salondebellezabe.service.servicio.ArchivosServicioService;
 import com.mycompany.salondebellezabe.service.servicio.ServicioService;
 import jakarta.ws.rs.Consumes;
@@ -95,6 +97,26 @@ public class ServicioController {
         return Response.ok(archivos.escribirArchivo(catalogo.getCatalogo()))
                 .header("Content-Type", "application/pdf")
                 .header("Content-Disposition", "inline; filename=\"catalogo_servicio_" + idServicio + "\"")
+                .build();
+    }
+    
+    @Path("servicios_mas_reservados")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerServicioMasReservado(Consulta consulta){
+        ServicioReporteService servicio = new ServicioReporteService();
+        return Response.ok(servicio.obtenerServicioMasReservado(consulta))
+                .build();
+    }
+    
+    @Path("servicios_menos_reservados")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerServicioMenosReservado(Consulta consulta){
+        ServicioReporteService servicio = new ServicioReporteService();
+        return Response.ok(servicio.obtenerServicioMenosReservado(consulta))
                 .build();
     }
 }

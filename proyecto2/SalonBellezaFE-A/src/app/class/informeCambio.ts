@@ -47,4 +47,9 @@ export class InformeCambio {
     public sonAmbasValidas(): boolean {
         return this.esFechaInicioValida() && this.esFechaFinValida();
     }
+
+    public vaciarFechas(): void {
+        this.fechaInicio = undefined;
+        this.fechaFin = undefined;
+    }
 }
