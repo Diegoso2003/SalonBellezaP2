@@ -206,6 +206,7 @@
             [seleccionado]="empleadoSeleccionado"
           ></app-form-empleados>
           @if(!empleadoSeleccionado.usuarioNulo()){
+            <br>
           <app-boton-agregar-empleado
             [empleadosDisponibles]="empleados"
             [empleadosDelServicio]="empleadosDelServicio"

@@ -23,6 +23,11 @@ export const SERVICIOS_ROUTES: Routes = [
                 data: { servicioMasReservado: false }
             },
             {
+                path: 'servicio_mayor_ganancia',
+                title: 'Servicio mayor ganancia',
+                loadComponent: () => import('./vista-servicio-ganancia/vista-servicio-ganancia.component').then(m => m.VistaServicioGananciaComponent)
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'crear_servicio'

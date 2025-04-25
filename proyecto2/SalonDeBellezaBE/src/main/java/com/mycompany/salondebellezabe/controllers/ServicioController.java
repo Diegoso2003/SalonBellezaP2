@@ -119,4 +119,14 @@ public class ServicioController {
         return Response.ok(servicio.obtenerServicioMenosReservado(consulta))
                 .build();
     }
+    
+    @Path("servicio_mayor_ganancia")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerServicioMasGanancia(Consulta consulta){
+        ServicioReporteService servicio = new ServicioReporteService();
+        return Response.ok(servicio.obtenerServicioMayorGanancia(consulta))
+                .build();
+    }
 }

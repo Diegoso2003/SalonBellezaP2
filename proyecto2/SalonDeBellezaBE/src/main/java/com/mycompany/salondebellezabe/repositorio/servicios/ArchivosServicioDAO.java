@@ -71,7 +71,6 @@ public class ArchivosServicioDAO extends ClaseDAO<ArchivosServicio, Integer>{
             consulta.append("fotografia, extension ");
         }
         consulta.append("FROM ArchivosServicio WHERE idArchivos = ?");
-        System.out.println(consulta.toString());
         return buscar(consulta.toString(), id, JDBCType.INTEGER);
     }
 

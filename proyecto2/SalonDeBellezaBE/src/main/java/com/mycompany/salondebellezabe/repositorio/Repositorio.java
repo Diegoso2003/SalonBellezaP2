@@ -28,7 +28,7 @@ public class Repositorio {
      * @throws ConeccionException si al conseguir la coneccion falla algo
      */
     protected void obtenerConeccion(){
-        if (!compartirConeccion || coneccion == null) {
+        if (!compartirConeccion) {
             try {
                 this.coneccion = PoolConnections.getInstance().getDatasource().getConnection();
             } catch (SQLException ex) {

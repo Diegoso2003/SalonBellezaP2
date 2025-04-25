@@ -31,8 +31,12 @@ public class ServicioReporteService {
     }
     
     public List<ServicioGanancias> obtenerGananciasServicio(Consulta consulta){
-        ReporteServicioGanancias reporte = new ReporteServicioGanancias();
-        return reporte.obtenerGananciasServicios(consulta);
+        ReporteServicioGanancias reporteGanancias = new ReporteServicioGanancias();
+        return reporteGanancias.obtenerGananciasServicios(consulta);
+    }
+    
+    public ServicioGanancias obtenerServicioMayorGanancia(Consulta consulta){
+        return obtenerGananciasServicio(consulta).getFirst();
     }
     
 }

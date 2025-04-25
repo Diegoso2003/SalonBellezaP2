@@ -30,14 +30,15 @@ import org.glassfish.jersey.media.multipart.FormDataBodyPart;
  *
  * @author rafael-cayax
  */
-public class AnuncioService extends Service<Anuncio>{
+public class AnuncioService extends Service<Anuncio> {
+
     private final ValidadorAnuncio validadorAnuncio;
     private final AnuncioDAO anuncioDAO;
-    
+
     public AnuncioService() {
         super(new AnuncioDAO(), new ValidadorAnuncio(), "anuncio no encontrado");
         this.validadorAnuncio = (ValidadorAnuncio) validador;
-        this.anuncioDAO = (AnuncioDAO) repositorio; 
+        this.anuncioDAO = (AnuncioDAO) repositorio;
     }
 
     public MensajeDTO publicarAnuncio(AnuncioDTO anuncioDTO) {
@@ -49,6 +50,7 @@ public class AnuncioService extends Service<Anuncio>{
 
     /**
      * metodo para publicar un anuncio de imagen y texto
+     *
      * @param imagen la imagen del anuncio
      * @param datosAnuncio los datos del anuncio en formato json
      * @return un mensaje con datos
@@ -68,8 +70,9 @@ public class AnuncioService extends Service<Anuncio>{
     }
 
     /**
-     * obtiente los datos del anuncio en formato json y lo transforma en un objeto
-     * Anuncio
+     * obtiente los datos del anuncio en formato json y lo transforma en un
+     * objeto Anuncio
+     *
      * @param anuncioDTO los datos de la publicacion
      * @return un anuncio
      */
@@ -87,6 +90,7 @@ public class AnuncioService extends Service<Anuncio>{
 
     /**
      * metodo para obtener la imagen del anuncio de los datos enviados
+     *
      * @param imagen la imagen del anuncio
      * @param anuncio el anuncio
      */
@@ -113,7 +117,7 @@ public class AnuncioService extends Service<Anuncio>{
     }
 
     private double obtenerPrecioTipo(PreciosAnuncio precios, TipoAnuncio tipo) {
-        switch(tipo){
+        switch (tipo) {
             case IMAGEN:
                 return precios.getImagen();
             case TEXTO:
@@ -128,18 +132,20 @@ public class AnuncioService extends Service<Anuncio>{
         mensaje.setMensaje("anuncio creado con el precio de: Q" + anuncio.getVigencia().getPrecio() + "");
         return mensaje;
     }
-    
+
     /**
-     * metodo para obtener los anuncios que se mostraran al inicio de la pantalla
-     * @return 
+     * metodo para obtener los anuncios que se mostraran al inicio de la
+     * pantalla
+     *
+     * @return
      */
-    public Anuncio obtenerAnuncioParaMostrar(){
+    public Anuncio obtenerAnuncioParaMostrar() {
         List<Anuncio> anunciosActivos = anuncioDAO.obtenerAnunciosActivos();
         validarVigenciaAnuncios(anunciosActivos);
         anunciosActivos = anuncioDAO.obtenerAnunciosActivos();
         if (anunciosActivos.size() == 1) {
             return anunciosActivos.getFirst();
-        } else if(anunciosActivos.isEmpty()){
+        } else if (anunciosActivos.isEmpty()) {
             throw new NotFoundException("no hay anuncios vigentes");
         }
         return seleccionarAnunciosAlAzar(anunciosActivos);
@@ -147,13 +153,14 @@ public class AnuncioService extends Service<Anuncio>{
 
     /**
      * metodo para validar que los anuncios sigan siendo vigentes
+     *
      * @param anunciosActivos los anuncios activos
      */
     private void validarVigenciaAnuncios(List<Anuncio> anunciosActivos) {
         LocalDate hoy = LocalDate.now();
-        for(Anuncio anuncio: anunciosActivos){
+        for (Anuncio anuncio : anunciosActivos) {
             Vigencia vigencia = anuncio.getVigencia();
-            long dias = ChronoUnit.DAYS.between(hoy, vigencia.getFechaPublicacion());
+            long dias = ChronoUnit.DAYS.between(vigencia.getFechaPublicacion(), hoy);
             if (dias > vigencia.getDias()) {
                 anuncioDAO.eliminar(anuncio.getIdAnuncio());
             }
@@ -161,7 +168,9 @@ public class AnuncioService extends Service<Anuncio>{
     }
 
     /**
-     * metodo para seleccionar aleatoriamente los anuncios que se mostran en la pantalla
+     * metodo para seleccionar aleatoriamente los anuncios que se mostran en la
+     * pantalla
+     *
      * @param anunciosActivos los anuncios que esten activos
      * @return los anuncios que se mostraran
      */
@@ -172,9 +181,9 @@ public class AnuncioService extends Service<Anuncio>{
     }
 
     /**
-     * 
+     *
      * @param idEnviado
-     * @return 
+     * @return
      */
     public Fotografia obtenerImagenFoto(String idEnviado) {
         Integer idAnuncio = validador.validarId(idEnviado);
