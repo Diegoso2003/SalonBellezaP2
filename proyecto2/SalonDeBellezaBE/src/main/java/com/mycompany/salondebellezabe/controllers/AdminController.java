@@ -39,4 +39,24 @@ public class AdminController {
         return Response.ok(servicio.obtenerUsuarioMenosGasto(consulta))
                 .build();
     }
+    
+    @Path("reporte_cliente_mas_citas")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response clienteMasCitas(Consulta consulta){
+        ClienteReporteService servicio = new ClienteReporteService();
+        return Response.ok(servicio.obtenerUsuarioMasReservaciones(consulta))
+                .build();
+    }
+    
+    @Path("reporte_cliente_menos_citas")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response clienteMenosCitas(Consulta consulta){
+        ClienteReporteService servicio = new ClienteReporteService();
+        return Response.ok(servicio.obtenerUsuarioMenosResevacionse(consulta))
+                .build();
+    }
 }
