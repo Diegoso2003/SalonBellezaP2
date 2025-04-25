@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { GastosCliente } from '../../models/gastosCliente';
 import { CitasCliente } from '../../models/citasCliente';
 import { ServicioGanancias } from '../../models/servicioGanancias';
+import { EmpleadoGanancias } from '../../models/empleadoGanancias';
 
 @Injectable({
   providedIn: 'root'
@@ -34,5 +35,9 @@ export class AdminService {
 
   obtenerServiciosGanancia(consulta: Consulta): Observable<ServicioGanancias[]> {
     return this._http.post<ServicioGanancias[]>(`${this.url}/reporte_servicios_ganancias`, consulta);
+  }
+
+  obtenerGananciasPorEmpleado(consulta: Consulta): Observable<EmpleadoGanancias[]> {
+    return this._http.post<EmpleadoGanancias[]>(`${this.url}/reporte_ganancias_empleado`, consulta);
   }
 }

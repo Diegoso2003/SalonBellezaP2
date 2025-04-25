@@ -47,6 +47,11 @@ export const ADMIN_ROUTES: Routes = [
                 loadComponent: () => import('./vista-reporte-ganancias-servicio/vista-reporte-ganancias-servicio.component').then(m => m.VistaReporteGananciasServicioComponent)
             },
             {
+                path: 'ganancias_empleado',
+                title: 'Reporte de ganancias por empleado',
+                loadComponent: () => import('./vista-reporte-ganancias-empleado/vista-reporte-ganancias-empleado.component').then(m => m.VistaReporteGananciasEmpleadoComponent)
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'registro_personal'

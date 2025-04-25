@@ -1,0 +1,85 @@
+<div class="d-flex align-items-center justify-content-center">
+    <div class="card w-25 m-3 shadow">
+      <div class="card-body custom-card">
+        <h5 class="card-title text-center mb-3">
+          Reporte de ganancias por empleado
+        </h5>
+        <form
+          class="needs-validation"
+          novalidate
+          [formGroup]="empleadoGananciasForm"
+          (submit)="enviar()"
+        >
+          <div
+            class="position-relative"
+            [ngClass]="{
+              'mb-5': esFechaInicioInvalida(),
+              'mb-3': !esFechaInicioInvalida()
+            }"
+          >
+            <label for="validationTooltip02" class="form-label"
+              >Fecha inicio</label
+            >
+            <input
+              type="date"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': esFechaInicioInvalida(),
+                'is-valid': esFechaInicioValida()
+              }"
+              id="validationTooltip02"
+              formControlName="fechaInicio"
+            />
+            <div class="invalid-tooltip">Ingrese una fecha valida</div>
+          </div>
+  
+          <div
+            class="position-relative"
+            [ngClass]="{
+              'mb-5': esFechaFinInvalida(),
+              'mb-3': !esFechaFinInvalida()
+            }"
+          >
+            <label for="validationTooltip01" class="form-label">Fecha fin</label>
+            <input
+              type="date"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': esFechaFinInvalida(),
+                'is-valid': esFechaFinValida()
+              }"
+              id="validationTooltip01"
+              formControlName="fechaFin"
+            />
+            <div class="invalid-tooltip">Ingrese una fecha valida</div>
+          </div>
+  
+          <div
+            class="position-relative"
+            [ngClass]="{
+              'mb-5': esDpiInvalido(),
+              'mb-3': ! (esDpiInvalido())
+            }"
+          >
+            <label for="validationTooltip04" class="form-label">DPI empleado</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': esDpiInvalido(),
+                'is-valid': esDpiValido()
+              }"
+              id="validationTooltip04"
+              formControlName="dpi"
+            />
+            <div class="invalid-tooltip">Ingrese un dpi valido</div>
+          </div>
+  
+          <div class="mb-3 d-flex justify-content-center">
+            <button class="custom-button" type="submit">Realizar consulta</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  

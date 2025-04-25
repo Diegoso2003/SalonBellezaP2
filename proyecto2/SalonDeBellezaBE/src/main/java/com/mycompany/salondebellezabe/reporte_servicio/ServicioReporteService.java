@@ -5,8 +5,10 @@
 package com.mycompany.salondebellezabe.reporte_servicio;
 
 import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
+import com.mycompany.salondebellezabe.consulta_reportes.ReporteEmpleadoGanancias;
 import com.mycompany.salondebellezabe.consulta_reportes.ReporteServicio;
 import com.mycompany.salondebellezabe.consulta_reportes.ReporteServicioGanancias;
+import com.mycompany.salondebellezabe.modelos.EmpleadoInforme;
 import com.mycompany.salondebellezabe.modelos.ReporteServicioCitas;
 import com.mycompany.salondebellezabe.modelos.ServicioGanancias;
 import java.util.List;
@@ -37,6 +39,11 @@ public class ServicioReporteService {
     
     public ServicioGanancias obtenerServicioMayorGanancia(Consulta consulta){
         return obtenerGananciasServicio(consulta).getFirst();
+    }
+    
+    public List<EmpleadoInforme> obtenerGananciaEmpleado(Consulta consulta){
+        ReporteEmpleadoGanancias reporteEmpleado = new ReporteEmpleadoGanancias();
+        return reporteEmpleado.obtenerGananciasEmpleado(consulta);
     }
     
 }
