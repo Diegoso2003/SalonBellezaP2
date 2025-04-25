@@ -1,0 +1,1 @@
+import{$ as a}from"./chunk-TQRRVTAY.js";var p=class s{transform(i){let[e,n]=i.split(":"),t=parseInt(e),m=parseInt(n),o=t>=12?"PM":"AM",r="";return t>12?r=`${t-12}:${n} ${o}`:r=`${t}:${n} ${o}`,r}static \u0275fac=function(e){return new(e||s)};static \u0275pipe=a({name:"horaPipe",type:s,pure:!0,standalone:!0})};export{p as a};

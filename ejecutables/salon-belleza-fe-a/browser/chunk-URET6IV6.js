@@ -1,0 +1,1 @@
+var o=class{form;constructor(r){this.form=r}hasErrors(r,t){return this.form.get(r)?.hasError(t)&&this.form.get(r)?.touched}esValido(r){return this.form.get(r)?.valid&&this.form.get(r)?.touched}};export{o as a};

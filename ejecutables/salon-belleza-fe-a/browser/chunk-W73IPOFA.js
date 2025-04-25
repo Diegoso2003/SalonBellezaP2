@@ -1,0 +1,1 @@
+import"./chunk-2VMXMS7J.js";var o=[{path:"",loadComponent:()=>import("./chunk-IVPUQFWI.js").then(t=>t.NavbarEmpleadoComponent),children:[{path:"agenda",title:"Agenda",loadComponent:()=>import("./chunk-DEN65VIN.js").then(t=>t.VistaCitasComponent)},{path:"",pathMatch:"full",redirectTo:"agenda"}]},{path:"**",redirectTo:"agenda"}];export{o as EMPLEADO_ROUTES};
