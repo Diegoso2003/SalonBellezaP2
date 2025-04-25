@@ -1,0 +1,41 @@
+<p class="card-text">
+  Nombre del servicio: {{ servicio.servicio.nombreServicio }}
+</p>
+<p class="card-text">
+  Total ganancias:
+  {{ servicio.totalGanancias | currency : "Q" : "symbol" : "1.2-2" }}
+</p>
+<p class="card-text">
+  Estado: @if(servicio.servicio.activo){
+  <span class="badge bg-success">Activo</span>
+  } @else {
+  <span class="badge bg-danger">Inactivo</span>
+  }
+</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Fecha</th>
+      <th scope="col">Empleado</th>
+      <th scope="col">Cliente</th>
+      <th scope="col">Hora</th>
+      <th scope="col">precio</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(cita of servicio.citas; track cita.idCita){
+    <tr>
+      <td>{{ cita.fecha }}</td>
+      <td>{{ cita.empleado.dpi }}</td>
+      <td>{{ cita.cliente.dpi }}</td>
+      <td>{{ cita.hora | horaPipe }}</td>
+      <td>{{ cita.costoTotal | currency : "Q" : "symbol" : "1.2-2" }}</td>
+    </tr>
+    } @empty {
+    <tr>
+      <td colspan="5" class="text-center">No tiene citas atendidas</td>
+    </tr>
+    }
+  </tbody>
+</table>
+<br />

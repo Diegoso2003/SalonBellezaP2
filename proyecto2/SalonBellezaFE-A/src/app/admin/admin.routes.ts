@@ -42,6 +42,11 @@ export const ADMIN_ROUTES: Routes = [
                 data: { clienteMasCitas: false }
             },
             {
+                path: 'ganancias_servicios',
+                title: 'Reporte de ganancias por servicios',
+                loadComponent: () => import('./vista-reporte-ganancias-servicio/vista-reporte-ganancias-servicio.component').then(m => m.VistaReporteGananciasServicioComponent)
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'registro_personal'

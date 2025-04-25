@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.repositorio;
 
+import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -111,7 +112,7 @@ public abstract class ClaseDAO<T, ID> extends Repositorio{
                 entidades.add(entidad);
             }
         } catch (SQLException e) {
-            //algo salio mal
+            throw new ConeccionException();
         } finally {
             cerrar();
         }

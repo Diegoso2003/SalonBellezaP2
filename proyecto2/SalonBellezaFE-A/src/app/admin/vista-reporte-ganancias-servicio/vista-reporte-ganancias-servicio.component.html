@@ -1,0 +1,38 @@
+<app-informacion></app-informacion>
+@if(!informeCambio.getCambio()){
+<app-form-servicio-ganancias
+  [informeCambio]="informeCambio"
+  [servicios]="servicios"
+></app-form-servicio-ganancias>
+} @else {
+<div class="d-flex align-items-center justify-content-center">
+  <app-boton-atras [informe]="informeCambio"></app-boton-atras>
+  <h2 class="m-3">Reporte de ganancias por servicio</h2>
+  <app-boton-importar-servicio-ganancias
+    [informeCambio]="informeCambio"
+  ></app-boton-importar-servicio-ganancias>
+</div>
+<br />
+<app-intervalo-vista [informeCambio]="informeCambio"></app-intervalo-vista>
+@if(informeCambio.esCampoValido()){
+<h5 class="text-center">
+  Filtrado por el servicio: {{ informeCambio.getCampo() }}
+</h5>
+}
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card w-50 m-3 shadow">
+    <div class="card-body custom-card">
+      <p class="card-text">Ganancia Total: {{ informeCambio.getSuma() }}</p>
+      @for(servicio of servicios; track $index){
+      <app-tabla-servicio-ganancias
+        [servicio]="servicio"
+      ></app-tabla-servicio-ganancias>
+      } @empty {
+      <div class="alert alert-warning w-100" role="alert">
+        Sin registro de citas atendidas
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}

@@ -6,6 +6,7 @@ package com.mycompany.salondebellezabe.controllers;
 
 import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.reporte_cliente.ClienteReporteService;
+import com.mycompany.salondebellezabe.reporte_servicio.ServicioReporteService;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -57,6 +58,16 @@ public class AdminController {
     public Response clienteMenosCitas(Consulta consulta){
         ClienteReporteService servicio = new ClienteReporteService();
         return Response.ok(servicio.obtenerUsuarioMenosResevacionse(consulta))
+                .build();
+    }
+    
+    @Path("reporte_servicios_ganancias")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerGananciasServicio(Consulta consulta){
+        ServicioReporteService servicio = new ServicioReporteService();
+        return Response.ok(servicio.obtenerGananciasServicio(consulta))
                 .build();
     }
 }

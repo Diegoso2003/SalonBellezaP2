@@ -4,6 +4,7 @@ export class InformeCambio {
     private fechaFin?: string;
     private fechaInicio?: string;
     private campo?: string;
+    private suma: number = 0;
 
     public getCambio(): boolean {
         return this.cambio;
@@ -61,9 +62,18 @@ export class InformeCambio {
         return this.campo !== undefined && this.campo !== '';
     }
 
+    public getSuma(): number {
+        return this.suma;
+    }
+    
+    public setSuma(suma: number): void {
+        this.suma = suma;
+    }
+
     public vaciarFechas(): void {
         this.fechaInicio = undefined;
         this.fechaFin = undefined;
         this.campo = undefined;
+        this.suma = 0;
     }
 }

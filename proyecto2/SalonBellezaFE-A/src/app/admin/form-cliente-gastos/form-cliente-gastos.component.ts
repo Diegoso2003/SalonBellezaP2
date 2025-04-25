@@ -16,7 +16,7 @@ import { InformacionService } from '../../services/informacion.service';
   styleUrl: './form-cliente-gastos.component.scss'
 })
 export class FormClienteGastosComponent {
-  clienteGastosForm!: FormGroup;
+  clienteGastosForm: FormGroup;
   
   private validador: Validador;
   private adminService = inject(AdminService);

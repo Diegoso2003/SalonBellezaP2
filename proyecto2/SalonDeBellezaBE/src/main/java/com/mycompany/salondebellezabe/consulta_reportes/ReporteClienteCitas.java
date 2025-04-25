@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.consulta_reportes;
 
+import com.mycompany.salondebellezabe.excepciones.ConeccionException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Cita;
 import com.mycompany.salondebellezabe.modelos.CitasCliente;
@@ -61,7 +62,7 @@ public class ReporteClienteCitas extends Repositorio{
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new ConeccionException();
         } finally {
             cerrar();
         }

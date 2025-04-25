@@ -6,7 +6,9 @@ package com.mycompany.salondebellezabe.reporte_servicio;
 
 import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
 import com.mycompany.salondebellezabe.consulta_reportes.ReporteServicio;
+import com.mycompany.salondebellezabe.consulta_reportes.ReporteServicioGanancias;
 import com.mycompany.salondebellezabe.modelos.ReporteServicioCitas;
+import com.mycompany.salondebellezabe.modelos.ServicioGanancias;
 import java.util.List;
 
 /**
@@ -26,6 +28,11 @@ public class ServicioReporteService {
     
     public List<ReporteServicioCitas> obtenerServicioMenosReservado(Consulta consulta){
         return reporte.obtenerServicioMenosReservado(consulta);
+    }
+    
+    public List<ServicioGanancias> obtenerGananciasServicio(Consulta consulta){
+        ReporteServicioGanancias reporte = new ReporteServicioGanancias();
+        return reporte.obtenerGananciasServicios(consulta);
     }
     
 }

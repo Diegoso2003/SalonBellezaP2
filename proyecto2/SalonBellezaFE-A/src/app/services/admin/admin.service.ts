@@ -5,6 +5,7 @@ import { Consulta } from '../../DTO/consulta';
 import { Observable } from 'rxjs';
 import { GastosCliente } from '../../models/gastosCliente';
 import { CitasCliente } from '../../models/citasCliente';
+import { ServicioGanancias } from '../../models/servicioGanancias';
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,9 @@ export class AdminService {
 
   obtenerClienteMenosCitas(consulta: Consulta): Observable<CitasCliente[]> {
     return this._http.post<CitasCliente[]>(`${this.url}/reporte_cliente_menos_citas`, consulta);
+  }
+
+  obtenerServiciosGanancia(consulta: Consulta): Observable<ServicioGanancias[]> {
+    return this._http.post<ServicioGanancias[]>(`${this.url}/reporte_servicios_ganancias`, consulta);
   }
 }
