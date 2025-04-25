@@ -52,6 +52,11 @@ export const ADMIN_ROUTES: Routes = [
                 loadComponent: () => import('./vista-reporte-ganancias-empleado/vista-reporte-ganancias-empleado.component').then(m => m.VistaReporteGananciasEmpleadoComponent)
             },
             {
+                path: 'empleados_mas_citas',
+                title: 'Reporte de los empleados con mas citas',
+                loadComponent: () => import('./vista-reporte-empleado-citas/vista-reporte-empleado-citas.component').then(m => m.VistaReporteEmpleadoCitasComponent)
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'registro_personal'

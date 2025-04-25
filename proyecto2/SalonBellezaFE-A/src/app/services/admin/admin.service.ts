@@ -40,4 +40,8 @@ export class AdminService {
   obtenerGananciasPorEmpleado(consulta: Consulta): Observable<EmpleadoGanancias[]> {
     return this._http.post<EmpleadoGanancias[]>(`${this.url}/reporte_ganancias_empleado`, consulta);
   }
+
+  obtenerCitasPorEmpleado(consulta: Consulta): Observable<EmpleadoGanancias[]> {
+    return this._http.post<EmpleadoGanancias[]>(`${this.url}/reporte_citas_empleado`, consulta);
+  }
 }

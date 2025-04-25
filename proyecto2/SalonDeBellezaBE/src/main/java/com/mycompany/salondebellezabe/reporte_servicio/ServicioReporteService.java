@@ -5,6 +5,7 @@
 package com.mycompany.salondebellezabe.reporte_servicio;
 
 import com.mycompany.salondebellezabe.consulta_reportes.Consulta;
+import com.mycompany.salondebellezabe.consulta_reportes.ReporteEmpleadoCitas;
 import com.mycompany.salondebellezabe.consulta_reportes.ReporteEmpleadoGanancias;
 import com.mycompany.salondebellezabe.consulta_reportes.ReporteServicio;
 import com.mycompany.salondebellezabe.consulta_reportes.ReporteServicioGanancias;
@@ -44,6 +45,11 @@ public class ServicioReporteService {
     public List<EmpleadoInforme> obtenerGananciaEmpleado(Consulta consulta){
         ReporteEmpleadoGanancias reporteEmpleado = new ReporteEmpleadoGanancias();
         return reporteEmpleado.obtenerGananciasEmpleado(consulta);
+    }
+    
+    public List<EmpleadoInforme> obtenerEmpleadosMasCitas(Consulta consulta){
+        ReporteEmpleadoCitas reporteCitas = new ReporteEmpleadoCitas();
+        return reporteCitas.obtenerEmpleadoConMasCitas(consulta);
     }
     
 }

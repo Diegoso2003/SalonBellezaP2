@@ -80,4 +80,14 @@ public class AdminController {
         return Response.ok(servicio.obtenerGananciaEmpleado(consulta))
                 .build();
     }
+    
+    @Path("reporte_citas_empleado")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response obtenerEmpleadoMasCitas(Consulta consulta){
+        ServicioReporteService servicio = new ServicioReporteService();
+        return Response.ok(servicio.obtenerEmpleadosMasCitas(consulta))
+                .build();
+    }
 }
