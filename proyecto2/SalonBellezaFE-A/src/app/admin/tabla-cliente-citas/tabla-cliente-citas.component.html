@@ -1,23 +1,23 @@
-<p class="card-text">Dpi cliente: {{ datos.cliente.dpi }}</p>
-<p class="card-text">Nombre cliente: {{ datos.cliente.nombre }}</p>
-<p class="card-text">Total gasto: {{ datos.gastoTotal }}</p>
+<p class="card-text">Dpi cliente: {{ clienteCitas.cliente.dpi }}</p>
+<p class="card-text">Nombre cliente: {{ clienteCitas.cliente.nombre }}</p>
+<p class="card-text">Total citas: {{ clienteCitas.totalCitas }}</p>
 <table class="table">
   <thead>
     <tr>
       <th scope="col">Fecha</th>
       <th scope="col">Servicio</th>
       <th scope="col">Empleado</th>
-      <th scope="col">Total</th>
+      <th scope="col">Estado</th>
       <th scope="col">Hora</th>
     </tr>
   </thead>
   <tbody>
-    @for(cita of datos.citas; track cita.idCita){
+    @for(cita of clienteCitas.citas; track cita.idCita){
     <tr>
       <td>{{ cita.fecha }}</td>
       <td>{{ cita.servicio.nombreServicio }}</td>
       <td>{{ cita.empleado.dpi }}</td>
-      <td>{{ cita.costoTotal }}</td>
+      <td>{{ cita.estado }}</td>
       <td>{{ cita.hora | horaPipe }}</td>
     </tr>
     }

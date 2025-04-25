@@ -30,6 +30,18 @@ export const ADMIN_ROUTES: Routes = [
                 data: { anunciosMasVistos: true }
             },
             {
+                path: 'clientes_mas_citas',
+                title: 'Reporte de los clientes con mas citas',
+                loadComponent: () => import('./vista-reporte-cliente-citas/vista-reporte-cliente-citas.component').then(m => m.VistaReporteClienteCitasComponent),
+                data: { clienteMasCitas: true }
+            },
+            {
+                path: 'clientes_menos_citas',
+                title: 'Reporte de los clientes con menos citas',
+                loadComponent: () => import('./vista-reporte-cliente-citas/vista-reporte-cliente-citas.component').then(m => m.VistaReporteClienteCitasComponent),
+                data: { clienteMasCitas: false }
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'registro_personal'

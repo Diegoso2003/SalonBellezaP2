@@ -43,7 +43,7 @@ public class ReporteClienteCitas extends Repositorio{
                     String query2 = armarConsultaCitas(consulta);
                     try(PreparedStatement stmt2 = coneccion.prepareStatement(query2)){
                         indice = 1;
-                        stmt.setLong(indice++, reporte.getCliente().getDpi());
+                        stmt2.setLong(indice++, reporte.getCliente().getDpi());
                         colocarFechas(consulta, stmt2);
                         try(ResultSet result2 = stmt2.executeQuery()){
                             List<Cita> citas = new ArrayList<>();
@@ -61,7 +61,7 @@ public class ReporteClienteCitas extends Repositorio{
                 }
             }
         } catch (SQLException e) {
-            
+            System.out.println(e);
         } finally {
             cerrar();
         }
