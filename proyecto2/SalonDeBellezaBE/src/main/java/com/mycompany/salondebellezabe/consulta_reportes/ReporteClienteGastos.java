@@ -4,6 +4,7 @@
  */
 package com.mycompany.salondebellezabe.consulta_reportes;
 
+import com.mycompany.salondebellezabe.excepciones.InvalidDataException;
 import com.mycompany.salondebellezabe.excepciones.NotFoundException;
 import com.mycompany.salondebellezabe.modelos.Cita;
 import com.mycompany.salondebellezabe.modelos.GastosCliente;
@@ -31,6 +32,9 @@ public class ReporteClienteGastos extends Repositorio{
         obtenerConeccion();
         try (PreparedStatement stmt = coneccion.prepareStatement(query)){
             colocarFechas(consulta, stmt);
+            if (consulta.tieneCampo()) {
+                stmt.setLong(indice, Long.parseLong(consulta.getCampo().trim()));
+            }
             try(ResultSet result = stmt.executeQuery()){
                 while(result.next()){
                     GastosCliente gastos = new GastosCliente();
@@ -48,8 +52,12 @@ public class ReporteClienteGastos extends Repositorio{
                 }
             }
         } catch (SQLException e) {
+            System.out.println(query);
+            System.out.println(e);
             throw new NotFoundException("error al conseguir los datos de los clientes");
-        } finally {
+        } catch(NumberFormatException e) {
+            throw new InvalidDataException("ingresar un dpi valido");
+        }finally {
             cerrar();
         }
         return reporteGastos;
@@ -72,12 +80,21 @@ public class ReporteClienteGastos extends Repositorio{
     }
 
     private void colocarFechas(Consulta consulta, StringBuilder query) {
+        boolean fechas = false;
         if (consulta.tieneAmbas()) {
+            fechas = true;
             query.append("WHERE fecha >= ? AND fecha <= ? ");
         } else if (consulta.tieneFechaInicio()) {
+            fechas = true;
             query.append("WHERE fecha >= ? ");
         } else if (consulta.tieneFechaFin()) {
+            fechas = true;
             query.append("WHERE fecha <= ? ");
+        }
+        if (consulta.tieneCampo() && fechas) {
+            query.append("AND cliente = ? ");
+        } else if(consulta.tieneCampo()){
+            query.append("WHERE cliente = ? ");
         }
     }
 }

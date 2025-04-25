@@ -3,6 +3,7 @@ export class InformeCambio {
     private fecha: string = '';
     private fechaFin?: string;
     private fechaInicio?: string;
+    private campo?: string;
 
     public getCambio(): boolean {
         return this.cambio;
@@ -32,6 +33,14 @@ export class InformeCambio {
         return this.fechaInicio || '';
     }
 
+    public getCampo(): string {
+        return this.campo || '';
+    }
+
+    public setCampo(campo: string): void {
+        this.campo = campo;
+    }
+
     public setFechaInicio(fechaInicio: string): void {
         this.fechaInicio = fechaInicio;
     }
@@ -48,8 +57,13 @@ export class InformeCambio {
         return this.esFechaInicioValida() && this.esFechaFinValida();
     }
 
+    public esCampoValido(): boolean {
+        return this.campo !== undefined && this.campo !== '';
+    }
+
     public vaciarFechas(): void {
         this.fechaInicio = undefined;
         this.fechaFin = undefined;
+        this.campo = undefined;
     }
 }

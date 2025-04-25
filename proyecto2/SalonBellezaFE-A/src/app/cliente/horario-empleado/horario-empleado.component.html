@@ -2,5 +2,7 @@
 <ul class="list-group">
     @for(horario of horarioEmpleado; track $index){
         <li class="list-group-item">{{ horario.horaInicio | horaPipe}} - {{ horario.horaFin | horaPipe }}</li>
+    } @empty {
+        <li class="list-group-item"> Horario libre </li>
     }
 </ul>

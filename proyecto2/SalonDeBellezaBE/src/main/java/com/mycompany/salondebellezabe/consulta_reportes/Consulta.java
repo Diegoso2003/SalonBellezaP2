@@ -16,6 +16,7 @@ public class Consulta {
     private LocalDate fechaInicio;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate fechaFin;
+    private String campo;
 
     public LocalDate getFechaInicio() {
         return fechaInicio;
@@ -32,6 +33,14 @@ public class Consulta {
     public void setFechaFin(LocalDate fechaFin) {
         this.fechaFin = fechaFin;
     }
+
+    public String getCampo() {
+        return campo;
+    }
+
+    public void setCampo(String campo) {
+        this.campo = campo;
+    }
     
     public boolean tieneFechaInicio(){
         return this.fechaInicio != null;
@@ -44,4 +53,9 @@ public class Consulta {
     public boolean tieneAmbas(){
         return this.tieneFechaFin() && this.tieneFechaInicio();
     }
+    
+    public boolean tieneCampo(){
+        return this.campo != null && !this.campo.isBlank();
+    }
+    
 }

@@ -24,6 +24,12 @@ export const ADMIN_ROUTES: Routes = [
                 data: { clienteMasGasto: false }
             },
             {
+                path: 'anuncios_mas_vistos',
+                title: 'Reporte de los anuncios mas vistos',
+                loadComponent: () => import('../marketing/vista-reporte-anuncio-vista/vista-reporte-anuncio-vista.component').then(m => m.VistaReporteAnuncioVistaComponent),
+                data: { anunciosMasVistos: true }
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'registro_personal'

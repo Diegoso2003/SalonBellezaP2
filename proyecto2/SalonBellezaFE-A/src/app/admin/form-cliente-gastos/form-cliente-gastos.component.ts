@@ -35,7 +35,8 @@ export class FormClienteGastosComponent {
     this.clienteGastosForm = this.formBuilder.group(
           {
           fechaInicio: ['', [Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
-          fechaFin: ['', [Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]]
+          fechaFin: ['', [Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
+          dpi: ['', [Validators.pattern(/^[1-9]\d{12}$/)]],
           }
         );
         this.validador = new Validador(this.clienteGastosForm);
@@ -90,18 +91,23 @@ export class FormClienteGastosComponent {
   private informarCambio(consulta: Consulta): void{
     this.informeCambio.setFechaInicio(consulta.fechaInicio || '');
     this.informeCambio.setFechaFin(consulta.fechaFin || '');
+    this.informeCambio.setCampo(consulta.campo || '');
     this.informeCambio.setCambio(true);
   }
 
   private armarConsulta(): Consulta {
     const fechaInicio = this.clienteGastosForm.get('fechaInicio')?.value;
     const fechaFin = this.clienteGastosForm.get('fechaFin')?.value;
+    const dpi = this.clienteGastosForm.get('dpi')?.value;
     let consulta: Consulta = {}
     if(fechaInicio !== ''){
       consulta.fechaInicio = fechaInicio;
     }
     if(fechaFin !== ''){
       consulta.fechaFin = fechaFin;
+    }
+    if(dpi !== ''){
+      consulta.campo = dpi;
     }
     return consulta;
   }
@@ -120,5 +126,13 @@ export class FormClienteGastosComponent {
 
   esFechaFinValida(){
     return this.validador.esValido('fechaFin');
+  }
+
+  esDpiInvalido() {
+    return this.validador.hasErrors('dpi', 'pattern');
+  }
+
+  esDpiValido() {
+    return this.validador.esValido('dpi');
   }
 }
