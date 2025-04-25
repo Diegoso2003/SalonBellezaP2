@@ -21,10 +21,20 @@ public class AnuncioReporteService {
         repositorio = new ReporteAnuncio();
     }
     
+    /**
+     * metodo usado para obtener los anuncios mas vistos
+     * @param consulta los datos para la consulta
+     * @return una lista con los anuncios
+     */
     public List<Anuncio> anunciosMasVistos(Consulta consulta) {
         return repositorio.anunciosMasMostrados(consulta);
     }
 
+    /**
+     * metodo usado para obtener los anuncios menos vistos
+     * @param consulta los datos para la consulta
+     * @return una lista con los anuncios
+     */
     public List<Anuncio> anunciosMenosVistos(Consulta consulta) {
         return repositorio.anunciosMenosMostrados(consulta);
     }

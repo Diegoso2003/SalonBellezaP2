@@ -22,19 +22,39 @@ public class ClienteReporteService {
         repositorio = new ReporteClienteGastos();
     }
     
+    /**
+     * metodo para obtener al usuario que mas gastos ha hecho en la app
+     * @param consulta los datos de la consulta para obtener los datos
+     * @return una lista con los datos
+     */
     public List<GastosCliente> obtenerUsuarioMasGasta(Consulta consulta){
         return repositorio.obtenerClienteMasGasto(consulta);
     }
     
+    /**
+     * metodo para obtener al usuario que menos gastos han hecho en la app
+     * @param consulta los datos de la consulta para obtener los datos
+     * @return una lista con los datos
+     */
     public List<GastosCliente> obtenerUsuarioMenosGasto(Consulta consulta){
         return repositorio.obtenerClienteMenosGasto(consulta);
     }
     
+    /**
+     * metodo usado para obtener al usuario que mas reservaciones haya hecho en la app
+     * @param consulta los datos de la consulta para obtener los datos
+     * @return una lista con los datos
+     */
     public List<CitasCliente> obtenerUsuarioMasReservaciones(Consulta consulta){
         ReporteClienteCitas reporte = new ReporteClienteCitas();
         return reporte.clienteConMasCitas(consulta);
     }
     
+    /**
+     * metodo para obtener a los usuarios con menos reservaciones que haya hecho en la app
+     * @param consulta los datos de la consulta para obtener los datos
+     * @return una lista con los datos
+     */
     public List<CitasCliente> obtenerUsuarioMenosResevacionse(Consulta consulta){
         ReporteClienteCitas reporte = new ReporteClienteCitas();
         return reporte.clienteConMenosCitas(consulta);
