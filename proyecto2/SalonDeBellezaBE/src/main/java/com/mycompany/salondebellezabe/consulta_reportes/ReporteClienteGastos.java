@@ -48,7 +48,7 @@ public class ReporteClienteGastos extends Repositorio{
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new NotFoundException("error al conseguir los datos de los clientes");
         } finally {
             cerrar();
         }
@@ -62,7 +62,7 @@ public class ReporteClienteGastos extends Repositorio{
 
     private String armarConsulta(Consulta consulta) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT SUM(costo_total) as total_gasto, cliente FROM Cita ");
+        query.append("SELECT SUM(costoTotal) as total_gasto, cliente FROM Cita ");
         colocarFechas(consulta, query);
         query.append("GROUP BY(cliente) ORDER BY(total_gasto) ");
         String orden = clienteMasGasto ? "DESC ": "ASC ";

@@ -12,6 +12,18 @@ export const ADMIN_ROUTES: Routes = [
                 data: {cliente: false}
             },
             {
+                path: 'cliente_mas_gasto',
+                title: 'Reporte  del cliente que mas gasto',
+                loadComponent: () => import('./vista-reporte-cliente-gastos/vista-reporte-cliente-gastos.component').then(m => m.VistaReporteClienteGastosComponent),
+                data: { clienteMasGasto: true }
+            },
+            {
+                path: 'cliente_menos_gasto',
+                title: 'Reporte del cliente que menos gasto',
+                loadComponent: () => import('./vista-reporte-cliente-gastos/vista-reporte-cliente-gastos.component').then(m => m.VistaReporteClienteGastosComponent),
+                data: { clienteMasGasto: false }
+            },
+            {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'registro_personal'

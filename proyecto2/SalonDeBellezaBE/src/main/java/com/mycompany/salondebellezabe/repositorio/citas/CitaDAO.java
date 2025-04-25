@@ -185,7 +185,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
                     Cita cita = new Cita();
                     cita.setIdCita(result.getInt("idCita"));
                     cita.setFecha(result.getDate("fecha").toLocalDate());
-                    cita.setCostoTotal(result.getDouble("costo_total"));
+                    cita.setCostoTotal(result.getDouble("costoTotal"));
                     cita.setHora(result.getTime("hora").toLocalTime());
                     ServicioDAO repoServicio = new ServicioDAO();
                     repoServicio.setConeccion(coneccion);
@@ -201,7 +201,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            throw new NotFoundException("error al conseguir los datos de la cita");
         } finally {
             cerrar();
         }
@@ -210,7 +210,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
 
     private String armarConsultaClienteCitas(Consulta consulta) {
         StringBuilder query = new StringBuilder();
-        query.append("SELECT * FROM Cita WHERE cliente = ? ");
+        query.append("SELECT * FROM Cita WHERE cliente = ? AND estado = 'ATENDIDA' ");
         if (consulta.tieneFechaInicio()) {
             query.append("AND fecha >= ? ");
         }

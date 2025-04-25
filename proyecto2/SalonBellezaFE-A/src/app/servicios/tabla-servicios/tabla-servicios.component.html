@@ -16,8 +16,8 @@
     @for(cita of reporte.citas; track cita.idCita){
     <tr>
       <td>{{ cita.fecha }}</td>
-      <td>{{ cita.empleado.nombre }}({{ cita.empleado.dpi }})</td>
-      <td>{{ cita.cliente.nombre }}({{ cita.cliente.dpi }})</td>
+      <td>{{ cita.empleado.dpi }}</td>
+      <td>{{ cita.cliente.dpi }}</td>
       <td>{{ cita.estado }}</td>
       <td>{{ cita.hora | horaPipe }}</td>
     </tr>

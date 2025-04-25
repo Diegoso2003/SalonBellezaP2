@@ -1,0 +1,24 @@
+<p class="card-text">Dpi cliente: {{ datos.cliente.dpi }}</p>
+<p class="card-text">Nombre cliente: {{ datos.cliente.nombre }}</p>
+<p class="card-text">Total gasto: {{ datos.gastoTotal }}</p>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Fecha</th>
+      <th scope="col">Servicio</th>
+      <th scope="col">Empleado</th>
+      <th scope="col">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    @for(cita of datos.citas; track cita.idCita){
+    <tr>
+      <td>{{ cita.fecha }}</td>
+      <td>{{ cita.servicio.nombreServicio }}</td>
+      <td>{{ cita.empleado.dpi }}</td>
+      <td>{{ cita.costoTotal }}</td>
+    </tr>
+    }
+  </tbody>
+</table>
+<br>

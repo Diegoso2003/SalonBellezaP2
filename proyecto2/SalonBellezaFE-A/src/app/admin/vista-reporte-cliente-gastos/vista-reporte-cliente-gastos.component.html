@@ -1,0 +1,35 @@
+<app-informacion></app-informacion>
+@if(!informeCambio.getCambio()){
+<app-form-cliente-gastos
+  [clienteMasGasto]="clienteMasGasto"
+  [informeCambio]="informeCambio"
+  [gastosClienteArreglo]="clientes"
+></app-form-cliente-gastos>
+} @else {
+<div class="d-flex align-items-center justify-content-center">
+  <app-boton-atras [informe]="informeCambio"></app-boton-atras>
+  <h2 class="m-3">
+    @if(clienteMasGasto){ Reporte de los 5 clientes que mas gastan } @else {
+    Reporte de los 5 clientes que menos gastan }
+  </h2>
+  <app-boton-importar-cliente-gastos
+    [clienteMasGasto]="clienteMasGasto"
+    [informeCambio]="informeCambio"
+  ></app-boton-importar-cliente-gastos>
+</div>
+<br />
+<app-intervalo-vista [informeCambio]="informeCambio"></app-intervalo-vista>
+<div class="d-flex align-items-center justify-content-center">
+  <div class="card w-50 m-3 shadow">
+    <div class="card-body custom-card">
+      @for(datos of clientes; track $index){
+      <app-tabla-clientes-gastos [datos]="datos"></app-tabla-clientes-gastos>
+      } @empty {
+      <div class="alert alert-warning w-100" role="alert">
+        Sin registro de citas atendidas
+      </div>
+      }
+    </div>
+  </div>
+</div>
+}
