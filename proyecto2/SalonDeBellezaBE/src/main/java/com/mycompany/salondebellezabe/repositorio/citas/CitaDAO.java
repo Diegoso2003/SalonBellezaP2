@@ -165,6 +165,7 @@ public class CitaDAO extends ClaseDAO<Cita, Integer>{
             if (stmt2.executeUpdate() <= 0) {
                 throw new NotFoundException("cliente no encontrado");
             }
+            coneccion.commit();
         } catch (SQLException e) {
             regresar();
             throw new InvalidDataException("datos enviados invalidos");

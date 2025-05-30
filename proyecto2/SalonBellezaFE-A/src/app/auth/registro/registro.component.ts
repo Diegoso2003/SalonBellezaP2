@@ -43,14 +43,14 @@ export class RegistroComponent implements OnInit{
       contraseña: ['', [Validators.required, Validators.minLength(6)]],
       confirmacionContraseña: ['', [Validators.required]]
     })
-    if (!this.cliente) {
+    if (this.cliente === false) {
       this.registroForm.addControl('rol', this.formBuilder.control('', [Validators.required]));
     }
     this._validadorForm = new Validador(this.registroForm);
   }
 
   enviar() {
-    if(this.cliente){
+    if(this.cliente === true){
       this.enviarCliente();
     } else {
       this.enviarEmpleado();
@@ -142,7 +142,6 @@ export class RegistroComponent implements OnInit{
     } else {
       this.informacion.informarError('Ingrese todos los datos correctamente');
       this.registroForm.markAllAsTouched();
-      console.log('Formulario inválido');
     }
   }
 
